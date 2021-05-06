@@ -1,0 +1,88 @@
+import NumberRange from 'src/components/form/NumberRange';
+import { Checkbox } from '@material-ui/core';
+import { ArrowBack } from '@material-ui/icons';
+
+import formatThousand from 'src/helpers/formatThousand';
+
+export default function Variation({
+  lang,
+  item,
+  productsOrdered,
+  fnSelectProduct,
+  fnChangeRangeProduct,
+  fnToggleSelectVariant
+}) {
+  return (
+    <section className="py-4">
+      <div
+        className="relative mb-4 flex items-center text-lg"
+        onClick={() => fnToggleSelectVariant()}
+      >
+        <ArrowBack
+            className="mr-2"
+            style={{ cursor: 'pointer' }}
+        />
+        <span className="truncate">
+          {item.name}
+        </span>
+      </div>
+      <span className="text-sm py-1 px-2 rounded bg-gray-400 mb-4">
+        {item.variation?.name}
+      </span>
+      <div className="px-2 py-4">
+        {item?.variation?.options
+          ?.filter((option) => option.id)
+          ?.map(
+            (option, index) => {
+              return (
+                  <div className="flex -mx-4 py-2 items-center" key={index}>
+                    <div className="flex-none">
+                        <Checkbox
+                          id={`${item.id}_${option.id}`}
+                          name={`${item.id}_${option.id}`}
+                          color="primary"
+                          onChange={(e) => {
+                            e.persist()
+                            fnSelectProduct(item, {...option, isSelected: e.target.checked})
+                          }}
+                          checked={!!productsOrdered?.[`${item.id}_${option.id}`]}
+                          //   disabled={variation.quantity === 0}
+                        />
+                    </div>
+                    <div className="w-full px-4">
+                      <div>{option.name}</div>
+                      {option.quantity === 0 && (
+                        <div className="text-sm text-red-600 leading-3">
+                          {lang?.text__out_of_stock || 'Out of stock'}
+                        </div>
+                      )}
+                    </div>
+                    <div className="w-full px-4">
+                      {productsOrdered?.[`${item.id}_${option.id}`] && (
+                        <NumberRange
+                          name={`${item.id}_${option.id}`}
+                          min="0"
+                          max={option.quantity}
+                          value={productsOrdered?.[`${item.id}_${option.id}`]?.quantity}
+                          fnChange={fnChangeRangeProduct}
+                        />
+                      )}
+                    </div>
+                    <div className="flex-none px-4">
+                        <span className="">
+                          {`${
+                              item?.currency
+                                ?.code ?? ''
+                          } ${formatThousand(
+                              option?.price
+                          )}`}
+                        </span>
+                    </div>
+                  </div>
+              )
+            }
+        )}
+      </div>
+  </section>
+  )
+}

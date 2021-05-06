@@ -1,0 +1,12 @@
+{
+  "text__subtotal": "Subtotal",
+  "text__shipping": "Shipping",
+  "text__shipping_insurance": "Shipping Insurance",
+  "text__tax": "Tax",
+  "text__discount": "Discount",
+  "text__total": "Total",
+  "text__calculating": "Calculating",
+  "label__Coupon": "Coupon",
+  "btn__Apply": "Apply",
+  "btn__Remove": "Remove"
+}

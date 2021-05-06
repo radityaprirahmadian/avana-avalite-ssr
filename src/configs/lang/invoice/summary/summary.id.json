@@ -1,0 +1,12 @@
+{
+  "text__subtotal": "Total Belanja",
+  "text__shipping": "Ongkos Kirim",
+  "text__shipping_insurance": "Asuransi Pengiriman",
+  "text__tax": "Pajak",
+  "text__discount": "Diskon",
+  "text__total": "Jumlah",
+  "text__calculating": "Menghitung",
+  "label__Coupon": "Coupon",
+  "btn__Apply": "Apply",
+  "btn__Remove": "Remove"
+}

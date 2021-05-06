@@ -1,0 +1,13 @@
+{
+  "text__complete_information": "Please Complete Your Information",
+  "text__thank_purchasing": "Thanks for Purchasing in [0]!",
+  "text__choose_payment": "Choose Your Payment Method",
+  "text__back": "Back",
+  "btn__continue": "Continue",
+  "btn__proceed_order": "Proceed Order",
+  "btn__choose_payment": "Choose Payment Method",
+  "btn__back": "Back",
+  "btn__edit_order": "I Want to Edit My Order",
+  "btn__submit": "Submit",
+  "btn__confirm": "Confirm"
+}
