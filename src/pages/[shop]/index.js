@@ -4,10 +4,10 @@ import Head from 'next/head'
 import shops from 'src/constants/api/shops'
 
 import Shop from 'src/parts/Shop'
-import ErrorBoundary from 'src/parts/ErrorBoundary';
+import ErrorBoundary from 'src/parts/ErrorBoundary'
 
 import Unauthenticated from 'src/parts/Unauthenticated'
-import FacebookPixel from 'src/helpers/analytics/facebookPixel';
+import FacebookPixel from 'src/helpers/analytics/facebookPixel'
 
 import { setAuthorization, setBaseUrl } from 'src/configs/axios/protected'
 
@@ -23,7 +23,8 @@ function Home(props) {
          ''
       ) ?? 'AVANA'
 
-   const favicon = props?.data?.details?.shop_info?.webstore_favicon ?? 'images/favicon.ico'
+   const favicon =
+      props?.data?.details?.shop_info?.webstore_favicon ?? 'images/favicon.ico'
 
    let imagePreview = props?.data?.details?.shop_info?.whatsapp_logo ?? ''
    if (imagePreview?.indexOf('%3A') > -1)
@@ -58,7 +59,9 @@ function Home(props) {
             <meta property="twitter:title" content={title} />
             <meta property="twitter:description" content={description} />
             <meta property="twitter:image" content={imagePreview} />
-            <FacebookPixel.init pixelid={props?.data?.details?.shop_info?.facebook_pixel_id} />
+            <FacebookPixel.init
+               pixelid={props?.data?.details?.shop_info?.facebook_pixel_id}
+            />
          </Head>
 
          <main>
@@ -94,7 +97,9 @@ export async function getServerSideProps(context) {
          },
       }
    } catch (error) {
-      const errors = error.response.status === 503 ? {} : error?.response?.data
+      console.log(error, error.response)
+      const errors =
+         error?.response?.status === 503 ? {} : error?.response?.data
       return { props: errors }
    }
 }
