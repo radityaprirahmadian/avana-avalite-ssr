@@ -13,7 +13,7 @@ export default function Variation({
   fnToggleSelectVariant
 }) {
   return (
-    <section className="py-4">
+    <section className="py-4 flex-1">
       <div
         className="relative mb-4 flex items-center text-lg"
         onClick={() => fnToggleSelectVariant()}

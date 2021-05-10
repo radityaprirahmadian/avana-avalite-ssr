@@ -105,17 +105,18 @@ export default function ProductSelection(props) {
 
    const fnHandleScroll = React.useCallback(
       () => {
-         if ((document.documentElement.scrollHeight -
+         const scrollOnEndge = (document.documentElement.scrollHeight -
             document.documentElement.scrollTop <
-            document.documentElement.clientHeight + 100) &&
-            (PRODUCTS.page.currentPage < PRODUCTS.page.lastPage) && (
+            document.documentElement.clientHeight + 100)
+            const isOverflow = (document.documentElement.scrollHeight !== document.documentElement.clientHeight)
+            if (scrollOnEndge && isOverflow &&(PRODUCTS.page.currentPage < PRODUCTS.page.lastPage) && (
                PRODUCTS.status !== 'loading'
             ))
          {
             fnGetProducts(search, selectedCategory, PRODUCTS.page.currentPage + 1);
          }
       },
-      [setProducts, fnGetProducts, search, selectedCategory, PRODUCTS.page.currentPage, PRODUCTS.page.lastPage, PRODUCTS.status]
+      [setProducts, fnGetProducts, search, selectedVariant.isSelect, selectedCategory, PRODUCTS]
    )
 
    const fnGetCategories = React.useCallback(() => {
@@ -126,7 +127,7 @@ export default function ProductSelection(props) {
             status: 'ok',
          }))
       })
-   }, [products])
+   }, [setSelectedVariant, selectedVariant])
 
    const fnToggleSelectVariant = React.useCallback(
       (product) => {
@@ -252,10 +253,10 @@ export default function ProductSelection(props) {
          window.addEventListener('scroll', fnHandleScroll);
       }
       return () => window.removeEventListener("scroll", fnHandleScroll);
-   }, [PRODUCTS.status])
+   }, [PRODUCTS.status, fnHandleScroll])
 
    return (
-      <div className="px-4 -mx-4">
+      <div className="px-4 -mx-4 relative flex flex-col flex-1">
          {
             !selectedVariant.isSelect && (
                <>
