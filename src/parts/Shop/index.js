@@ -183,11 +183,11 @@ export default function Shop({ shopDetails }) {
 
    return (
       <div
-         className="mx-auto min-h-screen"
+         className="mx-auto min-h-screen flex flex-col"
          style={{ minWidth: 300, maxWidth: 375}}
       >
          <Header data={shopDetails.details.shop_info} />
-         <form action="" onSubmit={onSubmit} autoComplete="off">
+         <form className="flex flex-col flex-1" action="" onSubmit={onSubmit} autoComplete="off">
             <Context.Provider value={CONTEXT}>
                <CustomerInformation
                   lang={lang}
@@ -199,9 +199,6 @@ export default function Shop({ shopDetails }) {
                <ProductSelection
                   productsOrdered={data.productsOrdered}
                   fnChange={fnChange}
-                  // fnSelectProduct={fnSelectProduct}
-                  // fnToggleSelectVariant={fnToggleSelectVariant}
-                  // fnChangeRangeProduct={fnChangeRangeProduct}
                />
                <Checkout
                   lang={lang}
