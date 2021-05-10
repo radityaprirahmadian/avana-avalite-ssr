@@ -8,7 +8,15 @@ export default (props) => (
       style={{
          marginTop: '16px',
          marginBottom: '8px',
-         width: '100%'
+         width: '100%',
+         ...props.style
+      }}
+      inputProps={{
+         ...props.inputProps,
+         style: {
+            width: '100%',
+            ...props.inputProps?.style,
+         }
       }}
    />
 )

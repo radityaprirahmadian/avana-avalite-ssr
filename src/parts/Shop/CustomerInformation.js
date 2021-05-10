@@ -1,7 +1,7 @@
 import React from 'react'
 
 import TextField from 'src/components/form/TextField'
-import PhoneInput from 'react-phone-input-2'
+import PhoneInput from 'src/components/form/PhoneInput'
 
 export default function CustomerInformation(props) {
    return (
