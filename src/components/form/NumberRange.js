@@ -1,8 +1,8 @@
 import React from 'react';
-import { target } from 'tailwind.config';
 
 export default function NumberRange(props) {
   const [value, setValue] = React.useState(props.value || null)
+  const [lastValue, setLastValue] = React.useState(null)
   const fnMinus = React.useCallback(
     () => {
       const newValue = Number(value) - 1;
@@ -15,6 +15,7 @@ export default function NumberRange(props) {
           max: props.max
         }
       };
+      setLastValue(value);
       setValue(newValue);
       fnChange(newEvent);
     },
@@ -33,6 +34,7 @@ export default function NumberRange(props) {
           max: props.max
         }
       };
+      setLastValue(value);
       setValue(newValue);
       fnChange(newEvent);
     },
@@ -42,6 +44,7 @@ export default function NumberRange(props) {
   const fnChange = React.useCallback(
     (e) => {
       e.persist && e.persist();
+      setLastValue(value);
       setValue(e.target.value);
       if (e.target.value !== '') {
         e.target.value = (props.hasOwnProperty('min') && (Number(e.target.value) < Number(props.min))) ?
@@ -54,6 +57,15 @@ export default function NumberRange(props) {
       }
     },
     [props.fnChange, setValue]
+  )
+
+  const fnBlur = React.useCallback (
+    (e) => {
+      e.persist && e.persist();
+      if (e.target.value === '') {
+        setValue(lastValue);
+      }
+    }
   )
 
   return (
@@ -77,8 +89,10 @@ export default function NumberRange(props) {
         value={value}
       />
       <button
-        className="input-number button plus rounded-full bg-blue-600 h-5 w-5 text-white focus:outline-none"
-        onClick={fnPlus}
+        className={`input-number button plus rounded-full bg-blue-600 h-5 w-5 text-white focus:outline-none
+          ${(!!props.max && value < props.max  || !props.max) ? ' visible' : ' invisible'}
+        `}
+        onClick={() => (!!props.max && value < props.max  || !props.max) && fnPlus()}
       >
       </button>
     </section>
