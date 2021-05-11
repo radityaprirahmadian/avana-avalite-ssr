@@ -3,7 +3,7 @@ import React from 'react'
 import { setCurrentLang } from 'src/helpers/localization';
 
 export default function Footer(props) {
-
+   const { lang } = props;
    // const setLang = React.useCallback((lang) => {
    //    props.fnSelectLocale(lang);
    // }, [setCurrentLang]);
@@ -16,7 +16,7 @@ export default function Footer(props) {
 
    return (
       <footer className="text-xs text-center py-2 px-4 sticky bottom-0 bg-white">
-         <span>Powered By</span>
+         <span>{lang?.text__powered_by || 'Powered By'}</span>
          <img
             className="inline-block h-4 w-16 object-contain mx-1"
             src={`/images/logo.png`}

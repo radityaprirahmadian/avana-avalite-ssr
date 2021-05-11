@@ -8,7 +8,7 @@ import  SearchIcon from '@material-ui/icons/Search';
 import images from 'src/constants/images';
 
 let fetchSearchTimeout = null;
-export default function LocationMaps(props) {
+export default function LocationMaps({ lang, ...props}) {
   const [Search, setSearch] = React.useState({
     data: [],
     input: '',
@@ -109,13 +109,13 @@ export default function LocationMaps(props) {
               ))
             ) : Search.status === 'IDLE' ? (
             <div className="p-4">
-              Find your location
+              {lang?.text__find_location || 'Find your location'}
             </div>) : Search.status === 'LOADING' ? (
             <div className="p-4" style={{display:'flex', flex: '1'}}>
               {/* <Spinner size={1} /> */}
-              Loading...
+              {lang?.text__loading || 'Loading'}...
             </div>) : (<div className="p-4">
-              Location not found
+              {lang?.text__location_not_found || 'Location not found'}
             </div>
           )}
       </div>

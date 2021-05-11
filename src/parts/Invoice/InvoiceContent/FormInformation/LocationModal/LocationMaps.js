@@ -12,7 +12,7 @@ import FormContext from '../FormContext';
 
 import images from 'src/constants/images';
 
-export default function LocationMaps(props) {
+export default function LocationMaps({ lang, ...props }) {
   const [Address, setAddress] = React.useState({
     title: '',
     details: ''
@@ -93,6 +93,7 @@ export default function LocationMaps(props) {
           style={{height: '80%'}}
         >
           <LocationSearch
+            lang={lang}
             maps={maps}
             center={Center}
             handleChange={handleChange}
@@ -134,7 +135,7 @@ export default function LocationMaps(props) {
                       </div>
                     </>
                   ) : (
-                    'Choose Location'
+                    lang?.text__choose_location || 'Choose Location'
                   )}
                 </div>
               )
@@ -143,7 +144,7 @@ export default function LocationMaps(props) {
           {
             (Address.details && !FORMCONTEXT.isAvailableService && !FORMCONTEXT.isLoadService && !Loading) && (
               <div className="text-red-600 py-2">
-                {'No courier service available'}
+                {lang?.text__courier_service_not_available || 'No courier service available'}
               </div>
             )
           }
@@ -154,7 +155,7 @@ export default function LocationMaps(props) {
               color="primary"
               onClick={handleConfirm}
             >
-              Confirm
+              {lang?.btn__confirm || 'Confirm'}
             </Button>
           </div>
         </section>

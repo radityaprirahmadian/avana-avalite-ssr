@@ -12,7 +12,7 @@ import calculateHourFromNow from 'src/helpers/calculateHourFromNow';
 
 import MainContext from 'src/parts/Context';
 import FormContext from './FormContext';
-import Localization from 'src/configs/lang/invoice/formInformation';
+import Localization from 'src/configs/lang/invoice/form-information';
 
 export default function FormInformation({
    COUNTRIES,

@@ -2,10 +2,14 @@ import image from 'src/constants/images'
 import Spinner from 'src/components/Spinner';
 import Button from 'src/components/Button';
 
+import Localization from 'src/configs/lang/invoice/finish-order';
+
 export default function FinishOrder({
   statusState,
   orderDetails
 }) {
+  const lang = Localization['id']
+
   return (
     <div
       className="flex flex-col justify-center text-center"
@@ -14,11 +18,10 @@ export default function FinishOrder({
         <img src={image.congratulation} alt="AVA mascot gratz" width="100" />
         <div>
           <h2 className="text-2xl font-semibold text-gray-700 my-4">
-            Thank You for Order!
+            {lang?.text__thank_for_order || 'Thank You for Order'}!
           </h2>
           <div>
-            Please wait in a moment... we will redirect you to
-            payment page
+            {lang?.text__please_wait_redirect || 'Please wait in a moment... we will redirect you to payment page'}
           </div>
         </div>
       </div>
@@ -36,7 +39,7 @@ export default function FinishOrder({
             className="buttons"
           >
             <div>
-              Not yet direct to payment page? Click button bellow
+              {lang?.text__not_directed_to_payment || 'Not yet direct to payment page'}? {lang?.text__click_button_bellow || 'Click button bellow'}
             </div>
             <Button
               variant="contained"
@@ -45,7 +48,7 @@ export default function FinishOrder({
               href={orderDetails.paymentUrl}
               // ref={this.paymentRef}
             >
-              Go to Payment Page
+              {lang?.btn__go_to_payment || 'Go to Payment Page'}
             </Button>
           </div>
         )}

@@ -18,8 +18,17 @@
   "placeholder__state": "Pilih Negeri",
   "placeholder__city": "Pilih Bandar",
   "placeholder__courier": "Pilih Kurier",
+  "placeholder__customer_location": "Klik untuk memilih lokasi",
   "placeholder__services": "Pilih Perkhidmatan",
   "text__additional_info": "Maklumat Tambahan",
   "text__not_found": "[0] yang anda cari tidak dijumpai",
-  "title__choose_location": "Pilih Lokasi"
+  "text__choose_location": "Pilih Lokasi",
+  "text__courier_service_not_available": "Tidak ada perkhidmatan kurier",
+  "text__find_location": "Cari lokasi anda",
+  "text__loading": "Memuat",
+  "text__location_not_found": "Lokasi tidak dijumpai",
+  "text__email_invalid": "Sila taipkan e-mel yang sah",
+  "btn__confirm": "Konfirmasi",
+  "option__no": "Tidak",
+  "option__yes": "Ya"
 }

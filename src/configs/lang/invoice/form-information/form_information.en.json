@@ -18,8 +18,17 @@
   "placeholder__state": "Select State",
   "placeholder__city": "Select City",
   "placeholder__courier": "Select Courier",
+  "placeholder__customer_location": "Click to choose location",
   "placeholder__services": "Select Services",
   "text__additional_info": "Checkout Additional Info",
   "text__not_found": "The [0] you are looking for was not found",
-  "title__choose_location": "Choose Location"
+  "text__choose_location": "Choose Location",
+  "text__courier_service_not_available": "No courier service available",
+  "text__find_location": "Find your location",
+  "text__loading": "Loading",
+  "text__location_not_found": "Location not found",
+  "text__email_invalid": "Please type valid email",
+  "btn__confirm": "Confirm",
+  "option__no": "No",
+  "option__yes": "Yes"
 }

@@ -3,5 +3,6 @@
   "btn__edit": "Edit",
   "text__all": "Semua",
   "text__search": "Cari Produk",
-  "text__out_of_stock": "Stock Kosong"
+  "text__out_of_stock": "Stock Kosong",
+  "text__product_not_found": "Produk yang anda cari tidak ditemukan"
 }

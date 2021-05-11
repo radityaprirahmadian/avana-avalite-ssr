@@ -8,7 +8,8 @@ import FormContext from '../FormContext';
 import { ArrowBack, LocationOn } from '@material-ui/icons';
 import { InputAdornment } from '@material-ui/core';
 
-export default function LocationModals() {
+export default function LocationModals(props) {
+  const { lang } = props;
   const FORMCONTEXT = useContext(FormContext);
   return (
     <>
@@ -31,11 +32,12 @@ export default function LocationModals() {
                     style={{ cursor: 'pointer' }}
                   />
                   <span className="truncate">
-                    Choose Location
+                    {lang?.text__choose_location || 'Choose Location'}
                   </span>
                 </div>
                 <div className="h-full">
                   <LocationMaps
+                    lang={lang}
                     toggleModal={toggleModal}
                   />
                 </div>
@@ -46,7 +48,7 @@ export default function LocationModals() {
       {(toggleModal) => (
         <TextField
           name="customer_location"
-          label={'Customer Location'}
+          label={lang?.label__customer_location || 'Customer Location'}
           multiline
           InputProps={{
             readOnly: true,
@@ -56,7 +58,7 @@ export default function LocationModals() {
               </InputAdornment>
             ),
           }}
-          placeholder="Click to choose location"
+          placeholder={lang?.placeholder__choose_location|| 'Click to choose location'}
           value={FORMCONTEXT?.orderDetails?.locationAddress?.details}
           onClick={toggleModal}
         />

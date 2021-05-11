@@ -1,4 +1,6 @@
 {
+  "text__greeting": "Selamat Datang di",
+  "text__powered_by": "Powered By",
   "label__name": "Nama Anda",
   "label__phone": "No Telepon Anda",
   "btn__buy": "Beli",

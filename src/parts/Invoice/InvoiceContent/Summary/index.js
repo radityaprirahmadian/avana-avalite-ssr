@@ -22,13 +22,14 @@ export default function Summary({
          className="flex flex-col"
       >
          <div className="text-base font-semibold">
-            {`Order #${orderDetails.orderNumber}`}
+            {`${lang?.text__order || 'Order'} \#${orderDetails.orderNumber}`}
          </div>
          <SummaryProducts
             orderDetails={orderDetails}
             productsOrdered={productsOrdered}
          />
          <Coupon
+            lang={lang}
             formInfoData={formInfoData}
             productsOrdered={productsOrdered}
             orderDetails={orderDetails}

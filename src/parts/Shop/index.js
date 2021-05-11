@@ -186,7 +186,7 @@ export default function Shop({ shopDetails }) {
          className="mx-auto min-h-screen flex flex-col"
          style={{ minWidth: 300, maxWidth: 375}}
       >
-         <Header data={shopDetails.details.shop_info} />
+         <Header data={shopDetails.details.shop_info} lang={lang} />
          <Context.Provider value={CONTEXT}>
             <CustomerInformation
                lang={lang}
@@ -207,7 +207,7 @@ export default function Shop({ shopDetails }) {
                fnCreateOrder={fnCreateOrder}
             />
          </Context.Provider>
-         <Footer fnSelectLocale={fnSelectLocale} />
+         <Footer fnSelectLocale={fnSelectLocale} lang={lang} />
       </div>
    )
 }

@@ -5,14 +5,14 @@ import Variation from './Variation';
 import images from 'src/constants/images'
 
 export default function ProductLists(props) {
-   const { products, selectedVariant } = props
+   const { products, selectedVariant, lang } = props
    
    return (
       <>
          {(Object.values(products.data).length > 0) ? (
             selectedVariant.isSelect ? (
                <Variation
-                  lang={props.lang}
+               lang={lang}
                   item={selectedVariant.product}
                   productsOrdered={props.productsOrdered}
                   fnSelectProduct={props.fnSelectProduct}
@@ -24,7 +24,7 @@ export default function ProductLists(props) {
                   {Object.values(products.data).map((item) => (
                      <div key={item.id}>
                         <Row
-                           lang={props.lang}
+                           lang={lang}
                            item={item}
                            productsOrdered={props.productsOrdered}
                            fnSelectProduct={props.fnSelectProduct}
@@ -42,7 +42,7 @@ export default function ProductLists(props) {
                   <div className="w-24 h-24 object-contain mb-3">
                      <img src={images.sad} alt="ava sad" />
                   </div>
-                  <span>Couldn't find any products</span>
+                  <span>{lang?.text__product_not_found || 'The product you are looking for was not found'}</span>
                </div>
             )}
             </>

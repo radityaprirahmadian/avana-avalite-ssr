@@ -267,7 +267,7 @@ export default function ProductSelection(props) {
                         type="search"
                         value={props.search}
                         onChange={(e) => fnSearch(e.target.value)}
-                        label={ lang?.text__search || 'Search Product'}
+                        label={lang?.text__search || 'Search Product'}
                         InputProps={{
                            startAdornment: (
                               <InputAdornment position="start">

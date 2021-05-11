@@ -1,4 +1,6 @@
 {
+  "text__greeting": "Welcome to",
+  "text__powered_by": "Powered By",
   "label__name": "Your Name",
   "label__phone": "Your Phone Number",
   "btn__buy": "Buy",

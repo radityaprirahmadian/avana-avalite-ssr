@@ -2,7 +2,7 @@ import React from 'react'
 import Image from 'src/components/Container/Image'
 import images from 'src/constants/images'
 
-export default function Header({ data }) {
+export default function Header({ data, lang }) {
    let imagePreview = data?.whatsapp_logo
    if (imagePreview.indexOf('%3A') > -1)
       //should be fixed on api level, but yeah we fixed it anyway on frontend
@@ -14,7 +14,7 @@ export default function Header({ data }) {
             <Image src={imagePreview} alt={data?.shop_name} placeholder={images.profilePlaceholder} />
          </div>
          <h1 className="text-center mt-3">
-            Selamat datang di <strong>{data?.shop_name ?? 'Shop Name'}</strong>
+            {lang?.text__greeting || 'Welcome to'} <strong>{data?.shop_name ?? 'Shop Name'}</strong>
          </h1>
       </header>
    )

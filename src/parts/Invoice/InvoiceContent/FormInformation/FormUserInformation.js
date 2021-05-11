@@ -66,7 +66,7 @@ export default function FormUserInformation({
          onChange={fnChange}
          isRequired
          statusInput={formInfoStatus.email}
-         labelError="Please type valid email"
+         labelError={lang?.text__invalid_email || 'Please type valid email'}
       />
       {
          COUNTRIES && (<>
@@ -236,7 +236,9 @@ export default function FormUserInformation({
             {(shippingMethod === 'shipper' && formInfoData.shipperCourierName &&
                formInfoData.postcode &&
                checkCourierSameDay(formInfoData.shipperCourierName)) && (
-                  <LocationModal />
+                  <LocationModal
+                     lang={lang}
+                  />
             )}
             {formInfoData.shipperCourierName &&
                ((checkCourierSameDay(formInfoData.shipperCourierName) && !! locationAddress) || 
@@ -280,10 +282,10 @@ export default function FormUserInformation({
                      }}
                   >
                      <option aria-label="None" value={0}>
-                        No
+                        {lang?.option__no || 'No'}
                      </option>
                      <option value={1}>
-                        Yes
+                        {lang?.option__yes || 'Yes'}
                      </option>
                   </Select>
                </>)

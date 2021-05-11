@@ -8,6 +8,7 @@ import coupons from 'src/constants/api/coupons'
 import MainContext from 'src/parts/Context';
 
 export default function Coupon(props) {
+  const { lang } = props; 
   const MAINCONTEXT = React.useContext(MainContext);
 
   const [COUPON, setCoupon] = React.useState({
@@ -73,6 +74,9 @@ export default function Coupon(props) {
       props.fnUpdateOrderDetails((prevState) => ({
         ...prevState,
         coupon: {},
+      }));
+      setCoupon((prevState) => ({
+        ...prevState,
         status: 'error',
         // errors: []
       }));
@@ -114,7 +118,7 @@ export default function Coupon(props) {
           COUPON.status === 'ok' ? (
             <>
               <h4 className="text-base mb-2">
-                Coupon
+                {lang?.label__coupon || 'Coupon'}
               </h4>
               <div className="text-sm font-semibold">
                 {COUPON.input}
@@ -124,12 +128,12 @@ export default function Coupon(props) {
             <TextField
               id="coupon"
               name="coupon_code"
-              label="Coupon"
+              label={lang?.label__coupon || 'Coupon'}
               disabled={COUPON.status === 'loading'}
               error={COUPON.status === 'error'}
               value={COUPON.input}
               onChange={fnChangeCoupon}
-              helperText={COUPON.status === 'error' && 'error coupon'}
+              helperText={COUPON.errors[0]}
             />
           )
         }
@@ -143,7 +147,11 @@ export default function Coupon(props) {
           disabled={COUPON.status === 'loading' || !COUPON.input}
           loading={COUPON.status === 'loading'}
         >
-          {COUPON.status === 'ok' ? 'Remove' : 'Apply'}
+          {
+            COUPON.status === 'ok'
+              ? lang?.btn__remove || 'Remove'
+              : lang?.btn__apply || 'Apply'
+          }
         </Button>
       </div>
     </section>
