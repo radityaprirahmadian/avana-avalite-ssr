@@ -3,6 +3,7 @@ import React from 'react'
 import { Button, Badge } from '@material-ui/core'
 import Modal from 'src/components/Modal'
 import NumberRange from 'src/components/form/NumberRange'
+import Image from 'src/components/Container/Image'
 
 import formatThousand from 'src/helpers/formatThousand'
 import Context from 'src/parts/Shop/Context'
@@ -37,7 +38,7 @@ export default function Row({
                         className="object-cover rounded overflow-hidden"
                         style={{ width: 76, height: 76 }}
                      >
-                        <img src={item.main_image} alt={item.name} className="w-full h-full object-cover" />
+                        <Image src={item.main_image} alt={item.name} />
                      </div>
                   </Badge>
                ) : (
@@ -45,7 +46,7 @@ export default function Row({
                      className="object-cover rounded overflow-hidden"
                      style={{ width: 76, height: 76 }}
                   >
-                     <img src={item.main_image} alt={item.name} className="w-full h-full object-cover" />
+                     <Image src={item.main_image} alt={item.name} />
                   </div>
                )}
             </div>
