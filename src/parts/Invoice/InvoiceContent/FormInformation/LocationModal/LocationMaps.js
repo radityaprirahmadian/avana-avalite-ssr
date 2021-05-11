@@ -143,7 +143,7 @@ export default function LocationMaps(props) {
           {
             (Address.details && !FORMCONTEXT.isAvailableService && !FORMCONTEXT.isLoadService && !Loading) && (
               <div className="text-red-600 py-2">
-                {'Your delivery distance is more than 30km'}
+                {'No courier service available'}
               </div>
             )
           }
