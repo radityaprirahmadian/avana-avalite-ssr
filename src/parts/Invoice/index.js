@@ -89,6 +89,10 @@ export default function Invoice({ shopDetails, orderToken }) {
    const fnChange = React.useCallback(
       (event) => {
          event.persist && event.persist()
+         const checkExistPatternUnvalid = !!event.target?.pattern && !event.target?.validity?.valid
+         if (checkExistPatternUnvalid) {
+            return;
+         }
          setFormInfoData(event)
 
          setFormInfoStatus(event)

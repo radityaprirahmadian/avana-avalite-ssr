@@ -204,6 +204,9 @@ export default function FormUserInformation({
                label="Post Code"
                value={formInfoData.postcode}
                onChange={fnChange}
+               inputProps={{
+                  pattern:'^[0-9]*$'
+               }}
                isRequired
                statusInput={formInfoStatus.postcode}
             />
