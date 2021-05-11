@@ -95,7 +95,7 @@ export async function getServerSideProps(context) {
          },
       }
    } catch (error) {
-      const errors = error?.response?.status === 503 ? {} : error?.response?.data
+      const errors = error?.response?.status === 503 ? {} : (error?.response?.data || {})
       return { props: errors }
    }
 }

@@ -97,9 +97,7 @@ export async function getServerSideProps(context) {
          },
       }
    } catch (error) {
-      console.log(error, error.response)
-      const errors =
-         error?.response?.status === 503 ? {} : error?.response?.data
+      const errors = error?.response?.status === 503 ? {} : (error?.response?.data || {})
       return { props: errors }
    }
 }

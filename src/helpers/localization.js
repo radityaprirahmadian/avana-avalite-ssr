@@ -11,8 +11,12 @@ export default function writeLocalization(string = '', collections = []) {
 };
 
 export const getCurrentLang = () => {
-  const lang = localStorage.get('lang');
-  return lang?.toLowerCase() ?? navigator.language.split("-")[0];
+  try {
+    const lang = localStorage.get('lang');
+    return lang?.toLowerCase() ?? navigator.language.split("-")[0];
+  } catch(e) {
+    return 'en'
+  }
 };
 
 export const setCurrentLang = (lang) => {
