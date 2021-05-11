@@ -19,7 +19,7 @@ export default function Footer(props) {
          <span>Powered By</span>
          <img
             className="inline-block h-4 w-16 object-contain mx-1"
-            src={`${process.env.NEXT_PUBLIC_BASE_URL}/images/logo.png`}
+            src={`/images/logo.png`}
             alt="AVANA logo"
          />
          {Object.values(locales).map((lang) => (

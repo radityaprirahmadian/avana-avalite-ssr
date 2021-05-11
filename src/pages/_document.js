@@ -17,7 +17,7 @@ class MyDocument extends Document {
                <meta name="theme-color" content={theme.palette.primary.main} />
                {/* <link
                   rel="shortcut icon"
-                  href={`${process.env.NEXT_PUBLIC_BASE_URL}/images/logo.png`}
+                  href={`/images/logo.png`}
                /> */}
             </Head>
             <body>

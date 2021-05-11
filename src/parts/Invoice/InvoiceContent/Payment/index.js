@@ -73,7 +73,7 @@ export default function Payments({
             >
               <PaymentMethod>
                 <img
-                  src={`${process.env.NEXT_PUBLIC_BASE_URL}/images/payments/${
+                  src={`/images/payments/${
                     payment.code === 'faspay' || payment.code === 'avapay'
                       ? `onlinebanking` : payment.code}.svg`
                   }
