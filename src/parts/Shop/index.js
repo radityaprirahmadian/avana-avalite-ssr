@@ -187,28 +187,26 @@ export default function Shop({ shopDetails }) {
          style={{ minWidth: 300, maxWidth: 375}}
       >
          <Header data={shopDetails.details.shop_info} />
-         <form className="flex flex-col flex-1" action="" onSubmit={onSubmit} autoComplete="off">
-            <Context.Provider value={CONTEXT}>
-               <CustomerInformation
-                  lang={lang}
-                  defualtCountry={shopDetails.details.country.iso_code.toLowerCase()}
-                  data={data}
-                  fnChange={fnChange}
-                  status={status}
-               />
-               <ProductSelection
-                  productsOrdered={data.productsOrdered}
-                  fnChange={fnChange}
-               />
-               <Checkout
-                  lang={lang}
-                  data={data}
-                  status={status}
-                  statusOrder={statusOrder}
-                  fnCreateOrder={fnCreateOrder}
-               />
-            </Context.Provider>
-         </form>
+         <Context.Provider value={CONTEXT}>
+            <CustomerInformation
+               lang={lang}
+               defualtCountry={shopDetails.details.country.iso_code.toLowerCase()}
+               data={data}
+               fnChange={fnChange}
+               status={status}
+            />
+            <ProductSelection
+               productsOrdered={data.productsOrdered}
+               fnChange={fnChange}
+            />
+            <Checkout
+               lang={lang}
+               data={data}
+               status={status}
+               statusOrder={statusOrder}
+               fnCreateOrder={fnCreateOrder}
+            />
+         </Context.Provider>
          <Footer fnSelectLocale={fnSelectLocale} />
       </div>
    )

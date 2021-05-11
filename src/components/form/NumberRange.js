@@ -15,8 +15,6 @@ export default function NumberRange(props) {
           max: props.max
         }
       };
-      setLastValue(value);
-      setValue(newValue);
       fnChange(newEvent);
     },
     [props.fnChange, props.name, props.value, setValue]
@@ -34,11 +32,21 @@ export default function NumberRange(props) {
           max: props.max
         }
       };
-      setLastValue(value);
-      setValue(newValue);
       fnChange(newEvent);
     },
     [props.fnChange, props.name, props.value, setValue]
+  )
+
+  const fnChangeInput = React.useCallback(
+    (e) => {
+      e.persist && e.persist();
+      if (!e.target.validity.valid) {
+        return;
+      } else {
+        fnChange(e);
+      }
+    },
+    [fnChange, value]
   )
 
   const fnChange = React.useCallback(
@@ -56,10 +64,10 @@ export default function NumberRange(props) {
         setValue(e.target.value);
       }
     },
-    [props.fnChange, setValue]
+    [props, setValue, value]
   )
 
-  const fnBlur = React.useCallback (
+  const fnBlur = React.useCallback(
     (e) => {
       e.persist && e.persist();
       if (e.target.value === '') {
@@ -85,7 +93,8 @@ export default function NumberRange(props) {
         style={{
           maxWidth: '2.5rem'
         }}
-        onChange={fnChange}
+        pattern="^[0-9]*$"
+        onChange={fnChangeInput}
         value={value}
       />
       <button
