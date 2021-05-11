@@ -37,7 +37,7 @@ export default function Row({
                         className="object-cover rounded overflow-hidden"
                         style={{ width: 76, height: 76 }}
                      >
-                        <img src={item.main_image} alt={item.name} />
+                        <img src={item.main_image} alt={item.name} className="w-full h-full object-cover" />
                      </div>
                   </Badge>
                ) : (
@@ -45,7 +45,7 @@ export default function Row({
                      className="object-cover rounded overflow-hidden"
                      style={{ width: 76, height: 76 }}
                   >
-                     <img src={item.main_image} alt={item.name} />
+                     <img src={item.main_image} alt={item.name} className="w-full h-full object-cover" />
                   </div>
                )}
             </div>
@@ -84,7 +84,7 @@ export default function Row({
             {item.variation ? (
                <Button
                   type="button"
-                  className="is-radiusless is-shadowless"
+                  className="is-radiusless is-shadowless w-20"
                   variant="contained"
                   color={productVariantSelected ?
                      'default' :
@@ -111,7 +111,7 @@ export default function Row({
                ) :  (
                <Button
                   type="button"
-                  className="is-radiusless is-shadowless"
+                  className="is-radiusless is-shadowless w-20"
                   variant="contained"
                   color="primary"
                   onClick={() => fnSelectProduct(item)}
