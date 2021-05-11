@@ -109,9 +109,10 @@ export default function ProductSelection(props) {
             document.documentElement.scrollTop <
             document.documentElement.clientHeight + 100)
             const isOverflow = (document.documentElement.scrollHeight !== document.documentElement.clientHeight)
-            if (scrollOnEndge && isOverflow &&(PRODUCTS.page.currentPage < PRODUCTS.page.lastPage) && (
-               PRODUCTS.status !== 'loading'
-            ))
+            if (scrollOnEndge && isOverflow && !selectedVariant.isSelect &&
+               (PRODUCTS.page.currentPage < PRODUCTS.page.lastPage) && (
+                  PRODUCTS.status !== 'loading')
+            )
          {
             fnGetProducts(search, selectedCategory, PRODUCTS.page.currentPage + 1);
          }
@@ -133,6 +134,7 @@ export default function ProductSelection(props) {
       (product) => {
          if (!selectedVariant.isSelect && product) {
             facebookPixel.viewContent(product);
+            window.removeEventListener("scroll", fnHandleScroll);
          }
 
          setSelectedVariant((prevState) => ({
@@ -141,7 +143,7 @@ export default function ProductSelection(props) {
             isSelect: !prevState.isSelect,
          }));
       },
-      [setSelectedVariant]
+      [setSelectedVariant, selectedVariant, fnHandleScroll]
    );
 
    const fnSelectProduct = React.useCallback(
