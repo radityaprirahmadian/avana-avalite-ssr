@@ -9,6 +9,7 @@ import formatThousand from 'src/helpers/formatThousand'
 import Context from 'src/parts/Shop/Context'
 
 export default function Row({
+   onClick,
    lang,
    item,
    productsOrdered,
@@ -21,9 +22,16 @@ export default function Row({
       Object.values(productsOrdered).filter(
          (product) => product.product_id === item.id
       ).length > 0
+   const handleOnEventChild = React.useCallback(
+      (e, onClickEvent) => {
+         e.stopPropagation();
+         onClickEvent(e)
+      },
+      []
+   )
 
    return (
-      <div className="flex flex-wrap items-center -mx-4 mb-4">
+      <div className="flex flex-wrap items-center -mx-4 mb-4" onClick={onClick}>
          <div className="w-auto px-4">
             <div className="relative">
                {item.sale_enabled && item.sale_percentage ? (
@@ -91,7 +99,7 @@ export default function Row({
                      'default' :
                      'primary'
                   }
-                  onClick={() => { fnToggleSelectVariant(item) }}
+                  onClick={(e) => handleOnEventChild(e, () => fnToggleSelectVariant(item))}
                   disableElevation
                   disabled={item.quantity === 0}
                >
@@ -115,7 +123,7 @@ export default function Row({
                   className="is-radiusless is-shadowless w-20"
                   variant="contained"
                   color="primary"
-                  onClick={() => fnSelectProduct(item)}
+                  onClick={(e) => handleOnEventChild(e,() => fnSelectProduct(item))}
                   disableElevation
                   disabled={item.quantity === 0}
                >

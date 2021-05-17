@@ -1,7 +1,7 @@
 import React from 'react'
 
-import Row from './Row'
-import Variation from './Variation';
+import ProductViewer from './ProductViewer'
+import Variation from './Variation'
 import images from 'src/constants/images'
 
 export default function ProductLists(props) {
@@ -23,7 +23,7 @@ export default function ProductLists(props) {
                <>
                   {Object.values(products.data).map((item) => (
                      <div key={item.id}>
-                        <Row
+                        <ProductViewer
                            lang={lang}
                            item={item}
                            productsOrdered={props.productsOrdered}

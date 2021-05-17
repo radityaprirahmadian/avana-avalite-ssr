@@ -41,6 +41,7 @@ function OrderInvoice(props) {
          <Head>
             {/* <!-- Primary Meta Tags --> */}
             <title>{title}</title>
+            <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
             <meta name="title" content={title} />
             <meta name="description" content={description} />
             <link rel="shortcut icon" href={favicon} />
