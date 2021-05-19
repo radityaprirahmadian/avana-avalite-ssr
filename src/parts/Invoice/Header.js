@@ -1,9 +1,11 @@
 import React from 'react'
 
+import PrivacyPolicy from 'src/parts/PrivacyPolicy'
 import Image from 'src/components/Container/Image'
 
 import images from 'src/constants/images'
 import writeLocalization from 'src/helpers/localization'
+
 
 export default function Header({ lang, data, currentStep }) {
    let imagePreview = data?.whatsapp_logo
@@ -28,6 +30,9 @@ export default function Header({ lang, data, currentStep }) {
                   )
             }
          </h1>
+         {!!(data?.is_enabled_privacy_policy) && (
+            <PrivacyPolicy longtext shopInfo={data} />
+         )}
       </header>
    )
 }

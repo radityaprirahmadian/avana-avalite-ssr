@@ -1,4 +1,6 @@
 import React from 'react'
+
+import PrivacyPolicy from 'src/parts/PrivacyPolicy'
 import Image from 'src/components/Container/Image'
 import images from 'src/constants/images'
 
@@ -16,6 +18,9 @@ export default function Header({ data, lang }) {
          <h1 className="text-center mt-3">
             {lang?.text__greeting || 'Welcome to'} <strong>{data?.shop_name ?? 'Shop Name'}</strong>
          </h1>
+         {!!(data?.is_enabled_privacy_policy) && (
+            <PrivacyPolicy longtext shopInfo={data} />
+         )}
       </header>
    )
 }

@@ -166,17 +166,10 @@ export default function InputList(props) {
         toggleModal={toggle}
         content={() => (
           <div
-            className="fixed bg-white mx-auto"
+            className="fixed inset-0 bg-white mx-auto"
             style={{
-              ...(!mobileTabletCheck() ? {
-                minWidth: '300px',
-                maxWidth: '375px',
-                margin: '0 auto',
-                inset: 0,
-              } : {
-                width: '100%'
-              }),
-              // inset: 0,
+              minWidth: '300px',
+              maxWidth: '375px'
             }}
           >
               <div
