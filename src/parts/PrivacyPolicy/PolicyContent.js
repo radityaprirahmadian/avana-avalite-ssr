@@ -2,7 +2,7 @@ import React from 'react'
 import writeLocalization from 'src/helpers/localization'
 
 export default function PolicyContent(props) {
-  const lang = {}
+  const { lang } = props 
   const RenderNumbering = (data) => {
     return data.map((item, index) => (
       <div className="my-2" key={index}>
