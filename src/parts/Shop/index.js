@@ -125,7 +125,18 @@ export default function Shop({ shopDetails }) {
 
             let urlRedirect = `/${router?.query?.shop}/${btoa(btoa(res.order_id))}`
             if (isViaWA) {
-               let messages = 'Hello shop';
+               const products = product_ordered
+                  .map(
+                  (product, idx) =>
+                     `${idx + 1}. ${product.name}${
+                        product.variation ? ` (${product.variation}) ` : ' '
+                     }*x ${product.quantity}*%0A`
+                  )
+                  .join(''); 
+               let messages = writeLocalization(
+                  lang?.text__whatsapp_order_message || `Hi [0], I'm [1].%0A%0AI'm interested to order :%0A[2].%0AOrder link : [3]`,
+                  [shopDetails.details.shop_info.shop_name, name, products, `${window.location.origin}${urlRedirect}`]
+               );
                const waPhoneNumber = await whatsapp.whatsappRotator({
                      phone_number: phoneNumber,
                      ...(waRotatorId ? {whatsapp_info_id: waRotatorId} : {})
