@@ -92,6 +92,14 @@ export default function Shop({ shopDetails }) {
          product_ordered: product_ordered
       })
          .then(async (res) => {
+            const waRotatorId = search && Number(() => {
+               try {
+                 return atob(new URLSearchParams(search).get("wa"))
+               } catch {
+                 return 0
+               }
+             });
+
             mixpanel.track('Order Form', {
                Products: product_ordered.map((product) => ({
                   'Product Name': `${product.name} ${
@@ -119,11 +127,11 @@ export default function Shop({ shopDetails }) {
             if (isViaWA) {
                let messages = 'Hello shop';
                const waPhoneNumber = await whatsapp.whatsappRotator({
-                     phone_number: phoneNumber
-                  })
-                     .then(({whatsapp}) => {
-                        return whatsapp.phone_no
-                     });
+                     phone_number: phoneNumber,
+                     ...(waRotatorId ? {whatsapp_info_id: waRotatorId} : {})
+                  }).then(({whatsapp}) => {
+                     return whatsapp.phone_no
+                  }).catch(() => {}) || shopDetails.details.whatsapp_no?.split('+')?.pop();;
 
                urlRedirect = mobileTabletCheck()
                   ? `whatsapp://send?phone=${waPhoneNumber}&text=${messages}`
