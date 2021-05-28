@@ -45,7 +45,7 @@ class ErrorBoundary extends React.Component {
       // You can render any custom fallback UI
       return (
         <div
-          className="m-auto text-center"
+          className="m-auto text-center min-h-screen"
           style={{ minWidth: 300, maxWidth: 375}}
         >
           <ErrorsWrapper error={{

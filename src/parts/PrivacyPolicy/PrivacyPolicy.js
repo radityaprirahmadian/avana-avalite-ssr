@@ -66,12 +66,11 @@ function PrivacyPolicy(props) {
         )}
       >
       {() => (
-        <div style={{textAlign: 'center', padding: props.footer ? '0.5rem 0.25rem 0' : '0 0.25rem 0.5rem', fontSize: '12px'}}>
+        <div className="text-xs text-center px-1 pb-2">
           {writeLocalization(
-            lang?.text__confirm_agree_privacy_policy || 'By providing my personal data herein, I confirm that I have read and agree to [0]',
-            [props?.shopInfo?.shop_name]
+            lang?.text__confirm_agree_privacy_policy || 'By providing my personal data herein, I confirm that I have read and agree to [0] [1]',
+            [props?.shopInfo?.shop_name, <u style={{cursor: 'pointer'}} onClick={() => toggle()}>{lang?.btn__privacy_policy || 'privacy policy'}</u>]
           )}{" "}
-          {<u style={{cursor: 'pointer'}} onClick={() => toggle()}>{lang?.btn__privacy_policy || 'privacy policy'}</u>}
         </div>
       )}
       </Modal>

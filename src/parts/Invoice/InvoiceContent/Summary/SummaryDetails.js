@@ -3,8 +3,7 @@ import formatCurrency from 'src/helpers/formatCurrency';
 
 const PriceSummary = (props) => (
    <div
-      className="flex items-center mb-2 text-right"
-      style={{ fontSize: props.totalPrice ? '1rem' : '0.9rem' }}
+      className={`flex items-center mb-2 text-right`}
    >
       {props.children}
    </div>
@@ -72,14 +71,16 @@ export default function SummaryDetails({lang, orderDetails, pricingCharge}) {
             </PriceAmmount>
          </PriceSummary>
          <hr className="my-4" />
-         <PriceSummary totalPrice>
-            <PriceTitle>
-               {lang?.text__total || 'Total'}
-            </PriceTitle>
-            <PriceAmmount>
-               {calculateWrapper(pricingCharge.totalPrice - (orderDetails.coupon?.total_discount || 0))}
-            </PriceAmmount>
-         </PriceSummary>
+         <h6 className="text-base text-primary-orange">
+            <PriceSummary>
+               <PriceTitle>
+                  {lang?.text__total || 'Total'}
+               </PriceTitle>
+               <PriceAmmount>
+                  {calculateWrapper(pricingCharge.totalPrice - (orderDetails.coupon?.total_discount || 0))}
+               </PriceAmmount>
+            </PriceSummary>
+         </h6>
       </div>
    )
 }

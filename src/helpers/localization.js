@@ -3,7 +3,7 @@ import localStorage from './localStorage';
 export default function writeLocalization(string = '', collections = []) {
   const text = string.split(/\[(.*?)\]/gi);
   return text.map((e) => {
-    if (!isNaN(+e)) {
+    if (!isNaN(e) && e !== ' ') {
       return collections?.[e] ?? '';
     }
     return e;

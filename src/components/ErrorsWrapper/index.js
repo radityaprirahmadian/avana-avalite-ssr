@@ -5,7 +5,7 @@ import Button from '../Button';
 export default function ErrorsWrapper({ error }) {
 
   return (
-    <section className="min-h-screen flex flex-col justify-center items-center">
+    <section className="min-h-full flex flex-col justify-center items-center">
       <img
         className=""
         src={images.sad}

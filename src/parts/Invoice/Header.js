@@ -15,10 +15,10 @@ export default function Header({ lang, data, currentStep }) {
 
    return (
       <header className="pt-6">
-         <div className="mx-auto w-20 h-20 rounded-full overflow-hidden">
+         <div className="mx-auto w-20 h-20 rounded-full overflow-hidden font-montserrat">
             <Image src={imagePreview} alt={data?.shop_name} placeholder={images.profilePlaceholder} />
          </div>
-         <h1 className="text-center mt-3">
+         <h1 className="text-center mt-3 font-bold">
             {/* {headerMessage ?? 'Selamat datang di'} <strong>{data?.shop_name ?? 'Shop Name'}</strong> */}
             {currentStep === 1
                ? lang?.text__complete_information || 'Please Complete Your Information'

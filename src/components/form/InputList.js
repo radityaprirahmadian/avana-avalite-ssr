@@ -2,9 +2,10 @@ import React from 'react';
 
 import { InputAdornment } from '@material-ui/core';
 import Modal from '../Modal';
-import { ArrowBack, Search, CheckCircle } from '@material-ui/icons';
+import { ArrowBack, Search, CheckCircle, ChevronRight } from '@material-ui/icons';
 import TextField from './TextField';
 import Spinner from '../Spinner';
+import ErrorWrapper from '../ErrorsWrapper';
 import mobileTabletCheck from 'src/helpers/mobileTabletCheck';
 
 export default function InputList(props) {
@@ -176,18 +177,18 @@ export default function InputList(props) {
                 className="flex flex-col h-full pt-0 px-4 pb-4"
               >
                 <section
-                  className="sticky p-4 flex items-center text-lg"
+                  className="sticky py-4 flex items-center text-lg"
                 >
                   <ArrowBack
                     className="mr-2 cursor-pointer"
                     onClick={() => toggle()}
                   />
-                  <span className="truncate">
+                  <h6 className="truncate">
                     {
                       props.titleModal ||
                       props.label
                     }
-                  </span>
+                  </h6>
                 </section>
                 {props?.isSearch && (
                   <section id="inputSearch" className="sticky">
@@ -209,93 +210,99 @@ export default function InputList(props) {
                     />
                   </section>
                 )}
-                <section
-                  id="inputlist"
-                  className="h-full mt-4 overflow-y-auto flex"
-                  ref={RefList}
-                >
-                  {(props?.loading || ErrorMessage?.message) ? (
-                    <Spinner
-                      size={1}
-                      className="flex-1 justify-center items-center"
-                      error={ErrorMessage}
-                    />
-                  ) : (
-                    <>
-                      {Options && (
-                        <ul
-                          id="input-list"
-                          className="input-list p-0 m-0 flex-1"
-                        >
-                          {(
-                            Selected && props?.limit &&
-                              props?.optionLabel(Selected)?.toLowerCase()
-                                ?.indexOf(SearchValue?.toLowerCase()) !== -1
-                            ) && (
-                            <li
-                              id={`list-item-${props?.valueKey ? props?.valueKey(Selected) : 'selected'}`}
-                              className={`flex list-none py-4 px-2 justify-between
-                                cursor-pointer border-gray-300 border-b ${isSelected(Selected) && 'bg-gray-300'}`
-                              }
-                              onClick={() => onClick(Selected,
-                                `list-item-${props?.valueKey ? props?.valueKey(Selected) : 'selected'}`
-                              )}
-                              key={`list-item-${props?.valueKey ? props?.valueKey(Selected) : 'selected'}`}
-                            >
-                              <div className="flex-1">
-                                {
-                                  props.optionLabel
-                                    ? props.optionLabel(Selected)
-                                    : Selected
+                {(ErrorMessage?.message) ? (
+                  <div className="flex-1">
+                    <ErrorWrapper error={ErrorMessage} />
+                  </div>
+                ) : (
+                  <section
+                    id="inputlist"
+                    className="h-full mt-4 overflow-y-auto flex"
+                    ref={RefList}
+                  >
+                    {(props?.loading) ? (
+                      <Spinner
+                        size={1}
+                        className="flex-1 justify-center items-center"
+                        error={ErrorMessage}
+                      />
+                    ) : (
+                      <>
+                        {Options && (
+                          <ul
+                            id="input-list"
+                            className="input-list p-0 m-0 flex-1"
+                          >
+                            {(
+                              Selected && props?.limit &&
+                                props?.optionLabel(Selected)?.toLowerCase()
+                                  ?.indexOf(SearchValue?.toLowerCase()) !== -1
+                              ) && (
+                              <li
+                                id={`list-item-${props?.valueKey ? props?.valueKey(Selected) : 'selected'}`}
+                                className={`flex list-none py-4 px-2 justify-between
+                                  cursor-pointer border-gray-300 border-b ${isSelected(Selected) && 'bg-gray-300'}`
                                 }
-                              </div>
-                              {isSelected(Selected) && (
-                                <div>
-                                  <CheckCircle style={{color: '#128c7e'}} />
-                                </div>
-                              )}
-                            </li>
-                          )}
-                          {Options
-                            ?.filter((el) => (Selected && props?.limit)
-                              ? props?.valueKey
-                                ?(props?.valueKey(el) !== props?.valueKey(Selected))
-                                : (el !== Selected)
-                              : true
-                            )
-                            ?.map((el, idx) => {
-                              const id = `list-item-${props?.valueKey ? props?.valueKey(el) : idx}`
-                              return (
-                                <li
-                                  id={id}
-                                  className={`flex list-none py-4 px-2 justify-between
-                                    cursor-pointer border-gray-300 border-b ${isSelected(el) && 'bg-gray-300'}`
+                                onClick={() => onClick(Selected,
+                                  `list-item-${props?.valueKey ? props?.valueKey(Selected) : 'selected'}`
+                                )}
+                                key={`list-item-${props?.valueKey ? props?.valueKey(Selected) : 'selected'}`}
+                              >
+                                <div className="flex-1">
+                                  {
+                                    props.optionLabel
+                                      ? props.optionLabel(Selected)
+                                      : Selected
                                   }
-                                  onClick={() => onClick(el, id)}
-                                  key={idx}
-                                >
+                                </div>
+                                {isSelected(Selected) && (
                                   <div>
-                                    {
-                                      props.optionLabel
-                                        ? props.optionLabel(el)
-                                        : el
-                                    }
+                                    <CheckCircle style={{color: '#128c7e'}} />
                                   </div>
-                                  {isSelected(el) && (
+                                )}
+                              </li>
+                            )}
+                            {Options
+                              ?.filter((el) => (Selected && props?.limit)
+                                ? props?.valueKey
+                                  ?(props?.valueKey(el) !== props?.valueKey(Selected))
+                                  : (el !== Selected)
+                                : true
+                              )
+                              ?.map((el, idx) => {
+                                const id = `list-item-${props?.valueKey ? props?.valueKey(el) : idx}`
+                                return (
+                                  <li
+                                    id={id}
+                                    className={`flex list-none py-4 px-2 justify-between
+                                      cursor-pointer border-gray-300 border-b ${isSelected(el) && 'bg-gray-300'}`
+                                    }
+                                    onClick={() => onClick(el, id)}
+                                    key={idx}
+                                  >
                                     <div>
-                                      <CheckCircle style={{color: '#128c7e'}} />
+                                      {
+                                        props.optionLabel
+                                          ? props.optionLabel(el)
+                                          : el
+                                      }
                                     </div>
-                                  )}
-                                </li>
-                              )}
-                            )
-                          }
-                        </ul>
-                      )}
-                    </>
-                  )
-                }
-                </section>
+                                    {isSelected(el) && (
+                                      <div>
+                                        <CheckCircle style={{color: '#128c7e'}} />
+                                      </div>
+                                    )}
+                                  </li>
+                                )}
+                              )
+                            }
+                          </ul>
+                        )}
+                      </>
+                    )
+                  }
+                  </section>
+                )}
               </div>
           </div>
         )}
@@ -309,8 +316,7 @@ export default function InputList(props) {
               ? props.optionLabel(Selected)
               : Selected
             }
-            margin="normal"
-            variant="outlined"
+            isRequired={props.isRequired}
             InputProps={{
               readOnly: true,
               autoComplete: "off",
@@ -318,7 +324,9 @@ export default function InputList(props) {
             inputProps={{
               className: "cursor-pointer"
             }}
+            readOnly
             fullWidth
+            endIcon={(<ChevronRight fontSize="small" />)}
             onClick={() => toggle()}
           />
       )}
