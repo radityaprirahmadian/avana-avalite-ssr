@@ -15,7 +15,7 @@ export default function Checkout(props) {
             <div className="w-full pr-2">
                <Button
                   variant="contained"
-                  color="primary"
+                  color="whatsapp"
                   className="whatsapp w-full"
                   disableElevation
                   startIcon={props.statusOrder.isCreateOrderViaWA || <WhatsApp />}

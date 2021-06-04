@@ -42,6 +42,7 @@ export default function FormUserInformation({
          isRequired
          statusInput={formInfoStatus.name}
       />
+      
       <PhoneInput
          name="phoneNumber"
          country="my"
@@ -76,6 +77,8 @@ export default function FormUserInformation({
                value={formInfoData.address1}
                onChange={fnChange}
                isRequired
+               multiline
+               rowsMax={2}
                statusInput={formInfoStatus.address1}
             />
             <TextField
@@ -83,6 +86,8 @@ export default function FormUserInformation({
                label={lang?.label__address_2 || 'Address 2 (optional)'}
                value={formInfoData.address2}
                onChange={fnChange}
+               multiline
+               rowsMax={2}
             />
             {/* <AutoComplete
                name="country"
@@ -109,6 +114,7 @@ export default function FormUserInformation({
                   lang?.text__not_found || 'The [0] you are looking for was not found',
                   [lang?.label__country || 'Country']
                )}
+               isRequired
                options={COUNTRIES.data}
                value={formInfoData.country}
                optionLabel={(option) => option?.name}
@@ -120,26 +126,6 @@ export default function FormUserInformation({
             />
             {
                formInfoData.country && (<>
-                  {/* <AutoComplete
-                     name="states"
-                     onOpen={STATES.data.length === 0 ? fnGetStates : null}
-                     options={STATES.data}
-                     loading={STATES.status === 'loading'}
-                     disabled={STATES.status === 'loading'}
-                     getOptionLabel={(option) => option?.name ?? ''}
-                     value={STATES.selected}
-                     defaultValue={formInfoStatus.state}
-                     renderInput={{
-                        name: "state_input",
-                        isRequired: true,
-                        statusInput: formInfoStatus.state,
-                        InputProps:{
-                           placeholder: (lang?.placeholder__state || 'Select State'),
-                        },
-                        label: (lang?.label__state || 'State'),
-                     }}
-                     onChange={fnChangeState}
-                  /> */}
                   <InputList
                      isSearch
                      labelSearch={lang?.label_search || 'Search'}
@@ -147,6 +133,7 @@ export default function FormUserInformation({
                         lang?.text__not_found || 'The [0] you are looking for was not found',
                         [lang?.label__state || 'State']
                      )}
+                     isRequired
                      options={STATES.data}
                      value={formInfoData.state}
                      optionLabel={(option) => option?.name}
@@ -160,25 +147,6 @@ export default function FormUserInformation({
             }
             {
                formInfoData.state && (<>
-                  {/* <AutoComplete
-                     name="city"
-                     onOpen={CITIES.data.length === 0 ? () => fnGetCities() : null}
-                     options={CITIES.data}
-                     loading={CITIES.status === 'loading'}
-                     disabled={CITIES.status === 'loading'}
-                     getOptionLabel={(option) => option?.label ?? ''}
-                     value={CITIES.selected}
-                     renderInput={{
-                        name: "city_input",
-                        isRequired: true,
-                        statusInput: formInfoStatus.city,
-                        InputProps:{
-                           placeholder: (lang?.placeholder__city || 'Select City'),
-                        },
-                        label: (lang?.label__city || 'City'),
-                     }}
-                     onChange={fnChangeCity}
-                  /> */}
                   <InputList
                      isSearch
                      limit={20}
@@ -187,6 +155,7 @@ export default function FormUserInformation({
                         lang?.text__not_found || 'The [0] you are looking for was not found',
                         [lang?.label__city || 'City']
                      )}
+                     isRequired
                      options={CITIES.data}
                      optionLabel={(option) => option?.label ?? ''}
                      value={formInfoData.city}

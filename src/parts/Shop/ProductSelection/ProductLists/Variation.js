@@ -29,14 +29,15 @@ export default function Variation({
       <span className="text-sm py-1 px-2 rounded bg-gray-400 mb-4">
         {item.variation?.name}
       </span>
-      <div className="px-2 py-4">
+      <div className="py-4">
         {item?.variation?.options
           ?.filter((option) => option.id)
           ?.map(
             (option, index) => {
               return (
-                  <div className="flex -mx-4 py-2 items-center" key={index}>
-                    <div className="flex-none">
+                  <div className="flex flex-col mb-2">
+                    <div className="flex items-center" key={index}>
+                      <div className="-ml-3">
                         <Checkbox
                           id={`${item.id}_${option.id}`}
                           name={`${item.id}_${option.id}`}
@@ -48,17 +49,28 @@ export default function Variation({
                           checked={!!productsOrdered?.[`${item.id}_${option.id}`]}
                           //   disabled={variation.quantity === 0}
                         />
+                      </div>
+                      <div className="w-full px-4">
+                        <div>{option.name}</div>
+                        {option.quantity === 0 && (
+                          <div className="text-sm text-red-600 leading-3">
+                            {lang?.text__out_of_stock || 'Out of stock'}
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex-none">
+                          <span className="">
+                            {`${
+                                item?.currency
+                                  ?.code ?? ''
+                            } ${formatThousand(
+                                option?.price
+                            )}`}
+                          </span>
+                      </div>
                     </div>
-                    <div className="w-full px-4">
-                      <div>{option.name}</div>
-                      {option.quantity === 0 && (
-                        <div className="text-sm text-red-600 leading-3">
-                          {lang?.text__out_of_stock || 'Out of stock'}
-                        </div>
-                      )}
-                    </div>
-                    <div className="w-full px-4">
-                      {productsOrdered?.[`${item.id}_${option.id}`] && (
+                    {productsOrdered?.[`${item.id}_${option.id}`] && (
+                      <div className="self-end py-2">
                         <NumberRange
                           name={`${item.id}_${option.id}`}
                           min="0"
@@ -66,18 +78,8 @@ export default function Variation({
                           value={productsOrdered?.[`${item.id}_${option.id}`]?.quantity}
                           fnChange={fnChangeRangeProduct}
                         />
-                      )}
-                    </div>
-                    <div className="flex-none px-4">
-                        <span className="">
-                          {`${
-                              item?.currency
-                                ?.code ?? ''
-                          } ${formatThousand(
-                              option?.price
-                          )}`}
-                        </span>
-                    </div>
+                      </div>
+                    )}
                   </div>
               )
             }

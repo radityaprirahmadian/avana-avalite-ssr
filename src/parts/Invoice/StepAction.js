@@ -54,7 +54,7 @@ export default function StepAction({
                 fnNextStep :
                 fnProcessOrder
             }
-            className="whatsapp w-full"
+            className="w-full"
             disabled={
               // isLoading ||
               ((currentStep === 1 &&
@@ -64,6 +64,7 @@ export default function StepAction({
               (currentStep === 3 &&
                 orderDetails.paymentMethod === ''))
             }
+            disableElevation
             loading={currentStep === 3 ? statusState.isProcessOrder : null}
           >
             { currentStep === 2
@@ -77,7 +78,7 @@ export default function StepAction({
         <div className="buttons w-full py-2">
           {currentStep > 1 && !statusState.isEditOrder && (
             <Button
-              variant="contained"
+              variant="outlined"
               color="default"
               className="w-full"
               onClick={fnPrevStep}
@@ -91,7 +92,7 @@ export default function StepAction({
         <div className="buttons w-full py-2">
           {(currentStep === 2 && !statusState.isEditOrder) && (
             <Button
-              color="primary"
+              color=""
               onClick={fnEditOrder}
               className="w-full"
               disableRipple

@@ -25,7 +25,7 @@ export default function FormAdditionalInfo({
                   }
                   value={formInfoData[`custom_${formAdditional.checkout_custom_field_id}`]}
                   key={`custom_${formAdditional.checkout_custom_field_id}`}
-                  isRequired
+                  isRequired={!!formAdditional.is_required}
                   statusInput={formInfoStatus[`custom_${formAdditional.checkout_custom_field_id}`]}
                   onChange={fnChange}
                 />
