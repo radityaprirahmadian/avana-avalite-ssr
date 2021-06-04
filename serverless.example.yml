@@ -1,0 +1,13 @@
+avaliteSSR:
+  component: '@sls-next/serverless-component@1.19.0'
+  inputs:
+    runtime:
+      defaultLambda: 'nodejs12.x'
+      apiLambda: 'nodejs12.x'
+    timeout: 30
+    memory: 1024
+    bucketRegion: ap-southeast-1
+    bucketName: avalite-ssr-local
+    name:
+      defaultLambda: avalite-ssr-local
+      apiLambda: avalite-ssr-local
