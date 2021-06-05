@@ -21,6 +21,7 @@
   border-color: rgba(0, 0, 0, 0.23);
   padding-top: 12px;
   padding-bottom: 12px;
+  font-size: 14px;
 }
 
 .react-tel-input .form-control + div::before{

@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { Button, Badge } from '@material-ui/core'
+import { BadgeDiscount, BadgeProductCount } from 'src/components/Badge'
 import NumberRange from 'src/components/form/NumberRange'
 import Image from 'src/components/Container/Image'
 
@@ -10,16 +11,19 @@ export default function Row({
    onClick,
    lang,
    item,
+   selectedMeta,
    productsOrdered,
    fnSelectProduct,
    fnChangeRangeProduct,
    fnToggleSelectVariant,
 }) {
    // const fnToggleSelectVariant = React.useCallback((event) => {}, [])
-   const productVariantSelected =
-      Object.values(productsOrdered).filter(
-         (product) => product.product_id === item.id
-      ).length > 0
+   // const isVariant =
+   //    Object.values(productsOrdered).filter(
+   //       (product) => product.product_id === item.id && !!product.variation_option_id
+   //    ).length > 0
+   const {quantity: countProduct, isVariant} = selectedMeta || {}
+
    const handleOnEventChild = React.useCallback(
       (e, onClickEvent) => {
          e.stopPropagation();
@@ -32,13 +36,31 @@ export default function Row({
       <div className="flex items-center py-4 border-b border-gray-200" onClick={onClick}>
          <div className="w-auto">
             <div className="relative">
+               <div
+                  className="absolute"
+                  style={{ width: 80, height: 80 }}
+               >
+                  <BadgeProductCount
+                     content={countProduct}
+                     styleBadge={{
+                        right: countProduct > 99
+                           ? '20px'
+                           : countProduct > 9
+                           ? '18px'
+                           : '16px'
+                     }}
+                  >
+                     <div
+                        className="object-cover rounded overflow-hidden"
+                        style={{ width: 80, height: 80 }}
+                     />
+                  </BadgeProductCount>
+               </div >
                {item.sale_enabled && item.sale_percentage ? (
-                  <Badge
-                     badgeContent={`${Math.round(
+                  <BadgeDiscount
+                     content={`${Math.round(
                         item.sale_percentage
                      )}%`}
-                     color="error"
-                     style={{ zIndex: 0 }}
                   >
                      <div
                         className="object-cover rounded overflow-hidden"
@@ -46,7 +68,7 @@ export default function Row({
                      >
                         <Image src={item.main_image} alt={item.name} />
                      </div>
-                  </Badge>
+                  </BadgeDiscount>
                ) : (
                   <div
                      className="object-cover rounded overflow-hidden"
@@ -92,7 +114,7 @@ export default function Row({
                   type="button"
                   className="is-radiusless is-shadowless"
                   variant="contained"
-                  color={productVariantSelected ?
+                  color={isVariant ?
                      'default' :
                      'primary'
                   }
@@ -100,7 +122,7 @@ export default function Row({
                   disableElevation
                   disabled={item.quantity === 0}
                >
-                  {productVariantSelected ?
+                  {isVariant ?
                      (lang?.btn__edit || 'Edit') :
                      (lang?.btn__buy || 'Buy')
                   }

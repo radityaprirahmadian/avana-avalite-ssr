@@ -224,15 +224,17 @@ export default function Shop({ shopDetails }) {
                productsOrdered={data.productsOrdered}
                fnChange={fnChange}
             />
-            <Checkout
-               lang={lang}
-               data={data}
-               status={status}
-               statusOrder={statusOrder}
-               fnCreateOrder={fnCreateOrder}
-            />
+            <div className="text-xs text-center py-2 sticky bottom-0 bg-white z-10">
+               <Checkout
+                  lang={lang}
+                  data={data}
+                  status={status}
+                  statusOrder={statusOrder}
+                  fnCreateOrder={fnCreateOrder}
+               />
+               <Footer fnSelectLocale={fnSelectLocale} lang={lang} />
+            </div>
          </Context.Provider>
-         <Footer fnSelectLocale={fnSelectLocale} lang={lang} />
       </div>
    )
 }
