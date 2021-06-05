@@ -31,7 +31,7 @@ export default function CategoriesSelection(props) {
       <div
          className="sticky bg-white mb-4 pb-2 z-10"
          style={{
-            top: '3.75rem'
+            top: '5.25rem'
          }}
       >
          <Tabs

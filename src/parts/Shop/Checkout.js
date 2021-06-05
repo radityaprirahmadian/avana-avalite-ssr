@@ -8,14 +8,14 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 export default function Checkout(props) {
    return (
       <div
-         className="sticky footer-checkout bg-white py-2 w-full"
+         className="sticky footer-checkout pb-2 bg-white w-full"
          style={{ bottom: 30 }}
       >
          <div className="flex">
             <div className="w-full pr-2">
                <Button
                   variant="contained"
-                  color="primary"
+                  color="whatsapp"
                   className="whatsapp w-full"
                   disableElevation
                   startIcon={props.statusOrder.isCreateOrderViaWA || <WhatsApp />}

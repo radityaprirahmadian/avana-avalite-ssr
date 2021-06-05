@@ -20,10 +20,10 @@ import Footer from 'src/parts/Footer'
 import Context from '../Context'
 import orders from 'src/constants/api/orders';
 import whatsapp from 'src/constants/api/whatsapp';
-import { route } from 'next/dist/next-server/server/router';
 
 import Localization from 'src/configs/lang/shop';
 import { getCurrentLang, setCurrentLang } from 'src/helpers/localization';
+import writeLocalization from 'src/helpers/localization'
 
 export default function Shop({ shopDetails }) {
    const router = useRouter()
@@ -65,6 +65,7 @@ export default function Shop({ shopDetails }) {
    }
    const fnCreateOrder= React.useCallback((isViaWA) => {
       const { name, phoneNumber, productsOrdered } = data;
+      const { search } = location;
       let product_ordered = Object.values(productsOrdered);
 
       setStatusOrder((prevState) => ({
@@ -92,6 +93,14 @@ export default function Shop({ shopDetails }) {
          product_ordered: product_ordered
       })
          .then(async (res) => {
+            const waRotatorId = search && Number(() => {
+               try {
+                 return atob(new URLSearchParams(search).get("wa"))
+               } catch {
+                 return 0
+               }
+             });
+
             mixpanel.track('Order Form', {
                Products: product_ordered.map((product) => ({
                   'Product Name': `${product.name} ${
@@ -114,16 +123,32 @@ export default function Shop({ shopDetails }) {
                $name: name,
                $phone: phoneNumber,
             });
+            setStatusOrder((prevState) => ({
+               ...prevState,
+               isCreateOrder: false,
+               isCreateOrderViaWA: false,
+            }))
 
             let urlRedirect = `/${router?.query?.shop}/${btoa(btoa(res.order_id))}`
             if (isViaWA) {
-               let messages = 'Hello shop';
+               const products = product_ordered
+                  .map(
+                  (product, idx) =>
+                     `${idx + 1}. ${product.name}${
+                        product.variation ? ` (${product.variation}) ` : ' '
+                     }*x ${product.quantity}*\n`
+                  )
+                  .join(''); 
+               let messages = encodeURIComponent(writeLocalization(
+                  lang?.text__whatsapp_order_message || `Hi [0], I'm [1].\n\nI'm interested to order :\n[2].\nOrder link : [3]`,
+                  [shopDetails.details.shop_info.shop_name, name, products, `${window.location.origin}${urlRedirect}`]
+               ).join(''));
                const waPhoneNumber = await whatsapp.whatsappRotator({
-                     phone_number: phoneNumber
-                  })
-                     .then(({whatsapp}) => {
-                        return whatsapp.phone_no
-                     });
+                     phone_number: phoneNumber,
+                     ...(waRotatorId ? {whatsapp_info_id: waRotatorId} : {})
+                  }).then(({whatsapp}) => {
+                     return whatsapp.phone_no
+                  }).catch(() => {}) || shopDetails.details.whatsapp_no?.split('+')?.pop();;
 
                urlRedirect = mobileTabletCheck()
                   ? `whatsapp://send?phone=${waPhoneNumber}&text=${messages}`
@@ -131,7 +156,7 @@ export default function Shop({ shopDetails }) {
                   urlRedirect
             }
             
-            window.location = urlRedirect;
+            window.open(urlRedirect, '_blank');
             // router.push(urlRedirect);
          })
    }, [data]);
@@ -199,15 +224,17 @@ export default function Shop({ shopDetails }) {
                productsOrdered={data.productsOrdered}
                fnChange={fnChange}
             />
-            <Checkout
-               lang={lang}
-               data={data}
-               status={status}
-               statusOrder={statusOrder}
-               fnCreateOrder={fnCreateOrder}
-            />
+            <div className="text-xs text-center py-2 sticky bottom-0 bg-white z-10">
+               <Checkout
+                  lang={lang}
+                  data={data}
+                  status={status}
+                  statusOrder={statusOrder}
+                  fnCreateOrder={fnCreateOrder}
+               />
+               <Footer fnSelectLocale={fnSelectLocale} lang={lang} />
+            </div>
          </Context.Provider>
-         <Footer fnSelectLocale={fnSelectLocale} lang={lang} />
       </div>
    )
 }

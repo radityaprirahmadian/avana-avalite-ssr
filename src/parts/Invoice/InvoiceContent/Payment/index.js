@@ -78,10 +78,11 @@ export default function Payments({
                       ? `onlinebanking` : payment.code}.svg`
                   }
                   alt=""
-                  className="h-3/6"
+                  className="h-12"
                   style={{
                     flex: '1',
                     maxWidth: '100px',
+                    maxHeight: '50px'
                   }}
                 />
                 <span

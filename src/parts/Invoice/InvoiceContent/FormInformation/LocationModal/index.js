@@ -18,8 +18,12 @@ export default function LocationModals(props) {
           <div
             className="fixed inset-0 bg-white mx-auto"
             style={{
-              minWidth: '300px',
-              maxWidth: '375px'
+              ...(!mobileTabletCheck() ? {
+                minWidth: '300px',
+                maxWidth: '375px',
+              } : {
+                width: '100%'
+              })
             }}
           >
               <div className="flex flex-col h-full">

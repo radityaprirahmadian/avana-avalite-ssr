@@ -13,7 +13,16 @@ module.exports = {
          lg: '1024px',
          xl: '1280px',
       },
-      colors: colors,
+      colors: {
+         ...colors,
+         primary: {
+            orange: '#F26522'
+         },
+         neutral: {
+            4: '#E5E5E5',
+            5: '#CCCCCC'
+         }
+      },
       spacing: {
          px: '1px',
          0: '0',
@@ -123,6 +132,7 @@ module.exports = {
       },
       fontFamily: {
          sans: ['Nunito'],
+         montserrat: ['Montserrat'],
          serif: ['Georgia', 'Cambria', '"Times New Roman"', 'Times', 'serif'],
          mono: [
             'Menlo',

@@ -182,14 +182,14 @@ export default function FormInformation({
                      };
                   })
                   .sort((a, b) => {
-                     if (a.main === b.main) {
+                     if (a.main === b.main || a.main === '' || b.main === '') {
                         return b.sub > a.sub ? -1 : 1;
                      }
                      return a.main > b.main ? 1 : -1;
                   })
                   .map((city) => ({
                      value: city.city_name,
-                     label: `${city.main}${city.sub ? ` - ${city.sub}` : ''}`,
+                     label: `${city.main || ''}${city.main && city.sub ? ' - ' : ''}${city.sub || ''}`,
                   }));
                setCities((prevState) => ({
                   ...prevState,

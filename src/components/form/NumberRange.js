@@ -1,10 +1,12 @@
 import React from 'react';
+import { Remove, Add } from '@material-ui/icons';
 
 export default function NumberRange(props) {
   const [value, setValue] = React.useState(props.value || null)
   const [lastValue, setLastValue] = React.useState(null)
   const fnMinus = React.useCallback(
-    () => {
+    (e) => {
+      e.stopPropagation && e.stopPropagation();
       const newValue = Number(value) - 1;
       const newEvent = {
         target: {
@@ -21,7 +23,8 @@ export default function NumberRange(props) {
   )
 
   const fnPlus = React.useCallback(
-    () => {
+    (e) => {
+      e.stopPropagation && e.stopPropagation();
       const newValue = Number(value) + 1;
       const newEvent = {
         target: {
@@ -79,9 +82,10 @@ export default function NumberRange(props) {
   return (
     <section className="flex align-center">
       <button
-        className="input-number button minus rounded-full bg-red-600 h-5 w-5 text-white focus:outline-none"
+        className="button rounded-full bg-white border border-solid border-neutral-4 h-8 w-8 text-black focus:outline-none"
         onClick={fnMinus}
       >
+        <Remove style={{fontSize: '16px'}} />
       </button>
       <input
         autoComplete="off"
@@ -95,14 +99,16 @@ export default function NumberRange(props) {
         }}
         pattern="^[0-9]*$"
         onChange={fnChangeInput}
+        onClick={(e) => e.stopPropagation && e.stopPropagation()}
         value={value}
       />
       <button
-        className={`input-number button plus rounded-full bg-blue-600 h-5 w-5 text-white focus:outline-none
+        className={`button rounded-full bg-white border border-solid border-neutral-4 h-8 w-8 text-black focus:outline-none
           ${(!!props.max && value < props.max  || !props.max) ? ' visible' : ' invisible'}
         `}
-        onClick={() => (!!props.max && value < props.max  || !props.max) && fnPlus()}
+        onClick={(e) => (!!props.max && value < props.max  || !props.max) && fnPlus(e)}
       >
+        <Add style={{fontSize: '16px'}} />
       </button>
     </section>
   )
