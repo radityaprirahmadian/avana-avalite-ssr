@@ -15,7 +15,7 @@ export default function Footer(props) {
    }
 
    return (
-      <footer className="text-xs text-center py-2 px-4 sticky bottom-0 bg-white">
+      <footer className="text-xs text-center py-1 px-4 sticky bottom-0 bg-white">
          <span>{lang?.text__powered_by || 'Powered By'}</span>
          <img
             className="inline-block h-4 w-16 object-contain mx-1"
@@ -31,18 +31,6 @@ export default function Footer(props) {
                {lang.name}
             </span>
          ))}
-         {/* <span
-            className="inline-block cursor-pointer underline mx-1"
-            onClick={() => {}}
-         >
-            Bahasa
-         </span>
-         <span
-            className="inline-block cursor-pointer underline mx-1"
-            onClick={() => {}}
-         >
-            Malaysia
-         </span> */}
       </footer>
    )
 }

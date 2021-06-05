@@ -49,15 +49,6 @@ const theme = createMuiTheme({
             }
          },
       },
-      MuiBadge: {
-         anchorOriginTopRightRectangle: {
-            top: '5.75px',
-            right: '5.75px',
-         },
-         // anchorOriginBottomRightRectangle: {
-            
-         // }
-      }
    },
    props: {
       MuiTab: {

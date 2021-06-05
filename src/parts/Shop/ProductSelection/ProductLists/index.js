@@ -26,6 +26,7 @@ export default function ProductLists(props) {
                         <ProductViewer
                            lang={lang}
                            item={item}
+                           selectedMeta={props.selectedMetaList[item.id]}
                            productsOrdered={props.productsOrdered}
                            fnSelectProduct={props.fnSelectProduct}
                            fnToggleSelectVariant={props.fnToggleSelectVariant}
@@ -48,7 +49,7 @@ export default function ProductLists(props) {
             </>
          )}
          {
-            products.status === 'loading' && (
+            (products.status === 'loading' && !selectedVariant.isSelect) && (
                <div className="my-2">
                   {Array(3)
                      .fill()

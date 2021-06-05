@@ -34,6 +34,7 @@ export default function ProductSelection(props) {
       status: 'loading',
       errors: [],
    })
+   const [selectedMetaList, setSelectedMetaList] = React.useState({})
 
    const [CATEGORIES, setCategories] = React.useState({
       data: null,
@@ -170,20 +171,38 @@ export default function ProductSelection(props) {
 
          facebookPixel.addToCart({id: product.id, currency: product.currency, ...addProduct});
 
-         const productId = productVariant ?
+         const productKey = productVariant ?
             `${product.id}_${productVariant.id}` :
             product.id;
+
+         let productsMeta = {};
          let productsOrdered = Object.assign({
             ...props.productsOrdered,
          }, {});
          if (productVariant && !productVariant.isSelected) {
-            delete productsOrdered[productId];
+            delete productsOrdered[productKey];
          } else {
             productsOrdered = {
                ...productsOrdered,
-               [productId]: addProduct
+               [productKey]: addProduct
             };
          }
+         
+         Object
+            .keys(productsOrdered)
+            .map((key) => {
+               let productId = key.split('_')[0]
+               if (productId in productsMeta) {
+                  productsMeta[productId] = {
+                     quantity: productsMeta[productId].quantity + productsOrdered[key].quantity
+                  }
+               } else {
+                  productsMeta[productId] = {
+                     quantity: productsOrdered[key].quantity
+                  }
+               }
+            })
+         setSelectedMetaList(productsMeta)
 
          props.fnChange({
             target: {
@@ -198,9 +217,11 @@ export default function ProductSelection(props) {
    const fnChangeRangeProduct = React.useCallback(
       (event) => {
          event.persist && event.persist();
-         let productsOrdered;
+         const selectedProduct = props.productsOrdered[event.target.name];
+         
+         let productsOrdered, productsMeta = {};
          let newQuantity = Number(event.target.value) < 0 ?
-            props.productsOrdered[event.target.name].quantity :
+            selectedProduct.quantity :
                (event.target.value > event.target.max) ?
                   Number(event.target.max) :
                   Number(event.target.value);
@@ -211,7 +232,7 @@ export default function ProductSelection(props) {
             productsOrdered = {
                ...props.productsOrdered,
                [event.target.name]: {
-                  ...props.productsOrdered[event.target.name],
+                  ...selectedProduct,
                   quantity: newQuantity
                }
             };
@@ -228,6 +249,22 @@ export default function ProductSelection(props) {
                }))[0];
             facebookPixel.addToCart(product);
          }
+         console.log('aw',productsOrdered)
+         Object
+            .keys(productsOrdered)
+            .map((key) => {
+               let productId = key.split('_')[0]
+               if (productId in productsMeta) {
+                  productsMeta[productId] = {
+                     quantity: productsMeta[productId].quantity + productsOrdered[key].quantity
+                  }
+               } else {
+                  productsMeta[productId] = {
+                     quantity: productsOrdered[key].quantity
+                  }
+               }
+            })
+         setSelectedMetaList(productsMeta)
 
          props.fnChange({
             target: {
@@ -294,6 +331,7 @@ export default function ProductSelection(props) {
          <ProductLists
             lang={lang}
             products={PRODUCTS}
+            selectedMetaList={selectedMetaList}
             productsOrdered={props.productsOrdered}
             selectedVariant={selectedVariant}
             fnToggleSelectVariant={fnToggleSelectVariant}
