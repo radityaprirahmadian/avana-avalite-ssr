@@ -8,7 +8,7 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 export default function Checkout(props) {
    return (
       <div
-         className="sticky footer-checkout bg-white py-2 w-full"
+         className="sticky footer-checkout pb-2 bg-white w-full"
          style={{ bottom: 30 }}
       >
          <div className="flex">

@@ -9,9 +9,6 @@ import ImgSlider from 'src/components/ImgSlider';
 import ProductItem from './ProductItem';
 
 export default function ProductViewer(props) {
-  const {
-    product,
-  } = props;
 
   const [Display, setDisplay] = React.useState(false);
   const toggle = React.useCallback(() => {
@@ -78,6 +75,7 @@ export default function ProductViewer(props) {
           onClick={() => toggle()}
           lang={props.lang}
           item={props.item}
+          selectedMeta={props.selectedMeta}
           productsOrdered={props.productsOrdered}
           fnSelectProduct={props.fnSelectProduct}
           fnToggleSelectVariant={props.fnToggleSelectVariant}
