@@ -24,7 +24,7 @@ function OrderInvoice(props) {
          ''
       ) ?? 'AVANA'
 
-   const favicon = props?.data?.details?.shop_info?.webstore_favicon ?? '/images/favicon.ico'
+   const favicon = props?.data?.details?.shop_info?.webstore_favicon || '/images/favicon.ico'
 
    let imagePreview = props?.data?.details?.shop_info?.whatsapp_logo ?? ''
    if (imagePreview?.indexOf('%3A') > -1)
