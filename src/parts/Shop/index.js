@@ -20,10 +20,10 @@ import Footer from 'src/parts/Footer'
 import Context from '../Context'
 import orders from 'src/constants/api/orders';
 import whatsapp from 'src/constants/api/whatsapp';
-import { route } from 'next/dist/next-server/server/router';
 
 import Localization from 'src/configs/lang/shop';
 import { getCurrentLang, setCurrentLang } from 'src/helpers/localization';
+import writeLocalization from 'src/helpers/localization'
 
 export default function Shop({ shopDetails }) {
    const router = useRouter()
@@ -65,6 +65,7 @@ export default function Shop({ shopDetails }) {
    }
    const fnCreateOrder= React.useCallback((isViaWA) => {
       const { name, phoneNumber, productsOrdered } = data;
+      const { search } = location;
       let product_ordered = Object.values(productsOrdered);
 
       setStatusOrder((prevState) => ({
@@ -122,6 +123,11 @@ export default function Shop({ shopDetails }) {
                $name: name,
                $phone: phoneNumber,
             });
+            setStatusOrder((prevState) => ({
+               ...prevState,
+               isCreateOrder: false,
+               isCreateOrderViaWA: false,
+            }))
 
             let urlRedirect = `/${router?.query?.shop}/${btoa(btoa(res.order_id))}`
             if (isViaWA) {
@@ -130,13 +136,13 @@ export default function Shop({ shopDetails }) {
                   (product, idx) =>
                      `${idx + 1}. ${product.name}${
                         product.variation ? ` (${product.variation}) ` : ' '
-                     }*x ${product.quantity}*%0A`
+                     }*x ${product.quantity}*\n`
                   )
                   .join(''); 
-               let messages = writeLocalization(
-                  lang?.text__whatsapp_order_message || `Hi [0], I'm [1].%0A%0AI'm interested to order :%0A[2].%0AOrder link : [3]`,
+               let messages = encodeURIComponent(writeLocalization(
+                  lang?.text__whatsapp_order_message || `Hi [0], I'm [1].\n\nI'm interested to order :\n[2].\nOrder link : [3]`,
                   [shopDetails.details.shop_info.shop_name, name, products, `${window.location.origin}${urlRedirect}`]
-               );
+               ).join(''));
                const waPhoneNumber = await whatsapp.whatsappRotator({
                      phone_number: phoneNumber,
                      ...(waRotatorId ? {whatsapp_info_id: waRotatorId} : {})
@@ -150,7 +156,7 @@ export default function Shop({ shopDetails }) {
                   urlRedirect
             }
             
-            window.location = urlRedirect;
+            window.open(urlRedirect, '_blank');
             // router.push(urlRedirect);
          })
    }, [data]);

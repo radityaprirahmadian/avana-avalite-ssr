@@ -1,5 +1,5 @@
 {
-  "text__whatsapp_order_message": "Hai [0], Saya [1].%0A%0ASaya ingin memesan :%0A[2].%0AKlik untuk pesan: [3]",
+  "text__whatsapp_order_message": "Hai [0], Saya [1].\n\nSaya ingin memesan :\n[2].\nKlik untuk pesan: [3]",
   "text__greeting": "Selamat Datang di",
   "text__powered_by": "Powered By",
   "label__name": "Nama Anda",
