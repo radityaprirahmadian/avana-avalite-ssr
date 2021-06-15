@@ -11,7 +11,7 @@ export default function Footer(props) {
    const locales = {
       en: {name: 'English', code: 'en'},
       id: {name: 'Bahasa', code: 'id'},
-      my: {name: 'Malaysia', code: 'my'}
+      my: {name: 'Melayu', code: 'my'}
    }
 
    return (
