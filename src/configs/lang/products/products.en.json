@@ -4,5 +4,6 @@
   "text__all": "All",
   "text__search": "Search Product",
   "text__out_of_stock": "Out of stock",
+  "text__oops": "Oops",
   "text__product_not_found": "The product you are looking for was not found"
 }

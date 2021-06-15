@@ -5,5 +5,6 @@
   "label__name": "Nama Anda",
   "label__phone": "No Telefon Anda",
   "btn__buy": "Beli",
-  "btn__order_via_whatsapp":  "Pesan melalui WhatsApp"
+  "btn__order_via_whatsapp":  "Pesan melalui WhatsApp",
+  "text__complete_phone_number": "Harap lengkapi nomor telephone anda"
 }

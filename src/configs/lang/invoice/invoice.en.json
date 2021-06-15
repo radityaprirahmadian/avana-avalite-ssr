@@ -9,5 +9,12 @@
   "btn__back": "Back",
   "btn__edit_order": "I Want to Edit My Order",
   "btn__submit": "Submit",
-  "btn__confirm": "Confirm"
+  "btn__confirm": "Confirm",
+  "text__order_not_found": "Order Not Found",
+  "text__order_not_found_description": "Opps, cannot find your order. Please check your order link, or order again here",
+  "text__order_expired": "Order Expired",
+  "text__order_cancelled": "Order Cancelled",
+  "text__order_expired_description": "Opps, your order has been expired",
+  "text__order_cancelled_description": "Opps, your order has been cancelled",
+  "text__order_again": "Order Again"
 }

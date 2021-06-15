@@ -9,5 +9,12 @@
   "btn__back": "Kembali",
   "btn__edit_order": "Saya ingin Mengubah Pesanan",
   "btn__submit": "Konfirmasi",
-  "btn__confirm": "Konfirmasi"
+  "btn__confirm": "Konfirmasi",
+  "text__order_not_found": "Pesanan Tidak Ditemukan",
+  "text__order_not_found_description": "Opps, tidak dapat menemukan pesanan anda. Silahkan periksa link pesanan anda, atau pesan lagi di sini",
+  "text__order_expired": "Pesanan Kadaluarsa",
+  "text__order_cancelled": "Pesanan Dibatalkan",
+  "text__order_expired_description": "Opps, pesanan anda telah kadaluarsa",
+  "text__order_cancelled_description": "Opps, pesanan anda telah dibatalkan",
+  "text__order_again": "Pesan Lagi"
 }
