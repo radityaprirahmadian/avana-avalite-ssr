@@ -1,3 +1,5 @@
 {
-  "text__required": "Kolom ini dibutuhkan"
+  "text__required": "Kolom ini dibutuhkan",
+  "text__min_length": "Panjang karakter minimal lebih dari [0]",
+  "text__max_length": "Panjang karakter maksimal kurang dari [0]"
 }

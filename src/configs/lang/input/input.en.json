@@ -1,3 +1,5 @@
 {
-  "text__required": "This field is required"
+  "text__required": "This field is required",
+  "text__min_length": "Min length should be more than [0]",
+  "text__max_length": "Max length should be less than [0]"
 }

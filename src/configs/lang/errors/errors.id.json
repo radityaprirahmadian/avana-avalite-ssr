@@ -1,5 +1,9 @@
 {
   "text__shop_not_found": "Maaf, toko tidak ditemukan",
   "text__certain_shop": "Maaf, fitur ini tidak tersedia untuk toko ini",
-  "text__network_error": "Oops, Ada masalah jaringan"
+  "text__network_error": "Oops, Ada masalah jaringan",
+  "text__default_error_title": "Sorry, something went wrong. Please try again or",
+  "text__refresh_page": "refresh the page",
+  "text__unhandled_error": "Oh Snap! The apps encountered technical problem",
+  "text__unhandled_error_description": "Try refreshing the page, or if it won't help, we will knock our developer door to get rid of this nasty error."
 }
