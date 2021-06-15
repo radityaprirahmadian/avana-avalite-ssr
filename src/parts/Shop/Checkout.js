@@ -1,7 +1,8 @@
 import React from 'react'
 
 import { Button } from '@material-ui/core'
-import { WhatsApp, LocalMall } from '@material-ui/icons'
+import { WhatsappButton } from 'src/components/Button'
+import { LocalMall } from '@material-ui/icons'
 
 import CircularProgress from '@material-ui/core/CircularProgress'
 
@@ -13,12 +14,9 @@ export default function Checkout(props) {
       >
          <div className="flex">
             <div className="w-full pr-2">
-               <Button
-                  variant="contained"
-                  color="whatsapp"
-                  className="whatsapp w-full"
-                  disableElevation
-                  startIcon={props.statusOrder.isCreateOrderViaWA || <WhatsApp />}
+               <WhatsappButton
+                  // variant="contained"
+                  className="w-full h-full"
                   onClick={
                      () => {
                         let isOrderViaWa = true;
@@ -30,19 +28,16 @@ export default function Checkout(props) {
                      Object.values(props.data.productsOrdered).length === 0 ||
                      props.status.isCreatingOrder
                   }
+                  loading={props.statusOrder.isCreateOrderViaWA}
                >
-                  {props.statusOrder.isCreateOrderViaWA ? (
-                     <CircularProgress size={20} />
-                  ) : (
-                     props.lang?.btn__order_via_whatsapp || 'Order via WhatsApp'
-                  )}
-               </Button>
+                  {props.lang?.btn__order_via_whatsapp || 'Order via WhatsApp'}
+               </WhatsappButton>
             </div>
             <div>
                <Button
                   variant="contained"
                   color="primary"
-                  className="w-auto pl-2"
+                  className="w-auto pl-2 h-full"
                   disableElevation
                   startIcon={props.statusOrder.isCreateOrder || <LocalMall />}
                   onClick={() => {

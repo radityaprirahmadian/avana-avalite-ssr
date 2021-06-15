@@ -154,6 +154,9 @@ export default function Shop({ shopDetails }) {
                   ? `whatsapp://send?phone=${waPhoneNumber}&text=${messages}`
                   : `https://web.whatsapp.com/send?phone=${waPhoneNumber}&text=${messages}`;
                   urlRedirect
+               window.open(urlRedirect, '_blank');
+            } else {
+               window.location = urlRedirect;
             }
             
             window.open(urlRedirect, '_blank');
