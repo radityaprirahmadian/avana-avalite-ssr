@@ -1,11 +1,13 @@
 {
-   "name": "bwamicro",
+   "name": "avalite-ssr",
    "version": "0.1.0",
    "private": true,
    "scripts": {
       "dev": "next dev -p 1928",
+      "start": "next start",
       "build": "next build",
-      "start": "next start"
+      "build:sandbox": "env-cmd -f .env.sandbox next build",
+      "build:production": "env-cmd -f .env.production next build"
    },
    "dependencies": {
       "@bugsnag/js": "^7.1.1",
@@ -15,6 +17,7 @@
       "@material-ui/lab": "^4.0.0-alpha.51",
       "@zeit/next-css": "^1.0.1",
       "axios": "^0.19.2",
+      "env-cmd": "^10.1.0",
       "google-map-react": "^2.1.9",
       "material-ui-dropzone": "^3.3.0",
       "mixpanel-browser": "^2.38.0",
