@@ -1,9 +1,9 @@
 import React from 'react';
 import Head from 'next/head';
+import dynamic from 'next/dynamic'
 
 import shops from 'src/constants/api/shops';
 
-import Invoice from 'src/parts/Invoice';
 import ErrorBoundary from 'src/parts/ErrorBoundary';
 
 import Unauthenticated from 'src/parts/Unauthenticated'
@@ -11,6 +11,11 @@ import Unauthenticated from 'src/parts/Unauthenticated'
 import { setAuthorization, setBaseUrl } from 'src/configs/axios/protected'
 
 import FacebookPixel from 'src/helpers/analytics/facebookPixel';
+
+const Invoice = dynamic(
+   () => import('src/parts/Invoice'),
+   { ssr: false }
+)
 
 function OrderInvoice(props) {
    if (props.errors) return null

@@ -1,15 +1,20 @@
 import React from 'react'
 import Head from 'next/head'
+import dynamic from 'next/dynamic'
 
 import shops from 'src/constants/api/shops'
 
-import Shop from 'src/parts/Shop'
 import ErrorBoundary from 'src/parts/ErrorBoundary'
 
 import Unauthenticated from 'src/parts/Unauthenticated'
 import FacebookPixel from 'src/helpers/analytics/facebookPixel'
 
 import { setAuthorization, setBaseUrl } from 'src/configs/axios/protected'
+
+const Shop = dynamic(
+   () => import('src/parts/Shop'),
+   { ssr: false }
+)
 
 function Home(props) {
    if (props.errors) return null
