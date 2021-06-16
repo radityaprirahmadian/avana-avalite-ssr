@@ -127,7 +127,7 @@ export default function LocationMaps({ lang, ...props }) {
                 <div className="flex flex-col mx-auto w-4/5">
                   {Address.details ? (
                     <>
-                      <h3 className="font-medium">
+                      <h3>
                         {Address.title}
                       </h3>
                       <div className="overflow-ellipsis overflow-hidden break-words" style={{maxHeight: '4rem'}}>

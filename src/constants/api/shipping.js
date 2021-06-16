@@ -14,4 +14,5 @@ export default {
    getServices: (options) => avaprotected.get(`/shipper/rates`, {
       params: { ...options?.params }
    }),
+   getSelfPickupInfo: () => avaprotected.get(`/shipping-self-pickup`),
 }

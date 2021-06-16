@@ -8,6 +8,8 @@ import FormContext from '../FormContext';
 import { ArrowBack, LocationOn } from '@material-ui/icons';
 import { InputAdornment } from '@material-ui/core';
 
+import mobileTabletCheck from 'src/helpers/mobileTabletCheck';
+
 export default function LocationModals(props) {
   const { lang } = props;
   const FORMCONTEXT = useContext(FormContext);

@@ -51,9 +51,9 @@ export default function InputList(props) {
   }, [props]);
 
   const handleScrollItems = React.useCallback(() => {
-    if ((document.getElementById('inputlist').scrollHeight -
-      document.getElementById('inputlist').scrollTop <
-      document.getElementById('inputlist').clientHeight + 100) &&
+    if ((document.getElementById('inputlist')?.scrollHeight -
+      document.getElementById('inputlist')?.scrollTop <
+      document.getElementById('inputlist')?.clientHeight + 100) &&
       (Page.current < Page.last) && (!Page.loading))
     {
       setPage((prevState) => {
@@ -145,6 +145,8 @@ export default function InputList(props) {
         ? props.options[Object.keys(props?.options).filter((key) => String(props?.valueKey(props?.options?.[key])) === String(props?.value))[0]]
         : props?.value;
       setSelected(value);
+    } else {
+      setSelected(null);
     }
     // eslint-disable-next-line
   }, [props?.value, props?.options]);
@@ -312,9 +314,9 @@ export default function InputList(props) {
             name={props.name}
             label={props.label}
             InputLabelProps={{ shrink: true }}
-            value={(props.optionLabel && Selected)
+            value={(props.optionLabel && !!Selected)
               ? props.optionLabel(Selected)
-              : Selected
+              : Selected || ''
             }
             isRequired={props.isRequired}
             InputProps={{

@@ -2,8 +2,10 @@ import TextField from 'src/components/form/TextField';
 import AutoComplete from 'src/components/form/AutoComplete';
 import PhoneInput from 'src/components/form/PhoneInput';
 import Select from 'src/components/form/Select';
-import LocationModal from './LocationModal';
 import InputList from 'src/components/form/InputList';
+
+import LocationModal from './LocationModal';
+import SelfPickupInformation from './SelfPickupInformation';
 
 import writeLocalization from 'src/helpers/localization';
 
@@ -16,10 +18,12 @@ export default function FormUserInformation({
    CITIES,
    COURIER,
    SERVICES,
+   SELFPICKUP,
    formInfoData,
    formInfoStatus,
    shippingMethod,
    locationAddress,
+   isShippingSelfPickup,
    fnGetStates,
    fnGetCities,
    fnGetCouriers,
@@ -139,6 +143,7 @@ export default function FormUserInformation({
                      optionLabel={(option) => option?.name}
                      valueKey={(option) => option?.state_id}
                      loading={STATES.status === 'loading'}
+                     onOpen={() => STATES.data.length === 0 ? fnGetStates() : null}
                      label={lang?.label__state || 'State'}
                      placeholder={lang?.placeholder__state || 'Select State'}
                      onChange={fnChangeState}
@@ -179,10 +184,10 @@ export default function FormUserInformation({
                isRequired
                statusInput={formInfoStatus.postcode}
             />
-            {
-               (formInfoData.postcode && shippingMethod === 'shipper') && (<>
+            {(formInfoData.state &&
+               formInfoData.postcode) && (<>
                   <AutoComplete
-                     name="shipperCourierName"
+                     name="shippingCourierName"
                      onOpen={() => COURIER.data?.length === 0 && fnGetCouriers}
                      getOptionLabel={(option) => option?.name || ''}
                      loading={COURIER.status === 'loading'}
@@ -190,9 +195,9 @@ export default function FormUserInformation({
                      options={COURIER.data}
                      value={COURIER.selected}
                      renderInput={{
-                        name: "shipperCourierName_input",
+                        name: "shippingCourierName_input",
                         isRequired: true,
-                        statusInput: formInfoStatus.shipperCourierName,
+                        statusInput: formInfoStatus.shippingCourierName,
                         InputProps:{
                            placeholder: (lang?.placeholder__courier || 'Select Courier'),
                         },
@@ -202,16 +207,23 @@ export default function FormUserInformation({
                   />
                </>)
             }
-            {(shippingMethod === 'shipper' && formInfoData.shipperCourierName &&
+            {(shippingMethod === 'shipper' && !isShippingSelfPickup && formInfoData.shippingCourierName &&
                formInfoData.postcode &&
-               checkCourierSameDay(formInfoData.shipperCourierName)) && (
+               checkCourierSameDay(formInfoData.shippingCourierName)) && (
                   <LocationModal
                      lang={lang}
                   />
             )}
-            {formInfoData.shipperCourierName &&
-               ((checkCourierSameDay(formInfoData.shipperCourierName) && !! locationAddress) || 
-               !checkCourierSameDay(formInfoData.shipperCourierName)) && (<>
+            {isShippingSelfPickup && (
+               <SelfPickupInformation
+                  selfPickupInfo={SELFPICKUP.data}
+                  isLoading={SELFPICKUP.status === 'loading'}
+                  lang={lang}
+               />
+            )}
+            {formInfoData.shippingCourierName && shippingMethod === 'shipper' && !isShippingSelfPickup &&
+               ((checkCourierSameDay(formInfoData.shippingCourierName) && !! locationAddress) || 
+               !checkCourierSameDay(formInfoData.shippingCourierName)) && (<>
                   <AutoComplete
                      name="service"
                      onOpen={() => SERVICES.data.length === 0 && fnGetServices}
@@ -242,13 +254,12 @@ export default function FormUserInformation({
             {
                formInfoData.shipperRateId && (<>
                   <Select
-                     Select={{
-                        label: (lang?.label__insurance || 'Insurance'),
-                        onChange: fnChangeInsurance,
-                        inputProps:{
-                           name: 'shipperUseInsurance',
-                        }
+                     label={(lang?.label__insurance || 'Insurance')}
+                     onChange={fnChangeInsurance}
+                     inputProps= {{
+                        name: 'shipperUseInsurance',
                      }}
+                     value={formInfoData.shipperUseInsurance}
                   >
                      <option aria-label="None" value={0}>
                         {lang?.option__no || 'No'}

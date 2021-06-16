@@ -21,7 +21,7 @@ export default function InvoiceContent({
 }) {
   const [COUNTRIES, setCountries] = React.useState({
     data: [],
-    selected: {},
+    selected: null,
     status: 'loading',
     errors: [],
   });
@@ -35,21 +35,27 @@ export default function InvoiceContent({
 
   const [CITIES, setCities] = React.useState({
     data: [],
-    selected: {},
+    selected: null,
     status: 'idle',
     errors: [],
   });
 
   const [COURIER, setCourier] = React.useState({
     data: [],
-    selected: {},
+    selected: null,
     status: 'idle',
     errors: [],
   });
 
   const [SERVICES, setService] = React.useState({
     data: [],
-    selected: {},
+    selected: null,
+    status: 'idle',
+    errors: [],
+  });
+
+  const [SELFPICKUP, setSelfPickup] = React.useState({
+    data: {},
     status: 'idle',
     errors: [],
   });
@@ -63,6 +69,7 @@ export default function InvoiceContent({
           CITIES={CITIES}
           COURIER={COURIER}
           SERVICES={SERVICES}
+          SELFPICKUP={SELFPICKUP}
           formInfoData={formInfoData}
           formInfoStatus={formInfoStatus}
           orderDetails={orderDetails}
@@ -76,6 +83,7 @@ export default function InvoiceContent({
           setCities={setCities}
           setCourier={setCourier}
           setService={setService}
+          setSelfPickup={setSelfPickup}
           fnChange={fnChange}
           fnSyncTotalPayment={fnSyncTotalPayment}
           fnUpdateOrderDetails={fnUpdateOrderDetails}

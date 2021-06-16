@@ -28,6 +28,8 @@ const Label = withStyles(() => ({
     marginBottom: '0.5px',
     transform: 'none',
     fontSize: '14px',
+    fontFamily: 'Nunito',
+    fontWeight: '700',
     color: '#000',
     '&$error': {
       color: '#f44336 !important'

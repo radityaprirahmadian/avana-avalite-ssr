@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 
 import STORAGE from 'src/helpers/localStorage';
 
@@ -9,6 +9,8 @@ import orders from 'src/constants/api/orders';
 import shipping from 'src/constants/api/shipping';
 
 import calculateHourFromNow from 'src/helpers/calculateHourFromNow';
+import { selectCourier } from 'src/helpers/indexCourier';
+import checkCourierSameDay from 'src/helpers/checkCourierSameDay';
 
 import MainContext from 'src/parts/Context';
 import FormContext from './FormContext';
@@ -20,6 +22,7 @@ export default function FormInformation({
    CITIES,
    COURIER,
    SERVICES,
+   SELFPICKUP,
    formInfoData,
    formInfoStatus,
    orderDetails,
@@ -33,9 +36,11 @@ export default function FormInformation({
    setCities,
    setCourier,
    setService,
+   setSelfPickup,
    fnChange,
    fnUpdateOrderDetails
 }) {
+   const [isLoadShipping, setIsLoadShipping] = useState(false);
    const MAINCONTEXT = useContext(MainContext);
    const lang = Localization[MAINCONTEXT?.locale];
    
@@ -63,8 +68,6 @@ export default function FormInformation({
    }, [meta])
 
    const fnChangeCountry = React.useCallback((eventValue, newValue) => {
-      // console.log(event, newValue)
-      // const eventValue = newValue?.country_id ?? '';
       const changeValue = typeof (eventValue) !== 'string' ? eventValue.toString() : eventValue;
       fnChange({
          target: {
@@ -75,23 +78,25 @@ export default function FormInformation({
       }, () => {
          fnGetCities();
       });
-      // setCountries((prevState) => ({
-      //    ...prevState,
-      //    selected: newValue,
-      // }));
-      setStates((prevState) => ({
+      setCourier((prevState) => ({
          ...prevState,
-         selected: {},
+         selected: null,
       }));
       updateFormInfoData({
          state: '',
          city: '',
          lat: '',
-         lng: ''
+         lng: '',
+         shippingCourierName: null,
+         shipperRateId: null,
+         shipperUseInsurance: null
       });
       updateFormInfoStatus({
          state: 0,
-         city: 0
+         city: 0,
+         shippingCourierName: 0,
+         shipperRateId: 0,
+         shipperUseInsurance: 0
       });
       fnGetStates(eventValue);
       fnGetCities(eventValue);
@@ -107,30 +112,44 @@ export default function FormInformation({
             value: changeValue,
          },
       });
-      // setStates((prevState) => ({
-      //    ...prevState,
-      //    selected: newValue,
-      // }));
+      setCourier((prevState) => ({
+         ...prevState,
+         selected: null,
+      }));
       updateFormInfoData({
-         city: ''
+         city: '',
+         lat: '',
+         lng: '',
+         shippingCourierName: null,
+         shipperRateId: null,
+         shipperUseInsurance: null
       });
       updateFormInfoStatus({
-         city: 0
+         city: 0,
+         shippingCourierName: 0,
+         shipperRateId: 0,
+         shipperUseInsurance: 0
       });
       fnCheckShippingMethod(eventValue);
-   }, [fnChange]);
+   }, [fnChange,updateFormInfoData, updateFormInfoStatus]);
 
    const fnCheckShippingMethod = React.useCallback((stateId = null) => {
       if (stateId) {
+         setIsLoadShipping(true);
          shipping.getRateByState({ stateId: stateId})
             .then((res) => {
                fnUpdateOrderDetails((prevState) => ({
                   ...prevState,
-                  shippingMethod: res.courier_code
+                  shippingMethod: res.courier_code,
+                  shippingCourier: res.type === 'courier'
+                     ? selectCourier(res.courier_code)
+                     : { name: 'Courier' },
+                  isAbleSelfPickup: !!res.is_self_pickup,
                }))
+               setIsLoadShipping(false);
             })
             .catch((err) => {
-
+               setIsLoadShipping(false);
             })
       }
    }, [shipping]);
@@ -228,24 +247,31 @@ export default function FormInformation({
             value: eventValue ?? '',
          },
       });
-      // setCities((prevState) => ({
-      //    ...prevState,
-      //    selected: newValue,
-      // }));
+      setCourier((prevState) => ({
+         ...prevState,
+         selected: null,
+      }));
+      fnGetCouriers();
+
+      updateFormInfoData({
+         lat: null,
+         lng: null,
+         shippingCourierName: null,
+         shipperRateId: null,
+         shipperUseInsurance: null
+      })
+
       if (orderDetails.shippingMethod === 'shipper') {
-         fnGetCouriers();
-         updateFormInfoData({
-            lat: null,
-            lng: null
-         })
          updateFormInfoStatus({
-            shipperCourierName: 0,
+            shippingCourierName: 0,
             shipperRateId: 0,
+            shipperUseInsurance: 0
          });
       } else {
          updateFormInfoStatus({
-            shipperCourierName: 4,
+            shippingCourierName: 0,
             shipperRateId: 4,
+            shipperUseInsurance: 4
          });
       }
    }, [fnChange, orderDetails]);
@@ -254,21 +280,43 @@ export default function FormInformation({
       fnChange({
          target: {
             type: 'no_persist',
-            name: 'shipperCourierName',
+            name: 'shippingCourierName',
             value: newValue?.name ?? '',
          },
       });
+
+      if (newValue?.isSelfPickup) {
+         fnGetSelfPickupInfo();
+      }
+
       setCourier((prevState) => ({
          ...prevState,
          selected: newValue,
       }));
       updateFormInfoData({
          lat: null,
-         lng: null
+         lng: null,
+         shipperRateId: null,
+         shipperUseInsurance: null
       })
-      if (newValue && orderDetails.shippingMethod === 'shipper'  &&
-         formInfoData.shipperCourierName) {
-         fnGetServices(newValue?.name)
+      updateFormInfoStatus({
+         shipperRateId: orderDetails.shippingMethod === 'shipper' && !newValue?.isSelfPickup
+            ? 0
+            : 4,
+         shipperUseInsurance: orderDetails.shippingMethod === 'shipper' && !newValue?.isSelfPickup
+            ? 0
+            : 4,
+      });
+      fnUpdateOrderDetails((prevState) => ({
+         ...prevState,
+         isShippingSelfPickup: !!newValue?.isSelfPickup
+      }))
+
+      if (newValue &&
+         orderDetails.shippingMethod === 'shipper' &&
+         newValue?.name
+      ) {
+         fnGetServices(newValue?.name);
       }
    }, [fnChange, orderDetails]);
 
@@ -360,7 +408,7 @@ export default function FormInformation({
 
       shipping.getServices({
          params: {
-            courier_name: courier ?? formInfoData.shipperCourierName,
+            courier_name: courier ?? formInfoData.shippingCourierName,
             city: formInfoData.city,
             weight: products.reduce(
                (acc, current) => acc + current.quantity * current.weight,
@@ -413,21 +461,107 @@ export default function FormInformation({
    }, [fnChange]);
 
    const fnGetCouriers = React.useCallback(() => {
+      const selfPickupData = { name: 'Self Pickup', isSelfPickup: true };
       setCourier((prevState) => ({
          ...prevState,
+         data: [],
          status: 'loading',
       }));
-      shipping.getCouriers()
-         .then((res) => {
-            setCourier((prevState) => ({
-               ...prevState,
-               data: res.data?.filter((courier) => {
+      if (orderDetails.shippingMethod === 'shipper') {
+         shipping.getCouriers()
+            .then((res) => {
+               let couriersList = res.data?.filter((courier) => {
                   return courier.name !== 'Alfatrex' && courier.name !== 'Lion Parcel' && courier.name !== 'Tiki';
-               }),
-               status: 'ok',
+               });
+               if (orderDetails.isAbleSelfPickup) {
+                  couriersList.push(selfPickupData)
+               }
+               setCourier((prevState) => ({
+                  ...prevState,
+                  data: couriersList,
+                  status: 'ok',
+               }));
+            })
+      } else {
+         setCourier((prevState) => ({
+            ...prevState,
+            data: [
+               { name: orderDetails.shippingCourier?.name },
+               ...(orderDetails.isAbleSelfPickup ? [selfPickupData] : [])
+            ],
+            status: 'ok',
+         }));
+      }
+   }, [shipping, orderDetails])
+
+   const fnGetSelfPickupInfo = React.useCallback(() => {
+      setSelfPickup((prevState) => ({
+         ...prevState,
+         data: {},
+         status: 'loading'
+      }));
+      shipping.getSelfPickupInfo()
+         .then((res) => {
+            const openHours = res.open_hour.split(":");
+            const closeHours = res.close_hour.split(":");
+            const {
+               address1: shopAddress1,
+               city: shopCity,
+               state: shopStateId,
+               country_id: shopCountryId,
+               postcode: shopPostcode,
+               phone: shopPhone,
+               latitude,
+               longitude
+            } = res?.self_pickup_address || {};
+            const shopCountry = COUNTRIES.data[COUNTRIES.data.findIndex(
+               (country) => country.country_id === Number(shopCountryId)
+            )];
+            const shopState = STATES.data[STATES.data.findIndex(
+               (state) => state.state_id === Number(shopStateId)
+            )];
+            const dayList = {
+               0: lang?.text__monday || 'Monday',
+               1: lang?.text__tuesday || 'Tuesday',
+               2: lang?.text__wednesday || 'Wednesday',
+               3: lang?.text__thursday || 'Thursday',
+               4: lang?.text__friday || 'Friday',
+               5: lang?.text__saturday || 'Saturday',
+               6: lang?.text__sunday || 'Sunday',
+            };
+            const shopDaysOpen = JSON.parse(res.open_days);
+            const isWeekends = shopDaysOpen.every((day) => [5, 6].includes(day)) && shopDaysOpen.length === 2;
+            const isWeekdays = shopDaysOpen.every((day) => [0, 1, 2, 3, 4].includes(day)) && shopDaysOpen.length === 5;
+            const daysOpen = shopDaysOpen.length === 7
+               ? lang?.text__everydays || 'Every days'
+               : isWeekends
+               ? lang?.text__weekends || 'Weekends'
+               : isWeekdays
+               ? lang?.text__weekdays || 'Weekdays'
+               : shopDaysOpen.map((day) => dayList[day]).join(', ')
+
+            setSelfPickup((prevState) => ({
+               ...prevState,
+               data: {
+                  address: `${shopAddress1}, ${shopCity}, ${shopState?.name || ''}, ${shopCountry?.name || ''} ${shopPostcode}`,
+                  timeOpen: `${openHours[0]}:${openHours[1]} - ${closeHours[0]}:${closeHours[1]}`,
+                  dayOpen: daysOpen,
+                  phone: shopPhone,
+                  mapsLink: `http://www.google.com/maps/place/${latitude},${longitude}`,
+                  note: res.self_pickup_note
+               },
+               status: 'ok'
             }));
          })
-   }, [shipping])
+         .catch((err) => {
+            setSelfPickup((prevState) => ({
+               ...prevState,
+               data: {},
+               error: err,
+               status: 'error'
+            }));
+         })
+   }, [shipping]);
 
    React.useEffect(() => {
       fnInitFormsInfo();
@@ -456,10 +590,12 @@ export default function FormInformation({
                CITIES={CITIES}
                COURIER={COURIER}
                SERVICES={SERVICES}
+               SELFPICKUP={SELFPICKUP}
                formInfoData={formInfoData}
                formInfoStatus={formInfoStatus}
                shippingMethod={orderDetails.shippingMethod}
                locationAddress={orderDetails.locationAddress}
+               isShippingSelfPickup={orderDetails.isShippingSelfPickup}
                fnGetStates={fnGetStates}
                fnGetCities={fnGetCities}
                fnGetCouriers={fnGetCouriers}

@@ -58,7 +58,7 @@ export default function StepAction({
             disabled={
               // isLoading ||
               ((currentStep === 1 &&
-                Object.values(formInfoStatus).some((x) => x < 3 || x === 0)) ||
+                Object.values(formInfoStatus).some((x) => x < 3)) ||
               (currentStep === 2 &&
                 (Object.values(productsOrdered).length <= 0 || pricingCharge.isCalculating)) ||
               (currentStep === 3 &&

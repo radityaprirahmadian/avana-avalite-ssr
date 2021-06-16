@@ -1,6 +1,6 @@
 export default function (props) {
   return (
-    <div className={`spinner ${props.className}`} style={{
+    <div className={`spinner flex-1 ${props.className}`} style={{
       transform: `scale(${props.size})`,
       ...props.style
     }}>

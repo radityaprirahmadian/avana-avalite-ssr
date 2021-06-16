@@ -1,10 +1,17 @@
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import {
+   withStyles,
+ } from '@material-ui/core/styles';
+import { Close, KeyboardArrowDown } from '@material-ui/icons';
 import TextField from './TextField';
 import Spinner from '../Spinner';
+
 export default (props) => (
    <Autocomplete
       {...props}
       autoComplete
+      popupIcon={<KeyboardArrowDown fontSize="small" />}
+      closeIcon={<Close fontSize="small" />}
       renderInput={(params) => (
          <TextField
          {...params}
@@ -17,11 +24,8 @@ export default (props) => (
                {
                   props.loading &&
                      <Spinner
-                     size={ 0.25}
-                     style={{
-                        flex: 'unset',
-                        justifyContent: 'flex-start'
-                     }}
+                        className="m-0 flex-none justify-start"
+                        size={0.25}
                      />
                }
                {params.InputProps?.endAdornment}

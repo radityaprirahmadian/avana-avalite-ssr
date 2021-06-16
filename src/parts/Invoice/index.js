@@ -64,6 +64,8 @@ export default function Invoice({ shopDetails, orderToken }) {
       shippingMethod: '',
       paymentUrl: '',
       locationAddress: '',
+      isAbleSelfPickup: false,
+      isShippingSelfPickup: false
    });
    const [productsOrdered, setProductsOrdered] = React.useState({});
    const [additionalInfoForm, setAdditionalInfoForm] = React.useState({});
@@ -84,13 +86,14 @@ export default function Invoice({ shopDetails, orderToken }) {
       isShowRedirect: false,
       isEditOrder: false,
       isProductsEdited: false,
+      isConfirmPrivacyPolicy: false,
    });
 
    const fnChange = React.useCallback(
       (event) => {
          event.persist && event.persist()
          const checkExistPatternUnvalid = !!event.target?.pattern && !event.target?.validity?.valid
-         if (checkExistPatternUnvalid) {
+         if (checkExistPatternUnvalid && event.target.value !== '') {
             return;
          }
          setFormInfoData(event)
@@ -130,11 +133,11 @@ export default function Invoice({ shopDetails, orderToken }) {
                discount: 0,
                isCalculating: false,
             }));
-         } else if (orderDetails.shippingMethod === 'shipper') {
+         } else if (orderDetails.shippingMethod === 'shipper' && !orderDetails.isShippingSelfPickup) {
             isSyncTotal = setTimeout(() => {
                shipping.getServices({
                   params: {
-                     courier_name: formInfoData.shipperCourierName,
+                     courier_name: formInfoData.shippingCourierName,
                      city: formInfoData.city,
                      weight: products.reduce(
                         (acc, current) => acc + current.quantity * current.weight,
@@ -160,7 +163,7 @@ export default function Invoice({ shopDetails, orderToken }) {
                         : 0;
 
                   const discount = Number(formInfoData.country) === 100 &&
-                     formInfoData.shipperCourierName === 'JNE' &&
+                     formInfoData.shippingCourierName === 'JNE' &&
                      subTotal > 50000 &&
                      discountActive
                         ? service.finalRate < 10000
@@ -196,6 +199,7 @@ export default function Invoice({ shopDetails, orderToken }) {
                         0
                      ),
                      subtotal: subTotal,
+                     is_self_pickup: Number(orderDetails.isShippingSelfPickup)
                    },
                }).then((res) => {
                   const discount = formInfoData.country === 100 &&
@@ -437,8 +441,9 @@ export default function Invoice({ shopDetails, orderToken }) {
 
    const fnProcessOrder = React.useCallback(
       () => {
-         const shipperPayload = (orderDetails.shippingMethod === 'shipper' ? {
-               shipper_courier_name: formInfoData.shipperCourierName,
+         const shipperPayload = (orderDetails.shippingMethod === 'shipper' ||
+            !orderDetails.isShippingSelfPickup ? {
+               shipper_courier_name: formInfoData.shippingCourierName,
                shipper_rate_id: Number(formInfoData.shipperRateId),
                shipper_use_insurance: formInfoData.shipperUseInsurance || '0',
             } : {});
