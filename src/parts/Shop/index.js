@@ -158,8 +158,6 @@ export default function Shop({ shopDetails }) {
             } else {
                window.location = urlRedirect;
             }
-            
-            window.open(urlRedirect, '_blank');
             // router.push(urlRedirect);
          })
    }, [data]);
