@@ -2,8 +2,11 @@ import React from 'react';
 
 import Button from 'src/components/Button';
 
+import PrivacyPolicy from 'src/parts/PrivacyPolicy'
+
 export default function StepAction({
   lang,
+  shopInfo,
   formInfoStatus,
   orderDetails,
   currentStep,
@@ -13,7 +16,8 @@ export default function StepAction({
   setStatusState,
   fnProcessOrder,
   fnNextStep,
-  fnPrevStep
+  fnPrevStep,
+  fnChangePrivacyPolicy
 }) {
 
   const fnEditOrder =  React.useCallback(
@@ -27,10 +31,17 @@ export default function StepAction({
   );
 
   return (
+    <>
+      {(!statusState?.isLoadingPage && !!shopInfo?.is_enabled_privacy_policy) && (
+        <PrivacyPolicy
+          shopInfo={shopInfo}
+          isCheckbox
+          checkboxValue={statusState.isConfirmPrivacyPolicy}
+          onCheck={fnChangePrivacyPolicy}
+        />
+      )}
       <div
-        className={`invoice__footer 
-          w-full
-        `}
+        className={`invoice__footer w-full my-1`}
         // ${
         //   status.isEditOrder ? 'is-sticky sticky-bottom' : ''
         // }
@@ -58,7 +69,9 @@ export default function StepAction({
             disabled={
               // isLoading ||
               ((currentStep === 1 &&
-                Object.values(formInfoStatus).some((x) => x < 3)) ||
+                (Object.values(formInfoStatus).some((x) => x < 3) ||
+                (shopInfo?.is_enabled_privacy_policy && !statusState.isConfirmPrivacyPolicy))
+              ) ||
               (currentStep === 2 &&
                 (Object.values(productsOrdered).length <= 0 || pricingCharge.isCalculating)) ||
               (currentStep === 3 &&
@@ -75,8 +88,8 @@ export default function StepAction({
             }
           </Button>
         </div>
-        <div className="buttons w-full py-2">
-          {currentStep > 1 && !statusState.isEditOrder && (
+        {currentStep > 1 && !statusState.isEditOrder && (
+          <div className="buttons w-full py-2">
             <Button
               variant="outlined"
               color="default"
@@ -87,10 +100,10 @@ export default function StepAction({
               {/* <FormattedMessage id="components.text__Back" /> */}
               {lang?.btn__back || 'Back'}
             </Button>
-          )}
-        </div>
-        <div className="buttons w-full py-2">
-          {(currentStep === 2 && !statusState.isEditOrder) && (
+          </div>
+        )}
+        {(currentStep === 2 && !statusState.isEditOrder) && (
+          <div className="buttons w-full py-2">
             <Button
               color=""
               onClick={fnEditOrder}
@@ -102,8 +115,9 @@ export default function StepAction({
             >
               {lang?.btn__edit_order || 'I Want to Edit My Order'}
             </Button>
-          )}
-        </div>
+          </div>
+        )}
       </div>
+    </>
   )
 }

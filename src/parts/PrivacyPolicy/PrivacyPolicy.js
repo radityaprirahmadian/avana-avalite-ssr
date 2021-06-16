@@ -1,6 +1,7 @@
 import React from 'react';
 import PolicyContent from './PolicyContent';
 import Modal from 'src/components/Modal';
+import { Checkbox } from '@material-ui/core';
 import { ArrowBack } from '@material-ui/icons';
 import mobileTabletCheck from 'src/helpers/mobileTabletCheck';
 import writeLocalization from 'src/helpers/localization'
@@ -9,7 +10,9 @@ import Localization from 'src/configs/lang/privacy-policy';
 
 function PrivacyPolicy(props) {
   const [Display, setDisplay] = React.useState(false);
+  const [isCheck, setIsCheck] = React.useState(props.checkboxValue || false);
   const RefList = React.useRef(null);
+  const lang = Localization[getCurrentLang()]
 
   const toggle = React.useCallback(() => {
     setDisplay(!Display);
@@ -17,7 +20,15 @@ function PrivacyPolicy(props) {
       props?.onOpen && props.onOpen();
     }
   }, [Display, props]);
-  const lang = Localization[getCurrentLang()]
+
+  const changeCheckbox = React.useCallback(() => {
+    if (props.isCheckbox) {
+      setIsCheck(!isCheck);
+    }
+    if (props.isCheckbox && props.onCheck) {
+      props.onCheck(!isCheck);
+    }
+  }, [isCheck, props]);
 
   return (
     <section>
@@ -66,12 +77,26 @@ function PrivacyPolicy(props) {
         )}
       >
       {() => (
-        <div className="text-xs text-center px-1 pb-2">
-          {writeLocalization(
-            lang?.text__confirm_agree_privacy_policy || 'By providing my personal data herein, I confirm that I have read and agree to [0] [1]',
-            [props?.shopInfo?.shop_name, <u style={{cursor: 'pointer'}} onClick={() => toggle()}>{lang?.btn__privacy_policy || 'privacy policy'}</u>]
-          )}{" "}
+        <div className="flex my-2">
+          {
+            props.isCheckbox && (
+              <div>
+                <Checkbox
+                  color="primary"
+                  checked={isCheck}
+                  onChange={changeCheckbox}
+                />
+              </div>
+            )
+          }
+          <div className={`text-xs px-1 pt-2 ${props.isCheckbox ? 'text-left' : 'text-center'}`}>
+            {writeLocalization(
+              lang?.text__confirm_agree_privacy_policy || 'By providing my personal data herein, I confirm that I have read and agree to [0] [1]',
+              [props?.shopInfo?.shop_name, <u style={{cursor: 'pointer'}} onClick={() => toggle()}>{lang?.btn__privacy_policy || 'privacy policy'}</u>]
+            )}{" "}
+          </div>
         </div>
+        
       )}
       </Modal>
     </section>

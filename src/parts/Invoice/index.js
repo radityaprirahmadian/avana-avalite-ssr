@@ -264,6 +264,16 @@ export default function Invoice({ shopDetails, orderToken }) {
       [orders]
    );
 
+   const fnChangePrivacyPolicy = React.useCallback(
+      (statusCheckbox) => {
+         setStatusState((prevState) => ({
+            ...prevState,
+            isConfirmPrivacyPolicy: statusCheckbox
+         }))
+      },
+      [orders]
+   );
+
    const fnSelectLocale = React.useCallback((lang) => {
       setLocale(lang);
       setCurrentLang(lang);
@@ -601,7 +611,7 @@ export default function Invoice({ shopDetails, orderToken }) {
                      <Header
                         lang={lang}
                         currentStep={step.current}
-                        data={shopDetails.details.shop_info}
+                        shopInfo={shopDetails.details.shop_info}
                      />
                         <div className="flex flex-1 flex-col my-4">
                            {statusState.isLoadingPage ?
@@ -629,6 +639,7 @@ export default function Invoice({ shopDetails, orderToken }) {
                         </div>
                      <StepAction
                         lang={lang}
+                        shopInfo={shopDetails.details.shop_info}
                         formInfoStatus={formInfoStatus}
                         orderDetails={orderDetails}
                         currentStep={step.current}
@@ -639,6 +650,7 @@ export default function Invoice({ shopDetails, orderToken }) {
                         fnProcessOrder={fnProcessOrder}
                         fnNextStep={fnNextStep}
                         fnPrevStep={fnPrevStep}
+                        fnChangePrivacyPolicy={fnChangePrivacyPolicy}
                      />
                   </>)
             }
