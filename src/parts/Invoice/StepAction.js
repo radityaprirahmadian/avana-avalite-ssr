@@ -32,7 +32,7 @@ export default function StepAction({
 
   return (
     <>
-      {(!statusState?.isLoadingPage && !!shopInfo?.is_enabled_privacy_policy) && (
+      {(currentStep === 1 && (!statusState?.isLoadingPage && !!shopInfo?.is_enabled_privacy_policy)) && (
         <PrivacyPolicy
           shopInfo={shopInfo}
           isCheckbox
@@ -80,11 +80,11 @@ export default function StepAction({
             disableElevation
             loading={currentStep === 3 ? statusState.isProcessOrder : null}
           >
-            { currentStep === 2
-                ? lang?.btn__proceed_order || 'Proceed Order'
-                : currentStep === 3
-                  ? lang?.btn__choose_payment || 'Choose Payment Method'
-                  : lang?.btn__continue || 'Continue'
+            {currentStep === 2
+              ? lang?.btn__proceed_order || 'Proceed Order'
+              : currentStep === 3
+                ? lang?.btn__choose_payment || 'Choose Payment Method'
+                : lang?.btn__continue || 'Continue'
             }
           </Button>
         </div>
