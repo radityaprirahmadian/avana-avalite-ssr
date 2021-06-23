@@ -6,7 +6,13 @@ import { ArrowBack } from '@material-ui/icons';
 import mixpanel from 'mixpanel-browser';
 
 export default function EditProducts(props) {
-  const [productsCart, setProductsCart] = React.useState({}) 
+  const [productsCart, setProductsCart] = React.useState({})
+
+  const [productDetails, setProductDetails] = useState({
+    id: null,
+    isViewProductDetail: false,
+    isViewProductVariant: false,
+ })
   
   const fnChangeProducts = React.useCallback(
     (e) => {
@@ -85,7 +91,9 @@ export default function EditProducts(props) {
       </div>
       <ProductSelection
         productsOrdered={productsCart}
+        productDetails={productDetails}
         fnChange={fnChangeProducts}
+        fnSetProductDetails={setProductDetails}
       />
       <div
         className="sticky bg-white bottom-0 py-2"

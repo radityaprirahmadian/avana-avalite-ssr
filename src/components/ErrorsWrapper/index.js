@@ -30,7 +30,7 @@ export default function ErrorsWrapper({ error }) {
       </section>
       {
         error.message && (
-          <section className="bg-red-200 bg-opacity-50 text-red-700 leading-7 px-4 py-2">
+          <section className="bg-red-1 bg-opacity-50 text-red-5 leading-7 px-4 py-2">
             {error.message}
           </section>
         )

@@ -47,6 +47,12 @@ export default function Shop({ shopDetails }) {
 
    const [locale, setLocale] = React.useState('en');
 
+   const [productDetails, setProductDetails] = useState({
+      id: null,
+      isViewProductDetail: false,
+      isViewProductVariant: false,
+   })
+
    const lang = Localization[locale];
 
    const fnChange = React.useCallback(
@@ -162,17 +168,6 @@ export default function Shop({ shopDetails }) {
          })
    }, [data]);
 
-   const fnInitDefaultPhoneNumber = React.useCallback(() => {
-      const lang = window?.navigator?.language.split('-')[0] || 'my'
-      const countryCode = { id: '+62', my: '+60', sg: '+65' }
-      setData({
-         target: {
-            name: 'phoneNumber',
-            value: countryCode[lang],
-         },
-      })
-   }, [])
-
    const fnSelectLocale = React.useCallback((lang) => {
       setLocale(lang);
       setCurrentLang(lang);
@@ -212,29 +207,37 @@ export default function Shop({ shopDetails }) {
          className="mx-auto min-h-screen flex flex-col"
          style={{ minWidth: 300, maxWidth: 375}}
       >
-         <Header data={shopDetails.details.shop_info} lang={lang} />
+         {(!productDetails.isViewProductDetail && !productDetails.isViewProductVariant) && (
+            <Header data={shopDetails.details.shop_info} lang={lang} />
+         )}
          <Context.Provider value={CONTEXT}>
-            <CustomerInformation
-               lang={lang}
-               defualtCountry={shopDetails.details.country.iso_code.toLowerCase()}
-               data={data}
-               fnChange={fnChange}
-               status={status}
-            />
+            {(!productDetails.isViewProductDetail && !productDetails.isViewProductVariant) && (
+               <CustomerInformation
+                  lang={lang}
+                  defualtCountry={shopDetails.details.country.iso_code.toLowerCase()}
+                  data={data}
+                  fnChange={fnChange}
+                  status={status}
+               />
+            )}
             <ProductSelection
                productsOrdered={data.productsOrdered}
+               productDetails={productDetails}
                fnChange={fnChange}
+               fnSetProductDetails={setProductDetails}
             />
-            <div className="text-xs text-center py-2 sticky bottom-0 bg-white z-10">
-               <Checkout
-                  lang={lang}
-                  data={data}
-                  status={status}
-                  statusOrder={statusOrder}
-                  fnCreateOrder={fnCreateOrder}
-               />
-               <Footer fnSelectLocale={fnSelectLocale} lang={lang} />
-            </div>
+            {(!productDetails.isViewProductDetail && !productDetails.isViewProductVariant) && (
+               <div className="text-xs text-center py-2 sticky bottom-0 bg-white z-10">
+                  <Checkout
+                     lang={lang}
+                     data={data}
+                     status={status}
+                     statusOrder={statusOrder}
+                     fnCreateOrder={fnCreateOrder}
+                  />
+                  <Footer fnSelectLocale={fnSelectLocale} lang={lang} />
+               </div>
+            )}
          </Context.Provider>
       </div>
    )

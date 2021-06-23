@@ -78,6 +78,7 @@ export default function ProductViewer(props) {
           selectedMeta={props.selectedMeta}
           productsOrdered={props.productsOrdered}
           fnSelectProduct={props.fnSelectProduct}
+          fnToggleSelectProduct={props.fnToggleSelectProduct}
           fnToggleSelectVariant={props.fnToggleSelectVariant}
           fnChangeRangeProduct={props.fnChangeRangeProduct}
         />
