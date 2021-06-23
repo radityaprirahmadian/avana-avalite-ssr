@@ -26,6 +26,23 @@
 body.modal-open {
    overflow: hidden;
 }
+
+p {
+   margin: 14px 0;
+}
+
+a {
+   @apply .text-additional-link .underline;
+}
+
+ul {
+   @apply .list-disc .list-inside .pl-4;
+}
+
+ol {
+   @apply list-decimal .list-inside .pl-4;
+}
+
 img {
    user-select: none;
    -moz-user-select: none;
@@ -119,7 +136,7 @@ svg#svg-star {
 
 .stars .star:not(.placeholder) {
    z-index: 2;
-   @apply .bg-yellow-400;
+   @apply .bg-yellow-4;
 }
 
 .stars .star.placeholder {
@@ -178,6 +195,63 @@ input.input-number::-webkit-outer-spin-button
 
 .slick-slide {
    display: inline-block;
+}
+
+.ql-align-center {
+  text-align: center;
+}
+.ql-align-right {
+  text-align: right;
+}
+.ql-size-small {
+  font-size: 0.75rem;
+}
+.ql-size-large {
+  font-size: 1.5em;
+}
+.ql-size-huge {
+  font-size: 2.5em;
+}
+.ql-video {
+  display: block;
+  max-width: 100%;
+}
+.ql-indent-1 {
+  padding-left: 3em;
+}
+.ql-indent-2 {
+  padding-left: 6em;
+}
+.ql-indent-3 {
+  padding-left: 9em;
+}
+.ql-indent-4 {
+  padding-left: 12em;
+}
+.ql-indent-5 {
+  padding-left: 15em;
+}
+.ql-indent-6 {
+  padding-left: 18em;
+}
+.ql-indent-7 {
+  padding-left: 21em;
+}
+.ql-indent-8 {
+  padding-left: 24em;
+}
+.ql-font-serif {
+  font-family: 'Georgia','Times New Roman','serif';
+}
+.ql-font-monospace {
+  font-family: 'Monaco','Courier New','monospace';
+}
+.product-description {
+  width: 100%;
+  overflow: hidden;
+}
+.product-description * {
+   max-width: 100%;
 }
 
 @keyframes spinnerKeyframe {
