@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 
 import Button from 'src/components/Button';
 import ProductSelection from 'src/parts/Shop/ProductSelection';
@@ -6,7 +6,7 @@ import { ArrowBack } from '@material-ui/icons';
 import mixpanel from 'mixpanel-browser';
 
 export default function EditProducts(props) {
-  const [productsCart, setProductsCart] = React.useState({})
+  const [productsCart, setProductsCart] = useState({})
 
   const [productDetails, setProductDetails] = useState({
     id: null,
@@ -14,7 +14,7 @@ export default function EditProducts(props) {
     isViewProductVariant: false,
  })
   
-  const fnChangeProducts = React.useCallback(
+  const fnChangeProducts = useCallback(
     (e) => {
       e.persist && e.persist();
 
@@ -25,7 +25,7 @@ export default function EditProducts(props) {
     [setProductsCart]
   );
 
-  const fnCloseEditOrder = React.useCallback(
+  const fnCloseEditOrder = useCallback(
     () => {
       mixpanel.track('Cancel Edit Order');
       props.setStatusState((prevState) => ({
@@ -37,7 +37,7 @@ export default function EditProducts(props) {
     [props.setStatusState]
   );
 
-  const fnConfirmEditProducts = React.useCallback(
+  const fnConfirmEditProducts = useCallback(
     () => {
       mixpanel.track('Submit Edit Order', {
         Products: Object.values(productsCart)
@@ -55,7 +55,7 @@ export default function EditProducts(props) {
     [fnCloseEditOrder, props.setProductsOrdered, props.fnSyncTotalPayment, productsCart]
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     mixpanel.track('Edit Order', {
       Products: Object.values(props.productsOrdered)
         .map((product) => ({
@@ -67,7 +67,7 @@ export default function EditProducts(props) {
     });
   }, [])
 
-  React.useEffect(
+  useEffect(
     () => {
       setProductsCart(() => ({
         ...props.productsOrdered
@@ -77,36 +77,40 @@ export default function EditProducts(props) {
   )
 
   return (
-    <section>
-      <div
-        onClick={fnCloseEditOrder}
-        className="sticky flex cursor-pointer items-center top-0 my-2"
-      >
-        <ArrowBack
-          className="mr-2"
-        />
-        <h5 className="font-semibold">
-          {props.lang?.text__back || 'Back'}
-        </h5>
-      </div>
+    <section className="flex flex-1 flex-col">
+      {(!productDetails.isViewProductDetail && !productDetails.isViewProductVariant) && (
+        <div
+          onClick={fnCloseEditOrder}
+          className="sticky flex cursor-pointer items-center top-0 my-2"
+        >
+          <ArrowBack
+            className="mr-2"
+          />
+          <h5 className="font-semibold">
+            {props.lang?.text__back || 'Back'}
+          </h5>
+        </div>
+      )}
       <ProductSelection
         productsOrdered={productsCart}
         productDetails={productDetails}
         fnChange={fnChangeProducts}
         fnSetProductDetails={setProductDetails}
       />
-      <div
-        className="sticky bg-white bottom-0 py-2"
-      >
-        <Button
-          onClick={fnConfirmEditProducts}
-          variant="contained"
-          color="primary"
-          className="whatsapp w-full"
+      {(!productDetails.isViewProductDetail && !productDetails.isViewProductVariant) && (
+        <div
+          className="sticky bg-white bottom-0 py-2"
         >
-          {props.lang?.btn__confirm || 'Confirm'}
-        </Button>
-      </div>
+          <Button
+            onClick={fnConfirmEditProducts}
+            variant="contained"
+            color="primary"
+            className="whatsapp w-full"
+          >
+            {props.lang?.btn__confirm || 'Confirm'}
+          </Button>
+        </div>
+      )}
     </section>
   )
 }
