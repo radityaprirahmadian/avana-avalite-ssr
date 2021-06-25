@@ -252,8 +252,6 @@ function ProductDetails(props) {
                     className="product-description"
                   >
                     {Parser(product.data?.description)}
-                    {Parser(product.data?.description)}
-                    {Parser(product.data?.description)}
                   </div>
                 </section>
               </>
