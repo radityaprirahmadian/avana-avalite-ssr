@@ -123,6 +123,7 @@ export default function Coupon(props) {
           name="coupon_code"
           label={lang?.label__coupon || 'Coupon'}
           disabled={COUPON.status === 'loading'}
+          readOnly={COUPON.status === 'ok'}
           error={COUPON.status === 'error'}
           value={COUPON.input}
           onChange={fnChangeCoupon}
