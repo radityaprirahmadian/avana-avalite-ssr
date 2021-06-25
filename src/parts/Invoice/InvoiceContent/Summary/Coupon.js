@@ -67,6 +67,9 @@ export default function Coupon(props) {
         },
       }));
     }).catch((err) => {
+      const errMessage = typeof err?.message === 'object'
+        ? err?.message?.coupon_code?.[0]
+        : err?.message;
       MAINCONTEXT.setPricingCharge((prevState) => ({
         ...prevState,
         isCalculating: false      
@@ -77,8 +80,9 @@ export default function Coupon(props) {
       }));
       setCoupon((prevState) => ({
         ...prevState,
+        input: '',
         status: 'error',
-        // errors: []
+        errors: errMessage
       }));
     })
   }, [props.formInfoData.email, props.formInfoData.phoneNumber, COUPON.input, props.productsOrdered, props.fnUpdateOrderDetails]);
@@ -112,33 +116,20 @@ export default function Coupon(props) {
   }, [props.orderDetails.coupon])
 
   return (
-    <section className="flex items-center w-100 mb-6">
+    <section className="flex w-100 mb-6">
       <div style={{flex: '3'}}>
-        {
-          COUPON.status === 'ok' ? (
-            <>
-              <h4 className="text-base mb-2">
-                {lang?.label__coupon || 'Coupon'}
-              </h4>
-              <div className="text-sm font-semibold">
-                {COUPON.input}
-              </div>
-            </>
-          ) : (
-            <TextField
-              id="coupon"
-              name="coupon_code"
-              label={lang?.label__coupon || 'Coupon'}
-              disabled={COUPON.status === 'loading'}
-              error={COUPON.status === 'error'}
-              value={COUPON.input}
-              onChange={fnChangeCoupon}
-              helperText={COUPON.errors[0]}
-            />
-          )
-        }
+        <TextField
+          id="coupon"
+          name="coupon_code"
+          label={lang?.label__coupon || 'Coupon'}
+          disabled={COUPON.status === 'loading'}
+          error={COUPON.status === 'error'}
+          value={COUPON.input}
+          onChange={fnChangeCoupon}
+          labelError={COUPON.errors}
+        />
       </div>
-      <div className="flex flex-row flex-1 justify-center items-start pt-3 mb-1">
+      <div className="flex-1 mt-10">
         <Button
           name="coupon_button"
           disableElevation

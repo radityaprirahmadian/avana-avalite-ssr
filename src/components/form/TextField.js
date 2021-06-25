@@ -118,8 +118,8 @@ export default function Text({label, onClick, endIcon, ...props}) {
           }}
         />
         <FormHelperText id={'helper'+props.id} style={{fontSize:'12px'}}>
-          {props.isRequired &&
-            isError &&
+          {((props.isRequired &&
+            isError) || props.error) &&
             (props.labelError || 'This field is required')
           }
         </FormHelperText>
