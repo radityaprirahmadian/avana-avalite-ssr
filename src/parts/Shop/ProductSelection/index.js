@@ -75,7 +75,7 @@ export default function ProductSelection(props) {
                   sortValue: 'desc',
                   limit: '10',
                   categories: selectedCategory ? [selectedCategory] : undefined,
-                  search: search,
+                  name: search,
                   page: page
                },
             })

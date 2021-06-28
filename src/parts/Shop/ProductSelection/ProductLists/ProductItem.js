@@ -35,7 +35,7 @@ export default function Row({
 
    return (
       <div className="flex py-4 border-b border-gray-200" >
-         <div className="w-auto" onClick={onClick}>
+         <div className="w-auto cursor-pointer" onClick={onClick}>
             <div className="relative">
                <div
                   className="absolute"
@@ -80,7 +80,7 @@ export default function Row({
                )}
             </div>
          </div>
-         <div className="flex flex-1 items-center" onClick={() => fnToggleSelectProduct(item)}>
+         <div className="flex flex-1 items-center cursor-pointer" onClick={() => fnToggleSelectProduct(item)}>
             <div className="flex-1 mx-4">
                <div
                   className="text-sm leading-4 font-bold mb-2"
