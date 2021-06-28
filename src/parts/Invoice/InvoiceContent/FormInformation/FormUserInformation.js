@@ -152,6 +152,7 @@ export default function FormUserInformation({
             }
             {
                formInfoData.state && (<>
+               {String(formInfoData.country) === '100' ? (
                   <InputList
                      isSearch
                      limit={20}
@@ -171,6 +172,16 @@ export default function FormUserInformation({
                      placeholder={lang?.placeholder__city || 'Select City'}
                      onChange={fnChangeCity}
                   />
+               ) : (
+                  <TextField
+                     name="city"
+                     label={lang?.label__city || 'City'}
+                     value={formInfoData.city}
+                     onChange={(event) => fnChangeCity(event.target.value)}
+                     isRequired
+                     statusInput={formInfoStatus.city}
+                  />
+               )}
                </>)
             }
             <TextField

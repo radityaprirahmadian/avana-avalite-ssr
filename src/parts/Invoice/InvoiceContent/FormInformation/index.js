@@ -16,6 +16,8 @@ import MainContext from 'src/parts/Context';
 import FormContext from './FormContext';
 import Localization from 'src/configs/lang/invoice/form-information';
 
+let fetchCityTimeout = null;
+
 export default function FormInformation({
    COUNTRIES,
    STATES,
@@ -249,9 +251,16 @@ export default function FormInformation({
       });
       setCourier((prevState) => ({
          ...prevState,
+         data: [],
          selected: null,
+         status: 'loading',
       }));
-      fnGetCouriers();
+      if (fetchCityTimeout) {
+         clearTimeout(fetchCityTimeout);
+      }
+      fetchCityTimeout = setTimeout(() =>  {
+         fnGetCouriers();
+      }, 1000);
 
       updateFormInfoData({
          lat: null,
