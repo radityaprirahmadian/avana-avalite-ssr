@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useRouter } from 'next/router';
 import mixpanel from 'mixpanel-browser';
 
@@ -27,6 +27,8 @@ import writeLocalization from 'src/helpers/localization'
 
 export default function Shop({ shopDetails }) {
    const router = useRouter()
+   const refRedirect = useRef()
+   const [redirectUrl, setRedirectUrl] = useState('');
 
    const [data, setData, updateData] = useForm({
       name: '',
@@ -129,13 +131,8 @@ export default function Shop({ shopDetails }) {
                $name: name,
                $phone: phoneNumber,
             });
-            setStatusOrder((prevState) => ({
-               ...prevState,
-               isCreateOrder: false,
-               isCreateOrderViaWA: false,
-            }))
 
-            let urlRedirect = `/${router?.query?.shop}/${btoa(btoa(res.order_id))}`
+            let urlRedirect = `/${router?.query?.shop}/${btoa(btoa(res.order_id))}`;
             if (isViaWA) {
                const products = product_ordered
                   .map(
@@ -160,11 +157,22 @@ export default function Shop({ shopDetails }) {
                   ? `whatsapp://send?phone=${waPhoneNumber}&text=${messages}`
                   : `https://web.whatsapp.com/send?phone=${waPhoneNumber}&text=${messages}`;
                   urlRedirect
-               window.open(urlRedirect, '_blank');
+               setRedirectUrl(urlRedirect);
+               if (refRedirect.current) {
+                  refRedirect.current.click();
+               } else {
+                  window.open(urlRedirect, '_blank');
+               }
             } else {
                window.location = urlRedirect;
             }
             // router.push(urlRedirect);
+         }).catch(() => {
+            setStatusOrder((prevState) => ({
+               ...prevState,
+               isCreateOrder: false,
+               isCreateOrderViaWA: false,
+            }))
          })
    }, [data]);
 
@@ -238,6 +246,16 @@ export default function Shop({ shopDetails }) {
                   <Footer fnSelectLocale={fnSelectLocale} lang={lang} />
                </div>
             )}
+            <a
+               ref={refRedirect}
+               href={redirectUrl}
+               rel="noopener noreferrer"
+               className="hidden"
+               style={{ display: 'none' }}
+               target={mobileTabletCheck() ? '_self' : '_blank'}
+            >
+               redirect link
+            </a>
          </Context.Provider>
       </div>
    )
