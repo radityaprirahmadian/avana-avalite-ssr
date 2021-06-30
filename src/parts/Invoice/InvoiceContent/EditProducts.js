@@ -6,7 +6,7 @@ import { ArrowBack } from '@material-ui/icons';
 import mixpanel from 'mixpanel-browser';
 
 export default function EditProducts(props) {
-  const [productsCart, setProductsCart] = useState({})
+  const [productsCart, setProductsCart] = useState(props.productsOrdered)
 
   const [productDetails, setProductDetails] = useState({
     id: null,
@@ -67,15 +67,6 @@ export default function EditProducts(props) {
     });
   }, [])
 
-  useEffect(
-    () => {
-      setProductsCart(() => ({
-        ...props.productsOrdered
-      }));
-    },
-    [setProductsCart, props.productsOrdered],
-  )
-
   return (
     <section className="flex flex-1 flex-col">
       {(!productDetails.isViewProductDetail && !productDetails.isViewProductVariant) && (
@@ -106,6 +97,7 @@ export default function EditProducts(props) {
             variant="contained"
             color="primary"
             className="whatsapp w-full"
+            disabled={!Object.keys(productsCart).length}
           >
             {props.lang?.btn__confirm || 'Confirm'}
           </Button>

@@ -225,23 +225,7 @@ export default function ProductSelection(props) {
             };
          }
          
-         Object
-            .keys(productsOrdered)
-            .map((key) => {
-               let productId = key.split('_')[0]
-               if (productId in productsMeta) {
-                  productsMeta[productId] = {
-                     ...productsMeta[productId],
-                     quantity: productsMeta[productId].quantity + productsOrdered[key].quantity
-                  }
-               } else {
-                  productsMeta[productId] = {
-                     quantity: productsOrdered[key].quantity,
-                     isVariant: !!productsOrdered[key].variation
-                  }
-               }
-            })
-         setSelectedMetaList(productsMeta)
+         fnResetMetaList(productsOrdered)
 
          props.fnChange({
             target: {
@@ -288,23 +272,7 @@ export default function ProductSelection(props) {
                }))[0];
             facebookPixel.addToCart(product);
          }
-         Object
-            .keys(productsOrdered)
-            .map((key) => {
-               let productId = key.split('_')[0]
-               if (productId in productsMeta) {
-                  productsMeta[productId] = {
-                     ...productsMeta[productId],
-                     quantity: productsMeta[productId].quantity + productsOrdered[key].quantity
-                  }
-               } else {
-                  productsMeta[productId] = {
-                     quantity: productsOrdered[key].quantity,
-                     isVariant: !!productsOrdered[key].variation
-                  }
-               }
-            })
-         setSelectedMetaList(productsMeta)
+         fnResetMetaList(productsOrdered)
 
          props.fnChange({
             target: {
@@ -316,14 +284,39 @@ export default function ProductSelection(props) {
       [props.fnChange, props.productsOrdered]
    );
 
+   const fnResetMetaList = React.useCallback(
+      (productsOrdered) => {
+         const productsOrderedList = productsOrdered || props.productsOrdered
+         let productsMeta = {};
+         Object
+            .keys(productsOrderedList)
+            .map((key) => {
+               let productId = key.split('_')[0]
+               if (productId in productsMeta) {
+                  productsMeta[productId] = {
+                     ...productsMeta[productId],
+                     quantity: productsMeta[productId].quantity + productsOrderedList[key].quantity
+                  }
+               } else {
+                  productsMeta[productId] = {
+                     quantity: productsOrderedList[key].quantity,
+                     isVariant: !!productsOrderedList[key].variation
+                  }
+               }
+            })
+         setSelectedMetaList(productsMeta)
+      },
+      [props, props.productsOrdered]
+   );
+
    React.useEffect(() => {
       fnGetProducts(search, selectedCategory)
    }, [fnGetProducts, search, selectedCategory])
 
    React.useEffect(() => {
       fnGetCategories()
-      // window.addEventListener('scroll', fnHandleScroll);
-   }, [fnGetCategories])
+      fnResetMetaList()
+   }, [])
 
    React.useEffect(() => {
       if (PRODUCTS.status === 'error') {
