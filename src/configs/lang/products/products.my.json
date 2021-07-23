@@ -5,5 +5,9 @@
   "text__search": "Carian Produk",
   "text__out_of_stock": "Tiada Stok",
   "text__oops": "Oops",
-  "text__product_not_found": "Produk yang anda cari tidak dijumpai"
+  "text__product_not_found": "Produk yang anda cari tidak dijumpai",
+  "text__product_detail": "Detail Produk",
+  "text__stock_left": "Stok tinggal:",
+  "text__select": "Pilih",
+  "text__description": "Deskripsi"
 }

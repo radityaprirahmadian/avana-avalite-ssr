@@ -15,6 +15,7 @@ export default function Row({
    productsOrdered,
    fnSelectProduct,
    fnChangeRangeProduct,
+   fnToggleSelectProduct,
    fnToggleSelectVariant,
 }) {
    // const fnToggleSelectVariant = React.useCallback((event) => {}, [])
@@ -33,8 +34,8 @@ export default function Row({
    )
 
    return (
-      <div className="flex items-center py-4 border-b border-gray-200" onClick={onClick}>
-         <div className="w-auto">
+      <div className="flex py-4 border-b border-gray-200" >
+         <div className="w-auto cursor-pointer" onClick={onClick}>
             <div className="relative">
                <div
                   className="absolute"
@@ -79,77 +80,79 @@ export default function Row({
                )}
             </div>
          </div>
-         <div className="flex-1 mx-4">
-            <div
-               className="text-sm leading-4 font-bold mb-2"
-            >
-               {item.name}
-            </div>
-            
+         <div className="flex flex-1 items-center cursor-pointer" onClick={() => fnToggleSelectProduct(item)}>
+            <div className="flex-1 mx-4">
+               <div
+                  className="text-sm leading-4 font-bold mb-2"
+               >
+                  {item.name}
+               </div>
+               
 
-            {item?.sale_enabled && (
-               <div className="text-sm leading-2 mb-2 text-neutral-5">
-                  <strike>
-                     {`${item?.currency?.code ?? ''} ${formatThousand(
-                        item?.price
-                     )}`}
-                  </strike>
+               {item?.sale_enabled && (
+                  <div className="text-sm leading-2 mb-2 text-neutral-5">
+                     <strike>
+                        {`${item?.currency?.code ?? ''} ${formatThousand(
+                           item?.price
+                        )}`}
+                     </strike>
+                  </div>
+               )}
+               <div className="text-sm font-semibold text-primary-orange">
+                  {`${item?.currency?.code ?? ''} ${formatThousand(
+                     !item.sale_enabled
+                        ? item?.price
+                        : item?.sale_price ?? 0
+                  )}`}
                </div>
-            )}
-            <div className="text-sm font-semibold text-primary-orange">
-               {`${item?.currency?.code ?? ''} ${formatThousand(
-                  !item.sale_enabled
-                     ? item?.price
-                     : item?.sale_price ?? 0
-               )}`}
             </div>
-         </div>
-         <div className="w-auto">
-            {item.quantity === 0 ? (
-               <div className="text-sm text-red-600 mb-2 font-bold">
-                  {lang?.text__out_of_stock || 'Out of stock'}
-               </div>
-            ) : item.variation ? (
-               <Button
-                  type="button"
-                  className="is-radiusless is-shadowless"
-                  variant="contained"
-                  color={isVariant ?
-                     'default' :
-                     'primary'
-                  }
-                  onClick={(e) => handleOnEventChild(e, () => fnToggleSelectVariant(item))}
-                  disableElevation
-                  disabled={item.quantity === 0}
-               >
-                  {isVariant ?
-                     (lang?.btn__edit || 'Edit') :
-                     (lang?.btn__buy || 'Buy')
-                  }
-               </Button>
-            ) : (
-               productsOrdered?.[item.id] ? (
-                  <NumberRange
-                     name={item.id}
-                     min="0"
-                     max={item.quantity}
-                     value={productsOrdered?.[item.id]?.quantity}
-                     fnChange={fnChangeRangeProduct}
-                  />
-               ) :  (
-               <Button
-                  type="button"
-                  className="is-radiusless is-shadowless"
-                  variant="contained"
-                  color="primary"
-                  onClick={(e) => handleOnEventChild(e,() => fnSelectProduct(item))}
-                  disableElevation
-                  disabled={item.quantity === 0}
-               >
-                  {lang?.btn__buy || 'Buy'}
-               </Button>
-               )
-            )}
+            <div className="w-auto">
+               {(item.quantity === 0 || item.quantityVariants === 0) ? (
+                  <div className="text-sm text-red-5 font-bold">
+                     {lang?.text__out_of_stock || 'Out of stock'}
+                  </div>
+               ) : item.variation ? (
+                  <Button
+                     type="button"
+                     className="is-radiusless is-shadowless"
+                     variant="contained"
+                     color={isVariant ?
+                        'default' :
+                        'primary'
+                     }
+                     onClick={(e) => handleOnEventChild(e, () => fnToggleSelectVariant(item))}
+                     disableElevation
+                     disabled={item.quantity === 0 || item.quantityVariants === 0}
+                  >
+                     {isVariant ?
+                        (lang?.btn__edit || 'Edit') :
+                        (lang?.btn__buy || 'Buy')
+                     }
+                  </Button>
+               ) : (
+                  productsOrdered?.[item.id] ? (
+                     <NumberRange
+                        name={item.id}
+                        min="0"
+                        max={item.quantity}
+                        value={productsOrdered?.[item.id]?.quantity}
+                        fnChange={fnChangeRangeProduct}
+                     />
+                  ) :  (
+                  <Button
+                     type="button"
+                     className="is-radiusless is-shadowless"
+                     variant="contained"
+                     color="primary"
+                     onClick={(e) => handleOnEventChild(e,() => fnSelectProduct(item))}
+                     disableElevation
+                     disabled={item.quantity === 0}
+                  >
+                     {lang?.btn__buy || 'Buy'}
+                  </Button>
+                  )
+               )}
+            </div>
          </div>
       </div>
    )

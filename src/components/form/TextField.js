@@ -82,7 +82,7 @@ export default function Text({label, onClick, endIcon, ...props}) {
       >
         {
           label && (
-            <Label {...props.InputLabelProps} shrink htmlFor={props.id}>{label}{props.isRequired && (<span className="text-red-600">*</span>)}</Label>
+            <Label {...props.InputLabelProps} shrink htmlFor={props.id}>{label}{props.isRequired && (<span className="text-red-5">*</span>)}</Label>
           )
         }
         <Input
@@ -118,8 +118,8 @@ export default function Text({label, onClick, endIcon, ...props}) {
           }}
         />
         <FormHelperText id={'helper'+props.id} style={{fontSize:'12px'}}>
-          {props.isRequired &&
-            isError &&
+          {((props.isRequired &&
+            isError) || props.error) &&
             (props.labelError || 'This field is required')
           }
         </FormHelperText>

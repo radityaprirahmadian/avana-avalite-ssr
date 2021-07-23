@@ -8,6 +8,7 @@ import { Search } from '@material-ui/icons'
 
 import CategoriesSelection from './CategoriesSelection'
 import ProductLists from './ProductLists'
+import ProductDetails from './ProductDetails'
 
 import products from 'src/constants/api/products'
 
@@ -21,7 +22,6 @@ import normalizeErrorResponse from 'src/helpers/normalizeErrorResponse'
 
 let timeoutSearch = null
 export default function ProductSelection(props) {
-   const router = useRouter()
    const MAINCONTEXT = React.useContext(MainContext);
    const lang = Localization[MAINCONTEXT?.locale];
    // const [lang, setLang] = React.useState({});
@@ -75,7 +75,7 @@ export default function ProductSelection(props) {
                   sortValue: 'desc',
                   limit: '10',
                   categories: selectedCategory ? [selectedCategory] : undefined,
-                  search: search,
+                  name: search,
                   page: page
                },
             })
@@ -83,7 +83,15 @@ export default function ProductSelection(props) {
                setProducts((prev) => ({
                   ...prev,
                   data: res.data.reduce((acc, item) => {
-                     acc[Object.values(acc).length] = item;
+                     acc[Object.values(acc).length] = {
+                        ...item,
+                        quantityVariants: !!item.variation
+                           ? item?.variation?.options
+                              ?.reduce((acc, variant) => {
+                                 return acc + variant?.quantity
+                              }, 0)
+                           : undefined
+                     };
                      return acc;
                   }, page === 1 ? {} : prev.data),
                   page: {
@@ -109,16 +117,16 @@ export default function ProductSelection(props) {
          const scrollOnEndge = (document.documentElement.scrollHeight -
             document.documentElement.scrollTop <
             document.documentElement.clientHeight + 100)
-            const isOverflow = (document.documentElement.scrollHeight !== document.documentElement.clientHeight)
-            if (scrollOnEndge && isOverflow && !selectedVariant.isSelect &&
-               (PRODUCTS.page.currentPage < PRODUCTS.page.lastPage) && (
-                  PRODUCTS.status !== 'loading')
-            )
-         {
+         const isOverflow = (document.documentElement.scrollHeight !== document.documentElement.clientHeight)
+         if (scrollOnEndge && isOverflow && !selectedVariant.isSelect && !props.productDetails.isViewProductDetail &&
+            (PRODUCTS.page.currentPage < PRODUCTS.page.lastPage) &&
+            (PRODUCTS.status !== 'loading')
+         ) {
+            console.log('fetching?', PRODUCTS.page.currentPage + 1, scrollOnEndge, isOverflow, !selectedVariant.isSelect, !props.productDetails.isViewProductDetail)
             fnGetProducts(search, selectedCategory, PRODUCTS.page.currentPage + 1);
          }
       },
-      [setProducts, fnGetProducts, search, selectedVariant.isSelect, selectedCategory, PRODUCTS]
+      [setProducts, fnGetProducts, search, selectedVariant.isSelect, selectedCategory, props.productDetails.isViewProductDetail, PRODUCTS]
    )
 
    const fnGetCategories = React.useCallback(() => {
@@ -135,16 +143,45 @@ export default function ProductSelection(props) {
       (product) => {
          if (!selectedVariant.isSelect && product) {
             facebookPixel.viewContent(product);
-            window.removeEventListener("scroll", fnHandleScroll);
+            // window.removeEventListener("scroll", fnHandleScroll);
          }
+         // else {
+         //    window.addEventListener("scroll", fnHandleScroll);
+         // }
 
          setSelectedVariant((prevState) => ({
             ...prevState,
             product: !prevState.isSelect ? product : {},
             isSelect: !prevState.isSelect,
          }));
+
+         props.fnSetProductDetails((prevState) => ({
+            ...prevState,
+            id: null,
+            isViewProductDetail: false,
+            isViewProductVariant: !selectedVariant.isSelect
+         }));
       },
-      [setSelectedVariant, selectedVariant, fnHandleScroll]
+      [setSelectedVariant, props, selectedVariant, fnHandleScroll]
+   );
+
+   const fnToggleSelectProduct = React.useCallback(
+      (product) => {
+         if (!props.productDetails.isViewProductDetail && product) {
+            facebookPixel.viewContent(product);
+            // window.removeEventListener("scroll", fnHandleScroll);
+         }
+         // else {
+         //    window.addEventListener("scroll", fnHandleScroll);
+         // }
+
+         props.fnSetProductDetails((prevState) => ({
+            ...prevState,
+            id: product?.id || null,
+            isViewProductDetail: !!product?.id,
+         }));
+      },
+      [props, fnHandleScroll]
    );
 
    const fnSelectProduct = React.useCallback(
@@ -188,21 +225,7 @@ export default function ProductSelection(props) {
             };
          }
          
-         Object
-            .keys(productsOrdered)
-            .map((key) => {
-               let productId = key.split('_')[0]
-               if (productId in productsMeta) {
-                  productsMeta[productId] = {
-                     quantity: productsMeta[productId].quantity + productsOrdered[key].quantity
-                  }
-               } else {
-                  productsMeta[productId] = {
-                     quantity: productsOrdered[key].quantity
-                  }
-               }
-            })
-         setSelectedMetaList(productsMeta)
+         fnResetMetaList(productsOrdered)
 
          props.fnChange({
             target: {
@@ -249,22 +272,7 @@ export default function ProductSelection(props) {
                }))[0];
             facebookPixel.addToCart(product);
          }
-         console.log('aw',productsOrdered)
-         Object
-            .keys(productsOrdered)
-            .map((key) => {
-               let productId = key.split('_')[0]
-               if (productId in productsMeta) {
-                  productsMeta[productId] = {
-                     quantity: productsMeta[productId].quantity + productsOrdered[key].quantity
-                  }
-               } else {
-                  productsMeta[productId] = {
-                     quantity: productsOrdered[key].quantity
-                  }
-               }
-            })
-         setSelectedMetaList(productsMeta)
+         fnResetMetaList(productsOrdered)
 
          props.fnChange({
             target: {
@@ -276,14 +284,39 @@ export default function ProductSelection(props) {
       [props.fnChange, props.productsOrdered]
    );
 
+   const fnResetMetaList = React.useCallback(
+      (productsOrdered) => {
+         const productsOrderedList = productsOrdered || props.productsOrdered
+         let productsMeta = {};
+         Object
+            .keys(productsOrderedList)
+            .map((key) => {
+               let productId = key.split('_')[0]
+               if (productId in productsMeta) {
+                  productsMeta[productId] = {
+                     ...productsMeta[productId],
+                     quantity: productsMeta[productId].quantity + productsOrderedList[key].quantity
+                  }
+               } else {
+                  productsMeta[productId] = {
+                     quantity: productsOrderedList[key].quantity,
+                     isVariant: !!productsOrderedList[key].variation
+                  }
+               }
+            })
+         setSelectedMetaList(productsMeta)
+      },
+      [props, props.productsOrdered]
+   );
+
    React.useEffect(() => {
       fnGetProducts(search, selectedCategory)
    }, [fnGetProducts, search, selectedCategory])
 
    React.useEffect(() => {
       fnGetCategories()
-      // window.addEventListener('scroll', fnHandleScroll);
-   }, [fnGetCategories])
+      fnResetMetaList()
+   }, [])
 
    React.useEffect(() => {
       if (PRODUCTS.status === 'error') {
@@ -297,7 +330,7 @@ export default function ProductSelection(props) {
    return (
       <div className="px-4 -mx-4 relative flex flex-col flex-1">
          {
-            !selectedVariant.isSelect && (
+            (!selectedVariant.isSelect && !props.productDetails.isViewProductDetail) && (
                <>
                   <div className="sticky top-0 bg-white z-10">
                      <TextField
@@ -328,16 +361,31 @@ export default function ProductSelection(props) {
                </>
             )
          }
-         <ProductLists
-            lang={lang}
-            products={PRODUCTS}
-            selectedMetaList={selectedMetaList}
-            productsOrdered={props.productsOrdered}
-            selectedVariant={selectedVariant}
-            fnToggleSelectVariant={fnToggleSelectVariant}
-            fnSelectProduct={fnSelectProduct}
-            fnChangeRangeProduct={fnChangeRangeProduct}
-         />
+         {
+            props.productDetails.isViewProductDetail ? (
+               <ProductDetails
+                  lang={lang}
+                  productId={props.productDetails.id}
+                  productsOrdered={props.productsOrdered}
+                  fnSelectProduct={fnSelectProduct}
+                  fnChangeRangeProduct={fnChangeRangeProduct}
+                  fnToggleSelectVariant={fnToggleSelectVariant}
+                  fnToggleSelectProduct={fnToggleSelectProduct}
+               />
+            ) : (
+               <ProductLists
+                  lang={lang}
+                  products={PRODUCTS}
+                  selectedMetaList={selectedMetaList}
+                  productsOrdered={props.productsOrdered}
+                  selectedVariant={selectedVariant}
+                  fnToggleSelectVariant={fnToggleSelectVariant}
+                  fnToggleSelectProduct={fnToggleSelectProduct}
+                  fnSelectProduct={fnSelectProduct}
+                  fnChangeRangeProduct={fnChangeRangeProduct}
+               />
+            )
+         }
       </div>
    )
 }

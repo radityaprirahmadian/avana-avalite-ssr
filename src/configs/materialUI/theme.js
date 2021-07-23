@@ -4,9 +4,9 @@ import { red } from '@material-ui/core/colors'
 // Create a theme instance.
 const theme = createMuiTheme({
    palette: {
-      primary: {
-         main: '#FDB814',
-      },
+      // primary: {
+      //    main: '#FDB814',
+      // },
       secondary: {
          main: '#19857b',
       },
@@ -16,11 +16,11 @@ const theme = createMuiTheme({
       background: {
          default: '#fff',
       },
-      whatsapp: {
-         main: '#128C7E',
-         backgroundColor: '#128C7E',
-         color: '#FFFFFF'
-      }
+      // whatsapp: {
+      //    main: '#128C7E',
+      //    backgroundColor: '#128C7E',
+      //    color: '#FFFFFF'
+      // }
    },
    overrides: {
       MuiButton: {

@@ -5,5 +5,9 @@
   "text__search": "Search Product",
   "text__out_of_stock": "Out of stock",
   "text__oops": "Oops",
-  "text__product_not_found": "The product you are looking for was not found"
+  "text__product_not_found": "The product you are looking for was not found",
+  "text__product_detail": "Product Detail",
+  "text__stock_left": "Stock left:",
+  "text__select": "Select",
+  "text__description": "Description"
 }

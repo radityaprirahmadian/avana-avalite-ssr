@@ -14,6 +14,7 @@ export default function ProductLists(props) {
                <Variation
                lang={lang}
                   item={selectedVariant.product}
+                  selectedMeta={props.selectedMetaList[selectedVariant.product.id]}
                   productsOrdered={props.productsOrdered}
                   fnSelectProduct={props.fnSelectProduct}
                   fnChangeRangeProduct={props.fnChangeRangeProduct}
@@ -29,6 +30,7 @@ export default function ProductLists(props) {
                            selectedMeta={props.selectedMetaList[item.id]}
                            productsOrdered={props.productsOrdered}
                            fnSelectProduct={props.fnSelectProduct}
+                           fnToggleSelectProduct={props.fnToggleSelectProduct}
                            fnToggleSelectVariant={props.fnToggleSelectVariant}
                            fnChangeRangeProduct={props.fnChangeRangeProduct}
                         />

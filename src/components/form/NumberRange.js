@@ -90,15 +90,15 @@ export default function NumberRange(props) {
       <input
         autoComplete="off"
         name={props?.name}
-        type="number"
         min={props.min}
         max={props.max}
         className="input-number input text-center border-none"
         style={{
           maxWidth: '2.5rem'
         }}
-        pattern="^[0-9]*$"
+        pattern="^[0-9]+$"
         onChange={fnChangeInput}
+        onBlur={fnBlur}
         onClick={(e) => e.stopPropagation && e.stopPropagation()}
         value={value}
       />

@@ -10,10 +10,9 @@ export default function errorHandler(error) {
       if (error.response.status === 500)
         message = "Something went terribly wrong";
       else message = error.response.data.message;
-
       if (error?.config?.toastErrorEnabled &&
         typeof message === "string") toast.error(message);
-      return Promise.reject(error);
+      return Promise.reject({ status: error.response?.status, message });
     } else {
       const lang = Localization?.[getCurrentLang?.()];
       toast.error(lang?.text__network_error || 'Network Error');

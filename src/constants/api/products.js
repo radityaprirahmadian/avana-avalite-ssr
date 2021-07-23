@@ -15,4 +15,5 @@ export default {
       }),
 
    categories: () => avaprotected.get(`/product-categories`),
+   details: (productId) => avaprotected.get(`/products/${productId}`)
 }

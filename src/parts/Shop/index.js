@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useRouter } from 'next/router';
 import mixpanel from 'mixpanel-browser';
 
@@ -27,6 +27,8 @@ import writeLocalization from 'src/helpers/localization'
 
 export default function Shop({ shopDetails }) {
    const router = useRouter()
+   const refRedirect = useRef()
+   const [redirectUrl, setRedirectUrl] = useState('');
 
    const [data, setData, updateData] = useForm({
       name: '',
@@ -46,6 +48,12 @@ export default function Shop({ shopDetails }) {
    })
 
    const [locale, setLocale] = React.useState('en');
+
+   const [productDetails, setProductDetails] = useState({
+      id: null,
+      isViewProductDetail: false,
+      isViewProductVariant: false,
+   })
 
    const lang = Localization[locale];
 
@@ -123,13 +131,8 @@ export default function Shop({ shopDetails }) {
                $name: name,
                $phone: phoneNumber,
             });
-            setStatusOrder((prevState) => ({
-               ...prevState,
-               isCreateOrder: false,
-               isCreateOrderViaWA: false,
-            }))
 
-            let urlRedirect = `/${router?.query?.shop}/${btoa(btoa(res.order_id))}`
+            let urlRedirect = `/${router?.query?.shop}/${btoa(btoa(res.order_id))}`;
             if (isViaWA) {
                const products = product_ordered
                   .map(
@@ -154,24 +157,24 @@ export default function Shop({ shopDetails }) {
                   ? `whatsapp://send?phone=${waPhoneNumber}&text=${messages}`
                   : `https://web.whatsapp.com/send?phone=${waPhoneNumber}&text=${messages}`;
                   urlRedirect
-               window.open(urlRedirect, '_blank');
+               setRedirectUrl(urlRedirect);
+               if (refRedirect.current) {
+                  refRedirect.current.click();
+               } else {
+                  window.open(urlRedirect, '_blank');
+               }
             } else {
                window.location = urlRedirect;
             }
             // router.push(urlRedirect);
+         }).catch(() => {
+            setStatusOrder((prevState) => ({
+               ...prevState,
+               isCreateOrder: false,
+               isCreateOrderViaWA: false,
+            }))
          })
    }, [data]);
-
-   const fnInitDefaultPhoneNumber = React.useCallback(() => {
-      const lang = window?.navigator?.language.split('-')[0] || 'my'
-      const countryCode = { id: '+62', my: '+60', sg: '+65' }
-      setData({
-         target: {
-            name: 'phoneNumber',
-            value: countryCode[lang],
-         },
-      })
-   }, [])
 
    const fnSelectLocale = React.useCallback((lang) => {
       setLocale(lang);
@@ -212,29 +215,47 @@ export default function Shop({ shopDetails }) {
          className="mx-auto min-h-screen flex flex-col"
          style={{ minWidth: 300, maxWidth: 375}}
       >
-         <Header data={shopDetails.details.shop_info} lang={lang} />
+         {(!productDetails.isViewProductDetail && !productDetails.isViewProductVariant) && (
+            <Header data={shopDetails.details.shop_info} lang={lang} />
+         )}
          <Context.Provider value={CONTEXT}>
-            <CustomerInformation
-               lang={lang}
-               defualtCountry={shopDetails.details.country.iso_code.toLowerCase()}
-               data={data}
-               fnChange={fnChange}
-               status={status}
-            />
+            {(!productDetails.isViewProductDetail && !productDetails.isViewProductVariant) && (
+               <CustomerInformation
+                  lang={lang}
+                  defualtCountry={shopDetails.details.country.iso_code.toLowerCase()}
+                  data={data}
+                  fnChange={fnChange}
+                  status={status}
+               />
+            )}
             <ProductSelection
                productsOrdered={data.productsOrdered}
+               productDetails={productDetails}
                fnChange={fnChange}
+               fnSetProductDetails={setProductDetails}
             />
-            <div className="text-xs text-center py-2 sticky bottom-0 bg-white z-10">
-               <Checkout
-                  lang={lang}
-                  data={data}
-                  status={status}
-                  statusOrder={statusOrder}
-                  fnCreateOrder={fnCreateOrder}
-               />
-               <Footer fnSelectLocale={fnSelectLocale} lang={lang} />
-            </div>
+            {(!productDetails.isViewProductDetail && !productDetails.isViewProductVariant) && (
+               <div className="text-xs text-center py-2 sticky bottom-0 bg-white z-10">
+                  <Checkout
+                     lang={lang}
+                     data={data}
+                     status={status}
+                     statusOrder={statusOrder}
+                     fnCreateOrder={fnCreateOrder}
+                  />
+                  <Footer fnSelectLocale={fnSelectLocale} lang={lang} />
+               </div>
+            )}
+            <a
+               ref={refRedirect}
+               href={redirectUrl}
+               rel="noopener noreferrer"
+               className="hidden"
+               style={{ display: 'none' }}
+               target={mobileTabletCheck() ? '_self' : '_blank'}
+            >
+               redirect link
+            </a>
          </Context.Provider>
       </div>
    )
