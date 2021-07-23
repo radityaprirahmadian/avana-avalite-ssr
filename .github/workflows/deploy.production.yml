@@ -1,10 +1,8 @@
 name: deploy production
 
 on:
-  push:
-    branches: 
-      - master
   pull_request:
+    types: [closed]
     branches: 
       - master
   workflow_dispatch:
