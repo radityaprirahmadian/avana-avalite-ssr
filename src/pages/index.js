@@ -9,6 +9,7 @@ import axios from 'src/configs/axios'
 // import shop from 'src/constants/api/shop'
 
 function Home() {
+   console.log("Products")
    return (
       <>
          <Head>
