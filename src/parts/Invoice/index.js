@@ -124,7 +124,7 @@ export default function Invoice({ shopDetails, orderToken }) {
             ...prevState,
             isCalculating: true,
          }));
-         if (meta.shippable_countries == null) {
+         if (!meta.shippable_countries.length) {
             setPricingCharge((prevState) => ({
                ...prevState,
                totalTax: totalTax,
@@ -286,6 +286,10 @@ export default function Invoice({ shopDetails, orderToken }) {
             fnGetOrderMeta(),
          ])
             .then(([order, meta]) => {
+               const shippableCountries = (typeof meta?.shippable_countries === 'object' && !!meta?.shippable_countries)
+                  ? Object.values(meta?.shippable_countries)
+                  : meta?.shippable_countries || [];
+
                if (order.order_status === 'cancelled') {
                   const checkStatusExpired = (order.order_status === 'cancelled' &&
                      calculateHourFromNow(new Date(order.order_date)) > 24
@@ -300,7 +304,10 @@ export default function Invoice({ shopDetails, orderToken }) {
                   })
                   return;
                }
-               setMeta(meta);
+               setMeta({
+                  ...meta,
+                  shippable_countries: shippableCountries
+               });
                setOrderDetails((prevState) => ({
                   ...prevState,
                   orderNumber: order.order_no,
@@ -324,7 +331,7 @@ export default function Invoice({ shopDetails, orderToken }) {
                   .filter(([key]) => key.match(/^customer*_(?!.*_)/))
                   .filter(([key]) => !optional.includes(key))
                   .map(([key, value]) => (
-                    initStatus[key] = meta.shippable_countries == null && noShippingPass.includes(key)
+                    initStatus[key] = !(shippableCountries|| []).length && noShippingPass.includes(key)
                       ? 4 : value
                       ? 3 : 0
                     )
@@ -352,7 +359,9 @@ export default function Invoice({ shopDetails, orderToken }) {
                   address2: order.customer_address2,
                   country: order.customer_country_id
                      ? Number(order.customer_country_id)
-                     : shopDetails.details?.country?.id,
+                     : !!(shippableCountries|| []).length
+                        ? shopDetails.details?.country?.id
+                        : '',
                   state: order.customer_state_id
                      ? Number(order.customer_state_id)
                      : '',
@@ -451,7 +460,7 @@ export default function Invoice({ shopDetails, orderToken }) {
 
    const fnProcessOrder = React.useCallback(
       () => {
-         const shipperPayload = (orderDetails.shippingMethod === 'shipper' ||
+         const shipperPayload = (orderDetails.shippingMethod === 'shipper' &&
             !orderDetails.isShippingSelfPickup ? {
                shipper_courier_name: formInfoData.shippingCourierName,
                shipper_rate_id: Number(formInfoData.shipperRateId),
@@ -477,8 +486,8 @@ export default function Invoice({ shopDetails, orderToken }) {
                customer_phone: formInfoData.phoneNumber,
                customer_address1: formInfoData.address1,
                customer_address2: formInfoData.address2,
-               customer_country: Number(formInfoData.country),
-               customer_state: Number(formInfoData.state),
+               customer_country: formInfoData.country ? Number(formInfoData.country) : '',
+               customer_state: formInfoData.state ? Number(formInfoData.state) : '',
                customer_city: formInfoData.city,
                customer_postcode: formInfoData.postcode,
                customer_lat: formInfoData.lat || '',
