@@ -10,7 +10,6 @@ import shipping from 'src/constants/api/shipping';
 
 import calculateHourFromNow from 'src/helpers/calculateHourFromNow';
 import { selectCourier } from 'src/helpers/indexCourier';
-import checkCourierSameDay from 'src/helpers/checkCourierSameDay';
 
 import MainContext from 'src/parts/Context';
 import FormContext from './FormContext';
@@ -100,6 +99,10 @@ export default function FormInformation({
          shipperRateId: 0,
          shipperUseInsurance: 0
       });
+      fnUpdateOrderDetails((prevState) => ({
+         ...prevState,
+         selectedCountry: COUNTRIES.data?.find((el) => el.country_id === changeValue),
+      }));
       fnGetStates(eventValue);
       fnGetCities(eventValue);
    }, [fnChange]);
@@ -132,6 +135,10 @@ export default function FormInformation({
          shipperRateId: 0,
          shipperUseInsurance: 0
       });
+      fnUpdateOrderDetails((prevState) => ({
+         ...prevState,
+         selectedState: STATES.data?.find((el) => el.country_id === changeValue),
+      }));
       fnCheckShippingMethod(eventValue);
    }, [fnChange,updateFormInfoData, updateFormInfoStatus]);
 
@@ -258,9 +265,6 @@ export default function FormInformation({
       if (fetchCityTimeout) {
          clearTimeout(fetchCityTimeout);
       }
-      fetchCityTimeout = setTimeout(() =>  {
-         fnGetCouriers();
-      }, 1000);
 
       updateFormInfoData({
          lat: null,
@@ -283,6 +287,7 @@ export default function FormInformation({
             shipperUseInsurance: 4
          });
       }
+      fnGetCouriers();
    }, [fnChange, orderDetails]);
 
    const fnChangeCourier = React.useCallback((event, newValue) => {
@@ -500,6 +505,19 @@ export default function FormInformation({
             ],
             status: 'ok',
          }));
+         if (!orderDetails.isAbleSelfPickup) {
+            // updateFormInfoData({
+            //    shippingCourierName: orderDetails.shippingCourier?.name,
+            // });
+            // updateFormInfoStatus({
+            //    shippingCourierName: 3,
+            // });
+            // setCourier((prevState) => ({
+            //    ...prevState,
+            //    selected: { name: orderDetails.shippingCourier?.name },
+            // }));
+            fnChangeCourier('', { name: orderDetails.shippingCourier?.name })
+         }
       }
    }, [shipping, orderDetails])
 
@@ -604,6 +622,7 @@ export default function FormInformation({
                formInfoStatus={formInfoStatus}
                shippingMethod={orderDetails.shippingMethod}
                locationAddress={orderDetails.locationAddress}
+               isAbleSelfPickup={orderDetails.isAbleSelfPickup}
                isShippingSelfPickup={orderDetails.isShippingSelfPickup}
                fnGetStates={fnGetStates}
                fnGetCities={fnGetCities}

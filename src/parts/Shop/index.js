@@ -55,6 +55,11 @@ export default function Shop({ shopDetails }) {
       isViewProductVariant: false,
    })
 
+   const [waRotatorData, setWaRotatorData] = useState({
+      details: {},
+      mixpanelWhatsappInfo: {}
+   })
+
    const lang = Localization[locale];
 
    const fnChange = React.useCallback(
@@ -101,15 +106,19 @@ export default function Shop({ shopDetails }) {
          product_ordered: product_ordered
       })
          .then(async (res) => {
-            const waRotatorId = search && Number(() => {
-               try {
-                 return atob(new URLSearchParams(search).get("wa"))
-               } catch {
-                 return 0
-               }
-             });
-
+            const { details: shop } = shopDetails;
+            const { details: waNumberDetails, mixpanelWhatsappInfo } = waRotatorData;
+            const waRotatorId = waNumberDetails.whatsapp_info_id;
             mixpanel.track('Order Form', {
+               'Order ID': res.order_id,
+               'Order No': res.order_no,
+               'Shop': shop.shop_info.shop_name,
+               'Shop ID': shop.id,
+               'Shop Category': shop?.shop_category?.category_name || '-',
+               'Order Date': res.order_date,
+               'Order Status': res.order_status,
+               'Order Status ID': res.order_status_id,
+               'Currency Code': res.currency_code,
                Products: product_ordered.map((product) => ({
                   'Product Name': `${product.name} ${
                      product.variation ? ` (${product.variation}) ` : ''
@@ -125,7 +134,7 @@ export default function Shop({ shopDetails }) {
                   (acc, current) => acc + Number(current.price),
                   0
                ),
-               Shop: shopDetails.details.shop_info.shop_name,
+               ...mixpanelWhatsappInfo
             });
             mixpanel.people.set({
                $name: name,
@@ -176,6 +185,41 @@ export default function Shop({ shopDetails }) {
          })
    }, [data]);
 
+   const fnTrackVisit = React.useCallback(async () => {
+      const { waId, details: shop } = shopDetails;
+      const waRotatorId = waId ? Number((() => {
+         try {
+           return atob(waId)
+         } catch {
+           return -1
+         }
+       })()) : -1;
+       console.log(shop)
+      let mixpanelWhatsappInfo = {};
+      if (waRotatorId !== -1) {
+         const whatsappData = await whatsapp.whatsappNumberList()
+            .then((data) => {
+               return data?.find((wa) => wa.whatsapp_info_id === waRotatorId)
+            });
+         mixpanelWhatsappInfo = {
+            'WhatsApp Info ID': whatsappData?.whatsapp_info_id,
+            'WhatsApp CS Name': whatsappData?.customer_service_name,
+            'WhatsApp CS Number': whatsappData?.phone_no,
+         }
+         setWaRotatorData((prev) => ({
+            ...prev,
+            details: whatsappData,
+            mixpanelWhatsappInfo,
+         }))
+      }
+      mixpanel.track('Visit', {
+         'Shop': shop.shop_info.shop_name,
+         'Shop ID': shop.id,
+         'Shop Category': shop?.shop_category?.category_name || '-',
+         ...(mixpanelWhatsappInfo)
+      });
+   }, [])
+
    const fnSelectLocale = React.useCallback((lang) => {
       setLocale(lang);
       setCurrentLang(lang);
@@ -190,6 +234,7 @@ export default function Shop({ shopDetails }) {
 
    React.useEffect(() => {
       facebookPixel.pageView();
+      fnTrackVisit();
    }, []);
 
    // React.useEffect(() => {

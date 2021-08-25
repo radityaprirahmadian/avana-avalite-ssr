@@ -12,6 +12,7 @@ export default function InvoiceContent({
   pricingCharge,
   additionalInfoForm,
   meta,
+  shop,
   currentStep,
   updateFormInfoData,
   updateFormInfoStatus,
@@ -108,6 +109,7 @@ export default function InvoiceContent({
         <Payment
           paymentList={meta.payment_method}
           orderDetails={orderDetails}
+          shop={shop}
           fnUpdateOrderDetails={fnUpdateOrderDetails}
         />
       </>

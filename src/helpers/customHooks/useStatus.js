@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import validator from "validator";
 
 export default (initialValues) => {
@@ -34,11 +34,10 @@ export default (initialValues) => {
         } else {
           statusUpdate = e.target.value.length > 0 ? 3 : 1;
         }
-        
-        setValues({
-          ...values,
+        setValues((prev) => ({
+          ...prev,
           [e.target.name]: statusUpdate,
-        });
+        }));
       }
     },
     () => {

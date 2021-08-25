@@ -85,6 +85,7 @@ function Home(props) {
 
 export async function getServerSideProps(context) {
    const { shop } = context.params
+   const { wa } = context.query
 
    try {
       const shopToken = await shops.oAuth(shop)
@@ -99,6 +100,7 @@ export async function getServerSideProps(context) {
             data: {
                details: shopDetails,
                token: shopToken,
+               waId: wa ? wa : null,
             },
          },
       }

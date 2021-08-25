@@ -63,6 +63,8 @@ export default function Invoice({ shopDetails, orderToken }) {
       paymentMethod: '',
       shippingMethod: '',
       paymentUrl: '',
+      selectedCountry: {},
+      selectedState: {},
       locationAddress: '',
       isAbleSelfPickup: false,
       isShippingSelfPickup: false
@@ -311,7 +313,16 @@ export default function Invoice({ shopDetails, orderToken }) {
                setOrderDetails((prevState) => ({
                   ...prevState,
                   orderNumber: order.order_no,
-                  currencyCode: order.currency_code
+                  orderId: order.order_id,
+                  orderDate: order.order_date,
+                  orderStatus: order.order_status,
+                  orderStatusId: order.order_status_id,
+                  currencyCode: order.currency_code,
+                  whatsappInfoData: {
+                     whatsapp_info_id: order?.whatsapp_info?.whatsapp_info_id,
+                     customer_service_name: order?.whatsapp_info?.customer_service_name,
+                     phone_no: order?.whatsapp_info?.phone_no,
+                  }
                }));
                const noShippingPass = [
                   'customer_address1',
@@ -421,6 +432,37 @@ export default function Invoice({ shopDetails, orderToken }) {
                   ...prevState,
                   isLoadingPage: false
                }))
+               mixpanel.track('Customer Info', {
+                  'Order ID': order.order_id,
+                  'Order No': order.order_no,
+                  'Shop': shopDetails?.details?.shop_info.shop_name,
+                  'Shop ID': shopDetails?.details?.id,
+                  'Shop Category': shopDetails?.details?.shop_category?.category_name || '-',
+                  'Order Date': order.order_date,
+                  'Order Status': order.order_status,
+                  'Order Status ID': order.order_status_id,
+                  'Currency Code': order.currency_code,
+                  'Checkout Platform': order.checkout_platform,
+                  Products: order?.order_product.map((product) => ({
+                    'Product Name': `${product.product_name} ${
+                        product.product_option_value ? ` (${product.product_option_value}) ` : ''
+                     }`,
+                     'Product Quantity': product.qty,
+                  })),
+                  'Cart Size (Quantity)': order?.order_product.reduce(
+                    (acc, current) => acc + Number(current.qty),
+                    0
+                  ),
+                  'Cart Volume': order?.order_product.reduce(
+                    (acc, current) => acc + Number(current.price),
+                    0
+                  ),
+                  ...(order?.whatsapp_info ? {
+                    'WhatsApp Info ID': order?.whatsapp_info?.whatsapp_info_id,
+                    'WhatsApp CS Name': order?.whatsapp_info?.customer_service_name,
+                    'WhatsApp CS Number': order?.whatsapp_info?.phone_no,
+                  } : {})
+                });
             })
       },
       []
@@ -449,6 +491,41 @@ export default function Invoice({ shopDetails, orderToken }) {
             (pricingCharge.isCalculating === false && pricingCharge.subTotal > 0)
          ) {
             facebookPixel.addPaymentInfo(Number(pricingCharge.subTotal), orderDetails.currencyCode);
+            mixpanel.track('Invoice', {
+               'Order ID': orderDetails.order_id,
+               'Order No': orderDetails.order_no,
+               'Shop': shopDetails.details?.shop_info.shop_name,
+               'Shop ID': shopDetails.details?.id,
+               'Shop Category': shopDetails.details?.shop_category?.category_name || '-',
+               'Order Date': orderDetails.order_date,
+               'Order Status': orderDetails.order_status,
+               'Order Status ID': orderDetails.order_status_id,
+               'Currency Code': orderDetails.currency_code,
+               'Customer Name': formInfoData.name,
+               'Customer Email': formInfoData.email,
+               'Customer Phone': formInfoData.phoneNumber,
+               'Customer City': formInfoData.city,
+               'Customer State': orderDetails.selectedState?.name,
+               'Customer Country': orderDetails.selectedCountry?.name,
+               'Customer Postcode': formInfoData.postcode,
+               'Customer Longitude': formInfoData.lng,
+               'Customer Latitude': formInfoData.lat,
+               'Additional Info': additionalInfoForm,
+               'Checkout Platform': 'avalite',
+               Products: Object.values(productsOrdered).map((product) => ({
+                 'Product Name': `${product.name} ${
+                   product.variation ? ` (${product.variation}) ` : ''
+                 }`,
+                 'Product Quantity': product.quantity,
+               })),
+               'Shipping Method':  orderDetails.shippingMethod,
+               'Shipping Insurance': formInfoData?.shipperUseInsurance || 0,
+               ...(orderDetails?.whatsappInfoData ? {
+                  'WhatsApp Info ID': orderDetails?.whatsappInfoData?.whatsapp_info_id,
+                  'WhatsApp CS Name': orderDetails?.whatsappInfoData?.customer_service_name,
+                  'WhatsApp CS Number': orderDetails?.whatsappInfoData?.phone_no,
+               } : {})
+             });
          }
       },
       [step.current, pricingCharge.subTotal, pricingCharge.isCalculating, orderDetails.currencyCode]
@@ -509,17 +586,28 @@ export default function Invoice({ shopDetails, orderToken }) {
             })
             .then(async (res) => {
                mixpanel.track('Checkout Form', {
+                  'Order ID': res.order_id,
                   'Order No': res.order_no,
+                  'Shop': shopDetails?.details?.shop_info.shop_name,
+                  'Shop ID': shopDetails?.details?.id,
+                  'Shop Category': shopDetails?.details?.shop_category?.category_name || '-',
                   'Order Date': res.order_date,
                   'Order Status': res.order_status,
+                  'Order Status ID': res.order_status_id,
                   'Customer Name': res.customer_name,
                   'Customer Email': res.customer_email,
                   'Customer Phone': res.customer_phone,
                   'Customer City': res.customer_city,
                   'Customer State': res.customer_state,
                   'Customer Country': res.customer_country,
+                  'Customer Postcode': res.customer_postcode,
+                  'Customer Longitude': res.customer_postcode,
+                  'Customer Latitude': res.customer_latitude,
+                  'Additional Info': res.order_custom_field,
                   'Payment Method': res.payment_method,
                   'Shipping Method': res.shipping_method,
+                  'Shipping Insurance': res.shipping_insurance,
+                  'Coupon Code': res.coupon_code,
                   'Order Product Total': res.order_product_total,
                   'Order Product': res.order_product,
                   'Total Weight': res.total_weight,
@@ -529,6 +617,11 @@ export default function Invoice({ shopDetails, orderToken }) {
                   'Total Price': res.total_price,
                   'Total Coupon': res.total_coupon,
                   'Checkout Platform': res.checkout_platform,
+                  ...(res?.whatsapp_info ? {
+                     'WhatsApp Info ID': res?.whatsapp_info?.whatsapp_info_id,
+                     'WhatsApp CS Name': res?.whatsapp_info?.customer_service_name,
+                     'WhatsApp CS Number': res?.whatsapp_info?.phone_no,
+                  } : {})
                });
                await setStatusState((prevState) => ({
                   ...prevState,
@@ -610,6 +703,9 @@ export default function Invoice({ shopDetails, orderToken }) {
                   statusState.isEditOrder ? (
                      <EditProducts
                         lang={lang}
+                        shopDetails={shopDetails.details}
+                        formInfoData={formInfoData}
+                        orderDetails={orderDetails}
                         productsOrdered={productsOrdered}
                         setStatusState={setStatusState}
                         setProductsOrdered={setProductsOrdered}
@@ -635,6 +731,7 @@ export default function Invoice({ shopDetails, orderToken }) {
                                     additionalInfoForm={additionalInfoForm}
                                     pricingCharge={pricingCharge}
                                     meta={meta}
+                                    shop={shopDetails.details}
                                     formInfoStatus={formInfoStatus}
                                     currentStep={step.current}
                                     updateFormInfoData={updateFormInfoData}

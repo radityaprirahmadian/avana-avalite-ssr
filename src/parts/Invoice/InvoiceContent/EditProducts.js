@@ -7,6 +7,7 @@ import mixpanel from 'mixpanel-browser';
 
 export default function EditProducts(props) {
   const [productsCart, setProductsCart] = useState(props.productsOrdered)
+  const [productsBefore, _] = useState(props.productsOrdered)
 
   const [productDetails, setProductDetails] = useState({
     id: null,
@@ -27,26 +28,92 @@ export default function EditProducts(props) {
 
   const fnCloseEditOrder = useCallback(
     () => {
-      mixpanel.track('Cancel Edit Order');
-      props.setStatusState((prevState) => ({
-        ...prevState,
-        isProductsEdited: true,
-        isEditOrder: false,
-      }))
-    },
-    [props.setStatusState]
-  );
-
-  const fnConfirmEditProducts = useCallback(
-    () => {
-      mixpanel.track('Submit Edit Order', {
-        Products: Object.values(productsCart)
+      const { shopDetails, formInfoData, additionalInfoForm, orderDetails } = props;
+      mixpanel.track('Cancel Edit Order', {
+        'Order ID': orderDetails.orderId,
+        'Order No': orderDetails.orderNo,
+        'Shop': shopDetails.shop_info.shop_name,
+        'Shop ID': shopDetails.id,
+        'Shop Category': shopDetails.shop_category.category_name,
+        'Order Date': orderDetails.orderDate,
+        'Order Status': orderDetails.orderStatus,
+        'Order Status ID': orderDetails.orderStatusId,
+        'Currency Code': orderDetails.currencyCode,
+        'Customer Name': formInfoData.name,
+        'Customer Email': formInfoData.email,
+        'Customer Phone': formInfoData.phoneNumber,
+        'Customer City': formInfoData.city,
+        'Customer State': orderDetails.selectedState?.name,
+        'Customer Country': orderDetails.selectedCountry?.name,
+        'Customer Postcode': formInfoData.postcode,
+        'Customer Longitude': formInfoData.lng,
+        'Customer Latitude': formInfoData.lat,
+        'Additional Info': additionalInfoForm,
+        'Checkout Platform': 'avalite',
+        Products: Object.values(props.productsOrdered)
           .map((product) => ({
             'Product Name': `${product.name} ${
               product.variation ? ` (${product.variation}) ` : ''
             }`,
             'Product Quantity': product.quantity,
           })),
+        ...(orderDetails?.whatsappInfoData ? {
+          'WhatsApp Info ID': orderDetails?.whatsappInfoData?.whatsapp_info_id,
+          'WhatsApp CS Name': orderDetails?.whatsappInfoData?.customer_service_name,
+          'WhatsApp CS Number': orderDetails?.whatsappInfoData?.phone_no,
+        } : {})
+      });
+      props.setStatusState((prevState) => ({
+        ...prevState,
+        isProductsEdited: true,
+        isEditOrder: false,
+      }))
+    },
+    [props]
+  );
+
+  const fnConfirmEditProducts = useCallback(
+    () => {
+      mixpanel.track('Submit Edit Order', {
+        'Order ID': orderDetails.orderId,
+        'Order No': orderDetails.orderNo,
+        'Shop': shopDetails.shop_info.shop_name,
+        'Shop ID': shopDetails.id,
+        'Shop Category': shopDetails.shop_category.category_name,
+        'Order Date': orderDetails.orderDate,
+        'Order Status': orderDetails.orderStatus,
+        'Order Status ID': orderDetails.orderStatusId,
+        'Currency Code': orderDetails.currencyCode,
+        'Customer Name': formInfoData.name,
+        'Customer Email': formInfoData.email,
+        'Customer Phone': formInfoData.phoneNumber,
+        'Customer City': formInfoData.city,
+        'Customer State': orderDetails.selectedState?.name,
+        'Customer Country': orderDetails.selectedCountry?.name,
+        'Customer Postcode': formInfoData.postcode,
+        'Customer Longitude': formInfoData.lng,
+        'Customer Latitude': formInfoData.lat,
+        'Additional Info': additionalInfoForm,
+        'Checkout Platform': 'avalite',
+        'Updated Products': Object.values(productsCart)
+          .map((product) => ({
+            'Product Name': `${product.name} ${
+              product.variation ? ` (${product.variation}) ` : ''
+            }`,
+            'Product Quantity': product.quantity,
+          })),
+        'Former Products': Object.values(productsBefore)
+          .map((product) => ({
+            'Product Name': `${product.name} ${
+              product.variation ? ` (${product.variation}) ` : ''
+            }`,
+            'Product Quantity': product.quantity,
+          })),
+        ...(orderDetails?.whatsappInfoData ? {
+          'WhatsApp Info ID': orderDetails?.whatsappInfoData?.whatsapp_info_id,
+          'WhatsApp CS Name': orderDetails?.whatsappInfoData?.customer_service_name,
+          'WhatsApp CS Number': orderDetails?.whatsappInfoData?.phone_no,
+        } : {})
       });
       props.setProductsOrdered(productsCart);
       props.fnSyncTotalPayment();
@@ -56,7 +123,28 @@ export default function EditProducts(props) {
   );
 
   useEffect(() => {
+    const { shopDetails, formInfoData, additionalInfoForm, orderDetails } = props;
     mixpanel.track('Edit Order', {
+      'Order ID': orderDetails.orderId,
+      'Order No': orderDetails.orderNo,
+      'Shop': shopDetails.shop_info.shop_name,
+      'Shop ID': shopDetails.id,
+      'Shop Category': shopDetails.shop_category.category_name,
+      'Order Date': orderDetails.orderDate,
+      'Order Status': orderDetails.orderStatus,
+      'Order Status ID': orderDetails.orderStatusId,
+      'Currency Code': orderDetails.currencyCode,
+      'Customer Name': formInfoData.name,
+      'Customer Email': formInfoData.email,
+      'Customer Phone': formInfoData.phoneNumber,
+      'Customer City': formInfoData.city,
+      'Customer State': orderDetails.selectedState?.name,
+      'Customer Country': orderDetails.selectedCountry?.name,
+      'Customer Postcode': formInfoData.postcode,
+      'Customer Longitude': formInfoData.lng,
+      'Customer Latitude': formInfoData.lat,
+      'Additional Info': additionalInfoForm,
+      'Checkout Platform': 'avalite',
       Products: Object.values(props.productsOrdered)
         .map((product) => ({
           'Product Name': `${product.name} ${
@@ -64,6 +152,11 @@ export default function EditProducts(props) {
           }`,
           'Product Quantity': product.quantity,
         })),
+      ...(orderDetails?.whatsappInfoData ? {
+        'WhatsApp Info ID': orderDetails?.whatsappInfoData?.whatsapp_info_id,
+        'WhatsApp CS Name': orderDetails?.whatsappInfoData?.customer_service_name,
+        'WhatsApp CS Number': orderDetails?.whatsappInfoData?.phone_no,
+      } : {})
     });
   }, [])
 
