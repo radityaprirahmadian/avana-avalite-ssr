@@ -31,7 +31,11 @@ function Home(props) {
    const favicon =
       props?.data?.details?.shop_info?.webstore_favicon || '/images/favicon.ico'
 
-   let imagePreview = props?.data?.details?.shop_info?.whatsapp_logo ?? ''
+   let imagePreview = props?.data?.details?.shop_info?.whatsapp_logo?.replace?.(
+      '/thumbnail',
+      '')
+      || props?.data?.details?.shop_info?.webstore_logo
+      || ''
    if (imagePreview?.indexOf('%3A') > -1)
       imagePreview = `https:` + imagePreview?.split('%3A')[1]
 

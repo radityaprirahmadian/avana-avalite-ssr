@@ -5,7 +5,9 @@ import Image from 'src/components/Container/Image'
 import images from 'src/constants/images'
 
 export default function Header({ data, lang }) {
-   let imagePreview = data?.whatsapp_logo
+   let imagePreview = data?.whatsapp_logo?.replace?.(
+      '/thumbnail',
+      '') || data?.webstore_logo
    if (imagePreview.indexOf('%3A') > -1)
       //should be fixed on api level, but yeah we fixed it anyway on frontend
       imagePreview = `https:` + imagePreview.split('%3A')[1]

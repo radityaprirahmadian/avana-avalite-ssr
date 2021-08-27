@@ -7,7 +7,9 @@ import writeLocalization from 'src/helpers/localization'
 
 
 export default function Header({ lang, shopInfo, currentStep }) {
-   let imagePreview = shopInfo?.whatsapp_logo
+   let imagePreview = shopInfo?.whatsapp_logo?.replace?.(
+      '/thumbnail',
+      '') || shopInfo?.webstore_logo
    if (imagePreview.indexOf('%3A') > -1)
       //should be fixed on api level, but yeah we fixed it anyway on frontend
       imagePreview = `https:` + imagePreview.split('%3A')[1]
