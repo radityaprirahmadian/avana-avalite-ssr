@@ -43,6 +43,7 @@ const PaymentMethod = ({children}) => (
 export default function Payments({
   paymentList,
   orderDetails,
+  shop,
   fnUpdateOrderDetails,
 }) {
   const slickSetting= {
@@ -58,7 +59,6 @@ export default function Payments({
       {
         paymentList
           ?.filter((payment) => payment.code !== 'manual')
-          ?.filter((payment) => payment.code !== 'nicepay')
           ?.map((payment) => (
             <PaymentsWrapper
               key={payment.code}
@@ -74,7 +74,9 @@ export default function Payments({
               <PaymentMethod>
                 <img
                   src={`/images/payments/${
-                    payment.code === 'faspay' || payment.code === 'avapay'
+                    payment.code === 'faspay'
+                    || payment.code === 'avapay'
+                    || payment.code === 'nicepay'
                       ? `onlinebanking` : payment.code}.svg`
                   }
                   alt=""
@@ -82,7 +84,7 @@ export default function Payments({
                   style={{
                     flex: '1',
                     maxWidth: '100px',
-                    maxHeight: '50px'
+                    maxHeight: '50%'
                   }}
                 />
                 <span
@@ -91,7 +93,7 @@ export default function Payments({
                     flex: '2',
                   }}
                 >
-                  {payment.code === 'faspay'
+                  {payment.code === 'faspay' || payment.code === 'nicepay'
                     ? 'Online Banking'
                     : payment.display_name}
                 </span>
@@ -104,7 +106,9 @@ export default function Payments({
                 />
               </PaymentMethod>
               {
-                payment.code === 'faspay' || payment.code === 'avapay' ? 
+                payment.code === 'faspay'
+                || payment.code === 'nicepay'
+                || (payment.code === 'avapay' && shop.country.id === 129) ?
                 <div className="grid border-t border-solid border-gray-300 py-3 mx-4 my-1">
                   <div
                     className="overflow-hidden"
@@ -114,7 +118,7 @@ export default function Payments({
                   >
                     <Slider {...slickSetting}>
                       {
-                        Object.values(bankList[payment.code === 'faspay' ? 'idBank' : 'myBank']).map((bank) => (
+                        Object.values(bankList[`${payment?.code}_${shop?.country?.id}`]).map((bank) => (
                           <div className="w-100 h-100">
                             <img
                               className="inline-block px-2"

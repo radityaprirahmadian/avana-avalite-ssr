@@ -292,6 +292,14 @@ export default function Invoice({ shopDetails, orderToken }) {
                   ? Object.values(meta?.shippable_countries)
                   : meta?.shippable_countries || [];
 
+               if (shopDetails?.details?.country?.id === 100) {
+                  const checkNicepay = meta.payment_method.findIndex((payment) => payment.code === 'nicepay');
+                  const checkFaspay = meta.payment_method.findIndex((payment) => payment.code === 'faspay');
+                  if ((checkNicepay !== -1) && (checkFaspay + 1 !== checkNicepay)) {
+                     meta.payment_method.splice(checkFaspay + 1, 0, meta.payment_method[checkNicepay]);
+                     meta.payment_method.splice(checkNicepay + 1, 1);
+                  }
+               }
                if (order.order_status === 'cancelled') {
                   const checkStatusExpired = (order.order_status === 'cancelled' &&
                      calculateHourFromNow(new Date(order.order_date)) > 24

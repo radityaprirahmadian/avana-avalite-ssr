@@ -1,27 +1,49 @@
 export default {
-  idBank: {
-    danamon: {
-      name: 'Danamon',
-      url: `/images/payments/bank/danamon.png`,
-    },
+  faspay_100: {
     mandiri: {
       name: 'Mandiri',
-      url: `/images/payments/bank/mandiri.png`,
+      url: '/images/payments/bank/mandiri.png',
     },
-    maybank: {
-      name: 'Maybank',
-      url: `/images/payments/bank/maybank.png`,
+    bri: {
+      name: 'BRI',
+      url: '/images/payments/bank/bri.png',
     },
     ovo: {
       name: 'OVO',
-      url: `/images/payments/bank/ovo.png`,
+      url: '/images/payments/bank/ovo.png',
+    },
+    danamon: {
+      name: 'Permata Bank',
+      url: '/images/payments/bank/danamon.png',
+    },
+    maybank: {
+      name: 'Maybank',
+      url: '/images/payments/bank/maybank.png',
+    },
+  },
+  nicepay_100: {
+    bca: {
+      name: 'BCA',
+      url: '/images/payments/bank/bca.png',
+    },
+    bni: {
+      name: 'BNI',
+      url: '/images/payments/bank/bni.png',
+    },
+    cimb: {
+      name: 'CIMB',
+      url: '/images/payments/bank/cimb.png',
+    },
+    hana: {
+      name: 'Hana Bank',
+      url: '/images/payments/bank/hana.png',
     },
     permatabank: {
       name: 'Permata Bank',
-      url: `/images/payments/bank/permatabank.png`,
+      url: '/images/payments/bank/permatabank.png',
     },
   },
-  myBank: {
+  avapay_129: {
     bankislam: {
       name: 'Bank Islam',
       url: `/images/payments/bank/bankislam.png`,
