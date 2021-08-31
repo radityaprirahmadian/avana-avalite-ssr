@@ -40,9 +40,9 @@ function Home(props) {
    if (imagePreview?.indexOf('%3A') > -1)
       imagePreview = `https:` + imagePreview?.split('%3A')[1]
 
-   const url =
-      `${process.env.NEXT_APP_HOST}/${props?.data?.details?.shop_info?.slug}` ??
-      ''
+   const url = process.env.NEXT_APP_HOST && props?.data?.details?.shop_info?.slug
+      ? `${process.env.NEXT_APP_HOST}/${props?.data?.details?.shop_info?.slug}`
+      : ''
 
    setBaseUrl(props?.data?.token?.shop_id)
    setAuthorization(props?.data?.token?.oauth_access_token)
