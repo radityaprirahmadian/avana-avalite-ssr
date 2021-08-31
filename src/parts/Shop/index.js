@@ -167,13 +167,17 @@ export default function Shop({ shopDetails }) {
                   : `https://web.whatsapp.com/send?phone=${waPhoneNumber}&text=${messages}`;
                   urlRedirect
                setRedirectUrl(urlRedirect);
-               if (refRedirect.current) {
-                  refRedirect.current.click();
-               } else {
-                  window.open(urlRedirect, '_blank');
-               }
+               fnAnalyticsOrderCreated(res.order_id).finally(() => {
+                  if (refRedirect.current) {
+                     refRedirect.current.click();
+                  } else {
+                     window.open(urlRedirect, '_blank');
+                  }
+               })
             } else {
-               window.location = urlRedirect;
+               fnAnalyticsOrderCreated(res.order_id).finally(() => {
+                  window.location = urlRedirect;
+               })
             }
             // router.push(urlRedirect);
          }).catch(() => {
@@ -191,12 +195,12 @@ export default function Shop({ shopDetails }) {
          try {
            return atob(waId)
          } catch {
-           return -1
+           return undefined
          }
-       })()) : -1;
+       })()) : undefined;
        console.log(shop)
       let mixpanelWhatsappInfo = {};
-      if (waRotatorId !== -1) {
+      if (waRotatorId) {
          const whatsappData = await whatsapp.whatsappNumberList()
             .then((data) => {
                return data?.find((wa) => wa.whatsapp_info_id === waRotatorId)
@@ -218,7 +222,34 @@ export default function Shop({ shopDetails }) {
          'Shop Category': shop?.shop_category?.category_name || '-',
          ...(mixpanelWhatsappInfo)
       });
-   }, [])
+      fnAnalyticsPageView(waRotatorId);
+   }, []);
+
+   const fnAnalyticsPageView = (id) => {
+      const { details: waNumberDetails } = waRotatorData;
+      const rotatorId = (id || waNumberDetails?.whatsapp_info_id || undefined);
+      whatsapp.analytics({
+         'type': 'page_views',
+         'whatsapp_info_id': rotatorId,
+         'meta_data': {
+            user_agent: navigator.userAgent,
+         }
+      })
+   }
+
+   const fnAnalyticsOrderCreated = (order_id) => {
+      const { details: waNumberDetails } = waRotatorData;
+      const rotatorId = (waNumberDetails?.whatsapp_info_id || undefined);
+  
+      return whatsapp.analytics({
+        'type': 'created_order',
+        'whatsapp_info_id': rotatorId,
+        'meta_data': {
+          order_id: order_id,
+          user_agent: navigator.userAgent,
+        }
+      });
+    }
 
    const fnSelectLocale = React.useCallback((lang) => {
       setLocale(lang);
