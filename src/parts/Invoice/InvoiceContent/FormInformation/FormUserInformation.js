@@ -23,6 +23,7 @@ export default function FormUserInformation({
    formInfoStatus,
    shippingMethod,
    locationAddress,
+   isAbleSelfPickup,
    isShippingSelfPickup,
    fnGetStates,
    fnGetCities,
@@ -74,7 +75,7 @@ export default function FormUserInformation({
          labelError={lang?.text__invalid_email || 'Please type valid email'}
       />
       {
-         COUNTRIES && (<>
+         COUNTRIES?.data?.length > 0 && (<>
             <TextField
                name="address1"
                label={lang?.label__address_1 || 'Address 1'}
@@ -196,7 +197,8 @@ export default function FormUserInformation({
                statusInput={formInfoStatus.postcode}
             />
             {(formInfoData.state &&
-               formInfoData.postcode) && (<>
+               formInfoData.postcode &&
+               (shippingMethod === 'shipper' || isAbleSelfPickup)) && (<>
                   <AutoComplete
                      name="shippingCourierName"
                      onOpen={() => COURIER.data?.length === 0 && fnGetCouriers}

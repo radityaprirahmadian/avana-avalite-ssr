@@ -15,10 +15,9 @@ class MyDocument extends Document {
          <Html>
             <Head>
                <meta name="theme-color" content={theme.palette.primary.main} />
-               {/* <link
-                  rel="shortcut icon"
-                  href={`/images/logo.png`}
-               /> */}
+               <link rel="shortcut icon" href="/images/favicon.ico" />
+               <meta name="title" content="WhatsApp Commerce" />
+               <meta name="description" content="Our commerce platform helps automate your business so that you can make money with ease" />
                {process.env.NEXT_PUBLIC_API_HOST.includes('avana.asia') && (<>
                   <script dangerouslySetInnerHTML={{__html: `
                      (function(h,o,t,j,a,r){

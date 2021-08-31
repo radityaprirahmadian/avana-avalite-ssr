@@ -20,18 +20,23 @@ function Home(props) {
    if (props.errors) return null
    const isShopFound = !!(props?.data?.token && props?.data?.details)
 
-   const title = props?.data?.details?.shop_info?.shop_name ?? 'WA Commerce'
+   const title = props?.data?.details?.shop_info?.shop_name ?? 'WhatsApp Commerce'
 
    const description =
       props?.data?.details?.shop_info?.description?.replace?.(
          /<\/?[^>]+(>|$)/g,
          ''
-      ) ?? 'AVANA'
+      ) ?? 'Our commerce platform helps automate your business so that you can make money with ease'
 
-   const favicon =
-      props?.data?.details?.shop_info?.webstore_favicon || '/images/favicon.ico'
+   const favicon = props?.data?.details?.shop_info?.webstore_favicon?.replace?.(
+      '/thumbnail',
+      '') || '/images/favicon.ico'
 
-   let imagePreview = props?.data?.details?.shop_info?.whatsapp_logo ?? ''
+   const imageLogo = props?.data?.details?.shop_info?.whatsapp_logo
+      || props?.data?.details?.shop_info?.webstore_logo || ''
+   let imagePreview = imageLogo?.replace?.(
+      '/thumbnail',
+      '') || '/images/avana_logo.png'
    if (imagePreview?.indexOf('%3A') > -1)
       imagePreview = `https:` + imagePreview?.split('%3A')[1]
 
@@ -56,8 +61,12 @@ function Home(props) {
             <meta property="og:type" content="website" />
             <meta property="og:url" content={url} />
             <meta property="og:title" content={title} />
+            <meta property="og:site_name" content={title} />
             <meta property="og:description" content={description} />
             <meta property="og:image" content={imagePreview} />
+            <meta property="og:image:secure_url" content={imagePreview} />
+            <meta property="og:image:width" content="200" />
+            <meta property="og:image:height" content="200" />
 
             {/* <!-- Twitter --> */}
             <meta property="twitter:card" content="summary_large_image" />
@@ -85,6 +94,7 @@ function Home(props) {
 
 export async function getServerSideProps(context) {
    const { shop } = context.params
+   const { wa } = context.query
 
    try {
       const shopToken = await shops.oAuth(shop)
@@ -99,6 +109,7 @@ export async function getServerSideProps(context) {
             data: {
                details: shopDetails,
                token: shopToken,
+               waId: wa ? wa : null,
             },
          },
       }
