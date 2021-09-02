@@ -18,13 +18,11 @@ export default function Row({
    fnToggleSelectProduct,
    fnToggleSelectVariant,
 }) {
-   // const fnToggleSelectVariant = React.useCallback((event) => {}, [])
-   // const isVariant =
-   //    Object.values(productsOrdered).filter(
-   //       (product) => product.product_id === item.id && !!product.variation_option_id
-   //    ).length > 0
    const {quantity: countProduct, isVariant} = selectedMeta || {}
-
+   const productImage = (item.main_image?.includes('/thumbnail/')
+      ? item.main_image
+      : item.main_image?.replace('/images', '/images/thumbnail')
+   );
    const handleOnEventChild = React.useCallback(
       (e, onClickEvent) => {
          e.stopPropagation();
@@ -67,7 +65,14 @@ export default function Row({
                         className="object-cover rounded overflow-hidden"
                         style={{ width: 80, height: 80 }}
                      >
-                        <Image src={item.main_image} alt={item.name} />
+                        <Image
+                           src={productImage}
+                           alt={item.name}
+                           style={{
+                              width: '80px',
+                              height: '80px'
+                           }}
+                        />
                      </div>
                   </BadgeDiscount>
                ) : (
@@ -75,7 +80,14 @@ export default function Row({
                      className="object-cover rounded overflow-hidden"
                      style={{ width: 80, height: 80 }}
                   >
-                     <Image src={item.main_image} alt={item.name} />
+                     <Image
+                        src={productImage}
+                        alt={item.name}
+                        style={{
+                           width: '80px',
+                           height: '80px'
+                        }}
+                     />
                   </div>
                )}
             </div>
