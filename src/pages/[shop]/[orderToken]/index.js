@@ -94,6 +94,12 @@ function OrderInvoice(props) {
 
 export async function getServerSideProps(context) {
    const { shop, orderToken } = context.params
+   const { setHeader } = context.res
+   setHeader(
+      'Cache-Control',
+      'public, s-maxage=10, stale-while-revalidate=59'
+   )
+
    try {
       const shopToken = await shops.oAuth(shop)
       const shopDetails = await shops.details({
