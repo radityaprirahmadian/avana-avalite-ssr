@@ -14,7 +14,13 @@ export default function Header({ data, lang }) {
 
    return (
       <header className="pt-6 font-montserrat">
-         <div className="mx-auto w-20 h-20 rounded-full overflow-hidden">
+         <div
+            className="mx-auto w-20 h-20 rounded-full overflow-hidden"
+            style={{
+               width: '80px',
+               height: '80px'
+            }}
+         >
             <Image src={imagePreview} alt={data?.shop_name} placeholder={images.profilePlaceholder} />
          </div>
          <h1 className="text-center mt-3">

@@ -21,6 +21,10 @@ export default function Footer(props) {
             className="inline-block h-4 w-16 object-contain mx-1"
             src={`/images/logo.png`}
             alt="AVANA logo"
+            style={{
+               width: '64px',
+               height: '16px'
+            }}
          />
          {Object.values(locales).map((lang) => (
             <span
