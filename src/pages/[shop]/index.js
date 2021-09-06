@@ -25,6 +25,8 @@ function Home(props) {
    const description = props?.data?.details?.seo?.description
       || 'Our commerce platform helps automate your business so that you can make money with ease'
 
+   const keywords = props?.data?.details?.seo?.keywords || ''
+
    const favicon = props?.data?.details?.shop_info?.webstore_favicon?.replace?.(
       '/thumbnail',
       '') || '/images/favicon.ico'
@@ -50,6 +52,7 @@ function Home(props) {
             <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
             <meta name="title" content={title} />
             <meta name="description" content={description} />
+            <meta name="keywords" content={keywords} />
             <link rel="shortcut icon" href={favicon} />
 
             {/* <!-- Open Graph / Facebook --> */}
