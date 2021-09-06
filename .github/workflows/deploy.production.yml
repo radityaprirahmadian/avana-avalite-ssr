@@ -41,7 +41,7 @@ jobs:
           OUTPUT_PATH: 'serverless.yml'
 
       - name: Download `.serverless` state from S3
-        run: aws s3 sync s3://avalite-ssr-production/.serverless .serverless --delete --cache-control max-age=10,no-cache,no-store,must-revalidate
+        run: aws s3 sync s3://avalite-ssr-production/.serverless .serverless --delete
 
       - name: serverless deploy
         uses: serverless/github-action@master
@@ -50,4 +50,4 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Upload `.serverless` state to S3
-        run: aws s3 sync .serverless s3://avalite-ssr-production/.serverless --delete --cache-control max-age=10,no-cache,no-store,must-revalidate
+        run: aws s3 sync .serverless s3://avalite-ssr-production/.serverless --delete
