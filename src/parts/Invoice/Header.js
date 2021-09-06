@@ -17,7 +17,15 @@ export default function Header({ lang, shopInfo, currentStep }) {
    return (
       <header className="pt-6">
          <div className="mx-auto w-20 h-20 rounded-full overflow-hidden font-montserrat">
-            <Image src={imagePreview} alt={shopInfo?.shop_name} placeholder={images.profilePlaceholder} />
+            <Image
+               src={imagePreview}
+               alt={shopInfo?.shop_name}
+               placeholder={images.profilePlaceholder}
+               style={{
+                  width: '80px',
+                  height: '80px'
+               }}
+            />
          </div>
          <h1 className="text-center mt-3 font-bold">
             {currentStep === 1

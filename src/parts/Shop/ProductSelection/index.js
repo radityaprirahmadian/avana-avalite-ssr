@@ -122,7 +122,6 @@ export default function ProductSelection(props) {
             (PRODUCTS.page.currentPage < PRODUCTS.page.lastPage) &&
             (PRODUCTS.status !== 'loading')
          ) {
-            console.log('fetching?', PRODUCTS.page.currentPage + 1, scrollOnEndge, isOverflow, !selectedVariant.isSelect, !props.productDetails.isViewProductDetail)
             fnGetProducts(search, selectedCategory, PRODUCTS.page.currentPage + 1);
          }
       },

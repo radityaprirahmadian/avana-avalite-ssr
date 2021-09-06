@@ -198,7 +198,6 @@ export default function Shop({ shopDetails }) {
            return undefined
          }
        })()) : undefined;
-       console.log(shop)
       let mixpanelWhatsappInfo = {};
       if (waRotatorId) {
          const whatsappData = await whatsapp.whatsappNumberList()

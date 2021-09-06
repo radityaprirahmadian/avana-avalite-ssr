@@ -95,6 +95,10 @@ function Home(props) {
 export async function getServerSideProps(context) {
    const { shop } = context.params
    const { wa } = context.query
+   context.res?.setHeader(
+      'Cache-Control',
+      'max-age=10, no-cache, no-store, must-revalidate'
+   )
 
    try {
       const shopToken = await shops.oAuth(shop)
