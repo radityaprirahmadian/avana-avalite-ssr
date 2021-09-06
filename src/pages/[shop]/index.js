@@ -96,6 +96,7 @@ export async function getServerSideProps(context) {
    const { shop } = context.params
    const { wa } = context.query
    const { setHeader } = context.res
+   console.log(context.res?.setHeader)
    setHeader(
       'Cache-Control',
       'max-age=10, no-cache, no-store, must-revalidate'

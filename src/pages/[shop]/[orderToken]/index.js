@@ -94,8 +94,7 @@ function OrderInvoice(props) {
 
 export async function getServerSideProps(context) {
    const { shop, orderToken } = context.params
-   const { setHeader } = context.res
-   setHeader(
+   context.res?.setHeader(
       'Cache-Control',
       'max-age=10, no-cache, no-store, must-revalidate'
    )
