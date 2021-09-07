@@ -1,14 +1,28 @@
-import React from 'react'
+import React, { lazy, Suspense } from 'react'
 
-import ProductViewer from './ProductViewer'
-import Variation from './Variation'
+// import ProductViewer from './ProductViewer'
+// import Variation from './Variation'
 import images from 'src/constants/images'
+import Spinner from 'src/components/Spinner'
+
+const ProductViewer = lazy(() =>
+  import(
+    /* webpackChunkName: "Variation" */ /* webpackPrefetch: true */
+    './ProductViewer'
+  )
+);
+const Variation = lazy(() =>
+  import(
+    /* webpackChunkName: "Variation" */ /* webpackPrefetch: true */
+    './Variation'
+  )
+);
 
 export default function ProductLists(props) {
    const { products, selectedVariant, lang } = props
    
    return (
-      <>
+      <Suspense fallback={<Spinner size={0.5} />}>
          {(Object.values(products.data).length > 0) ? (
             selectedVariant.isSelect ? (
                <Variation
@@ -75,6 +89,6 @@ export default function ProductLists(props) {
                </div>
             )
          }
-      </>
+      </Suspense>
    )
 }
