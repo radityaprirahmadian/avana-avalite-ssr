@@ -5,6 +5,8 @@ import dynamic from 'next/dynamic'
 import shops from 'src/constants/api/shops'
 
 import ErrorBoundary from 'src/parts/ErrorBoundary'
+import Header from 'src/parts/Shop/Header'
+import Spinner from 'src/components/Spinner'
 
 import Unauthenticated from 'src/parts/Unauthenticated'
 import FacebookPixel from 'src/helpers/analytics/facebookPixel'
@@ -13,7 +15,17 @@ import { setAuthorization, setBaseUrl } from 'src/configs/axios/protected'
 
 const Shop = dynamic(
    () => import('src/parts/Shop'),
-   { ssr: false }
+   {
+      ssr: false,
+      loading: () => (
+         <div className="flex align-center justify-center flex-1">
+            <Spinner
+               className="m-0 flex-none"
+               size={1}
+            />
+         </div>
+      )
+   }
 )
 
 function Home(props) {
@@ -77,9 +89,13 @@ function Home(props) {
             />
          </Head>
 
-         <main>
+         <main
+            className="mx-auto min-h-screen flex flex-col"
+            style={{ minWidth: 300, maxWidth: 375}}
+         >
             {isShopFound ? (
                <ErrorBoundary>
+                  <Header data={props.data?.details?.shop_info} />
                   <Shop shopDetails={props.data} />
                </ErrorBoundary>
             ) : (

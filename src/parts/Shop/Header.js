@@ -4,7 +4,11 @@ import PrivacyPolicy from 'src/parts/PrivacyPolicy'
 import Image from 'src/components/Container/Image'
 import images from 'src/constants/images'
 
-export default function Header({ data, lang }) {
+import Localization from 'src/configs/lang/errors';
+import { getCurrentLang } from 'src/helpers/localization';
+
+export default function Header({ data }) {
+   const lang = Localization[getCurrentLang()]
    let imagePreview = data?.whatsapp_logo?.replace?.(
       '/thumbnail',
       '') || data?.webstore_logo

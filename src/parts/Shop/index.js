@@ -286,13 +286,10 @@ export default function Shop({ shopDetails }) {
    // console.log(data)
 
    return (
-      <div
-         className="mx-auto min-h-screen flex flex-col"
-         style={{ minWidth: 300, maxWidth: 375}}
-      >
-         {(!productDetails.isViewProductDetail && !productDetails.isViewProductVariant) && (
+      <div>
+         {/* {(!productDetails.isViewProductDetail && !productDetails.isViewProductVariant) && (
             <Header data={shopDetails.details.shop_info} lang={lang} />
-         )}
+         )} */}
          <Context.Provider value={CONTEXT}>
             {(!productDetails.isViewProductDetail && !productDetails.isViewProductVariant) && (
                <CustomerInformation
