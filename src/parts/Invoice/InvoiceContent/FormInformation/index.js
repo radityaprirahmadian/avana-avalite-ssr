@@ -97,7 +97,7 @@ export default function FormInformation({
          city: 0,
          shippingCourierName: 0,
          shipperRateId: 0,
-         shipperUseInsurance: 0
+         shipperUseInsurance: 4
       });
       fnUpdateOrderDetails((prevState) => ({
          ...prevState,
@@ -133,7 +133,7 @@ export default function FormInformation({
          city: 0,
          shippingCourierName: 0,
          shipperRateId: 0,
-         shipperUseInsurance: 0
+         shipperUseInsurance: 4
       });
       fnUpdateOrderDetails((prevState) => ({
          ...prevState,
@@ -278,7 +278,7 @@ export default function FormInformation({
          updateFormInfoStatus({
             shippingCourierName: 0,
             shipperRateId: 0,
-            shipperUseInsurance: 0
+            shipperUseInsurance: 4
          });
       } else {
          updateFormInfoStatus({
@@ -317,9 +317,7 @@ export default function FormInformation({
          shipperRateId: orderDetails.shippingMethod === 'shipper' && !newValue?.isSelfPickup
             ? 0
             : 4,
-         shipperUseInsurance: orderDetails.shippingMethod === 'shipper' && !newValue?.isSelfPickup
-            ? 0
-            : 4,
+         shipperUseInsurance: 4,
       });
       fnUpdateOrderDetails((prevState) => ({
          ...prevState,
