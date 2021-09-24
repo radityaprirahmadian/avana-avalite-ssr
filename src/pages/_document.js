@@ -1,4 +1,6 @@
+import React from 'react';
 import Document, { Html, Head, Main, NextScript } from 'next/document'
+import Script from 'next/script';
 
 import { ServerStyleSheets } from '@material-ui/core/styles'
 
@@ -18,24 +20,38 @@ class MyDocument extends Document {
                <meta name="title" content="WhatsApp Commerce" />
                <meta name="description" content="Our commerce platform helps automate your business so that you can make money with ease" />
                {process.env.NEXT_PUBLIC_API_HOST.includes('avana.asia') && (<>
-                  <script dangerouslySetInnerHTML={{__html: `
-                     (function(h,o,t,j,a,r){
-                        h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-                        h._hjSettings={hjid:2001013,hjsv:6};
-                        a=o.getElementsByTagName('head')[0];
-                        r=o.createElement('script');r.async=1;
-                        r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
-                        a.appendChild(r);
-                     })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
-                  `}} />
-                  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MMLJL8CZZS"></script>
-                  <script dangerouslySetInnerHTML={{__html: `
-                     window.dataLayer = window.dataLayer || [];
-                     function gtag(){dataLayer.push(arguments);}
-                     gtag('js', new Date());
+                  <Script
+                     strategy="afterInteractive"
+                     dangerouslySetInnerHTML={{
+                        __html: `
+                           (function(h,o,t,j,a,r){
+                              h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+                              h._hjSettings={hjid:2001013,hjsv:6};
+                              a=o.getElementsByTagName('head')[0];
+                              r=o.createElement('script');r.async=1;
+                              r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+                              a.appendChild(r);
+                           })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+                        `
+                     }}
+                  />
+                  <Script
+                     async
+                     strategy="afterInteractive"
+                     src="https://www.googletagmanager.com/gtag/js?id=G-MMLJL8CZZS"
+                  />
+                  <Script
+                     strategy="afterInteractive"
+                     dangerouslySetInnerHTML={{
+                        __html: `
+                           window.dataLayer = window.dataLayer || [];
+                           function gtag(){dataLayer.push(arguments);}
+                           gtag('js', new Date());
 
-                     gtag('config', 'G-MMLJL8CZZS');
-                  `}} />
+                           gtag('config', 'G-MMLJL8CZZS');
+                        `
+                     }}
+                  />
                </>)}
             </Head>
             <body>

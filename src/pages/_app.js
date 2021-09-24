@@ -1,10 +1,10 @@
+import React from 'react';
 import Router from 'next/router'
 import { ToastContainer } from 'react-toastify'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 
 import { ThemeProvider } from '@material-ui/core/styles'
-import CssBaseline from '@material-ui/core/CssBaseline'
 import theme from 'src/configs/materialUI/theme'
 import mixpanel from 'mixpanel-browser';
 
