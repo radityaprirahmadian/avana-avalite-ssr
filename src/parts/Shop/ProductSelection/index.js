@@ -1,5 +1,4 @@
 import React from 'react'
-import { useRouter } from 'next/router'
 
 import TextField from 'src/components/form/TextField'
 import InputAdornment from '@material-ui/core/InputAdornment'
@@ -15,7 +14,6 @@ import products from 'src/constants/api/products'
 import Localization from "src/configs/lang/products";
 
 import MainContext from 'src/parts/Context';
-// import { useFetch } from 'src/helpers/customHooks'
 
 import facebookPixel from 'src/helpers/analytics/facebookPixel';
 import normalizeErrorResponse from 'src/helpers/normalizeErrorResponse'
@@ -142,11 +140,7 @@ export default function ProductSelection(props) {
       (product) => {
          if (!selectedVariant.isSelect && product) {
             facebookPixel.viewContent(product);
-            // window.removeEventListener("scroll", fnHandleScroll);
          }
-         // else {
-         //    window.addEventListener("scroll", fnHandleScroll);
-         // }
 
          setSelectedVariant((prevState) => ({
             ...prevState,
@@ -168,11 +162,7 @@ export default function ProductSelection(props) {
       (product) => {
          if (!props.productDetails.isViewProductDetail && product) {
             facebookPixel.viewContent(product);
-            // window.removeEventListener("scroll", fnHandleScroll);
          }
-         // else {
-         //    window.addEventListener("scroll", fnHandleScroll);
-         // }
 
          props.fnSetProductDetails((prevState) => ({
             ...prevState,
@@ -210,8 +200,6 @@ export default function ProductSelection(props) {
          const productKey = productVariant ?
             `${product.id}_${productVariant.id}` :
             product.id;
-
-         let productsMeta = {};
          let productsOrdered = Object.assign({
             ...props.productsOrdered,
          }, {});
@@ -309,12 +297,12 @@ export default function ProductSelection(props) {
    );
 
    React.useEffect(() => {
-      fnGetProducts(search, selectedCategory)
-   }, [fnGetProducts, search, selectedCategory])
+      fnGetProducts(search, selectedCategory);
+   }, [fnGetProducts, search, selectedCategory]);
 
    React.useEffect(() => {
-      fnGetCategories()
-      fnResetMetaList()
+      fnGetCategories();
+      fnResetMetaList();
    }, [])
 
    React.useEffect(() => {

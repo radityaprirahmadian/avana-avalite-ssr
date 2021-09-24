@@ -1,12 +1,10 @@
 import React, { useState, useRef } from 'react';
 import { useRouter } from 'next/router';
-import mixpanel from 'mixpanel-browser';
+import {track as mixpanelTrack, people as mixpanelPeople} from 'mixpanel-browser';
 
 import STORAGE from 'src/helpers/localStorage'
 import mobileTabletCheck from 'src/helpers/mobileTabletCheck';
-import facebookPixel from 'src/helpers/analytics/facebookPixel';
-
-import Header from './Header'
+import { initiateCheckout as fbInitiateCheckout, pageView as fbPageView} from 'src/helpers/analytics/facebookPixel';
 
 import CustomerInformation from './CustomerInformation'
 import ProductSelection from './ProductSelection'
@@ -72,13 +70,8 @@ export default function Shop({ shopDetails }) {
       [setData, setStatus]
    )
 
-   function onSubmit(e) {
-      e.preventDefault()
-
-   }
    const fnCreateOrder= React.useCallback((isViaWA) => {
       const { name, phoneNumber, productsOrdered } = data;
-      const { search } = location;
       let product_ordered = Object.values(productsOrdered);
 
       setStatusOrder((prevState) => ({
@@ -87,7 +80,7 @@ export default function Shop({ shopDetails }) {
          isCreateOrderViaWA: isViaWA,
       }))
 
-      facebookPixel.initiateCheckout();
+      fbInitiateCheckout();
 
       orders.create({
          checkout_platform: 'avalite',
@@ -109,7 +102,7 @@ export default function Shop({ shopDetails }) {
             const { details: shop } = shopDetails;
             const { details: waNumberDetails, mixpanelWhatsappInfo } = waRotatorData;
             const waRotatorId = waNumberDetails.whatsapp_info_id;
-            mixpanel.track('Order Form', {
+            mixpanelTrack('Order Form', {
                'Order ID': res.order_id,
                'Order No': res.order_no,
                'Shop': shop.shop_info.shop_name,
@@ -136,7 +129,7 @@ export default function Shop({ shopDetails }) {
                ),
                ...mixpanelWhatsappInfo
             });
-            mixpanel.people.set({
+            mixpanelPeople.set({
                $name: name,
                $phone: phoneNumber,
             });
@@ -215,7 +208,7 @@ export default function Shop({ shopDetails }) {
             mixpanelWhatsappInfo,
          }))
       }
-      mixpanel.track('Visit', {
+      mixpanelTrack('Visit', {
          'Shop': shop.shop_info.shop_name,
          'Shop ID': shop.id,
          'Shop Category': shop?.shop_category?.category_name || '-',
@@ -259,37 +252,21 @@ export default function Shop({ shopDetails }) {
       STORAGE.set('token', shopDetails.token)
       STORAGE.set('details', shopDetails.details)
       fnSelectLocale(getCurrentLang());
-      // fnInitDefaultPhoneNumber()
    }, [fnSelectLocale])
 
    React.useEffect(() => {
-      facebookPixel.pageView();
+      fbPageView();
       fnTrackVisit();
    }, []);
-
-   // React.useEffect(() => {
-   //    console.log(router)
-
-   //    clearTimeout(timeOutSearch)
-   //    timeOutSearch = setTimeout(() => {
-   //       router.push(`${router.asPath}${search}`)
-   //    }, 300)
-   // }, [])
 
    // BUILD CONTEXT FOR EASY PASSING METHOD OR STATE
    const CONTEXT = {
       data,
       locale,
-      // fnSelectProduct: fnSelectProduct,
    }
-
-   // console.log(data)
 
    return (
       <div>
-         {/* {(!productDetails.isViewProductDetail && !productDetails.isViewProductVariant) && (
-            <Header data={shopDetails.details.shop_info} lang={lang} />
-         )} */}
          <Context.Provider value={CONTEXT}>
             {(!productDetails.isViewProductDetail && !productDetails.isViewProductVariant) && (
                <CustomerInformation
