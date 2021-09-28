@@ -5,10 +5,6 @@ const withImages = require("next-images");
 
 const path = require("path");
 
-const nextConfig = {
-  webpack5: false
-};
-
 module.exports = withPlugins([
   withCss({}),
   withImages({}),
@@ -18,4 +14,4 @@ module.exports = withPlugins([
       return config;
     },
   }),
-], nextConfig);
+]);
