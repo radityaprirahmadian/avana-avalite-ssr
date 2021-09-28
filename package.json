@@ -34,7 +34,8 @@
       "react-slick": "^0.27.13",
       "react-toastify": "^6.0.8",
       "react-transition-group": "^4.4.1",
-      "validator": "^13.1.17"
+      "validator": "^13.1.17",
+      "webpack": "5.53.0"
    },
    "devDependencies": {
       "autoprefixer": "^9.8.4",
