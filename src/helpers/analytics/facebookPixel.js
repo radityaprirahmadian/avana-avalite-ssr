@@ -1,11 +1,7 @@
-import Script from 'next/script';
-
 export const init = ({pixelid}) => {
   if (!pixelid) return null
   return (
-    <Script
-      id="fb-pixel"
-      strategy="afterInteractive" 
+    <script
       dangerouslySetInnerHTML={{
         __html: `
             !function(f,b,e,v,n,t,s)

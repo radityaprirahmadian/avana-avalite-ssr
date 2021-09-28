@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useRouter } from 'next/router';
-import mixpanel from 'mixpanel-browser';
+import {track as mixpanelTrack, people as mixpanelPeople} from 'mixpanel-browser';
 
 import STORAGE from 'src/helpers/localStorage'
 import mobileTabletCheck from 'src/helpers/mobileTabletCheck';
@@ -102,7 +102,7 @@ export default function Shop({ shopDetails }) {
             const { details: shop } = shopDetails;
             const { details: waNumberDetails, mixpanelWhatsappInfo } = waRotatorData;
             const waRotatorId = waNumberDetails.whatsapp_info_id;
-            mixpanel.track('Order Form', {
+            mixpanelTrack('Order Form', {
                'Order ID': res.order_id,
                'Order No': res.order_no,
                'Shop': shop.shop_info.shop_name,
@@ -129,7 +129,7 @@ export default function Shop({ shopDetails }) {
                ),
                ...mixpanelWhatsappInfo
             });
-            mixpanel.people.set({
+            mixpanelPeople.set({
                $name: name,
                $phone: phoneNumber,
             });
@@ -208,7 +208,7 @@ export default function Shop({ shopDetails }) {
             mixpanelWhatsappInfo,
          }))
       }
-      mixpanel.track('Visit', {
+      mixpanelTrack('Visit', {
          'Shop': shop.shop_info.shop_name,
          'Shop ID': shop.id,
          'Shop Category': shop?.shop_category?.category_name || '-',
