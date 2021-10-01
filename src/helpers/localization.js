@@ -21,4 +21,5 @@ export const getCurrentLang = () => {
 
 export const setCurrentLang = (lang) => {
   localStorage.set('lang', lang);
+  document.querySelector('html').setAttribute('lang', lang);
 };
