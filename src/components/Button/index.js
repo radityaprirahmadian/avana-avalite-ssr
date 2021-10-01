@@ -39,13 +39,14 @@ export function WhatsappButton(props) {
   return (
     <>
       <WaButtonStyle
-        {...props}
+        className={props.className}
         variant="contained"
         disableElevation
         startIcon={props.loading || <WhatsApp />}
         disabled={
           props.loading || props.disabled
         }
+        onClick={props.onClick}
         fullWidth
       >
         {props.loading ? (
