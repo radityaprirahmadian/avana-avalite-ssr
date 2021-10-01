@@ -8,6 +8,7 @@ export default function CustomerInformation(props) {
       <div>
          <div className="mb-1">
             <TextField
+               id="customer-name"
                name="name"
                defaultValue={props.data.name}
                // error={errors.customer_name}

@@ -332,10 +332,6 @@ export default function ProductSelection(props) {
                               </InputAdornment>
                            ),
                         }}
-                        fullWidth
-                        variant="outlined"
-                        size="small"
-                        margin="normal"
                      />
                   </div>
 

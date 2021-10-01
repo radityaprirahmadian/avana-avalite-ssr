@@ -86,14 +86,16 @@ export default function Text({label, onClick, endIcon, ...props}) {
           )
         }
         <Input
-          {...props}
           {...props.InputProps}
           // ref={props.ref}
+          type={props.type}
+          label={props.label}
           id={props.id}
           name={props.name}
           aria-describedby={'helper'+props.id}
           defaultValue={props.defaultValue}
           {...(props.value ? {value: props.value} : {})}
+          size={props.size}
           onChange={props.onChange}
           margin="dense"
           fullWidth
@@ -117,7 +119,7 @@ export default function Text({label, onClick, endIcon, ...props}) {
             }
           }}
         />
-        <FormHelperText id={'helper'+props.id} style={{fontSize:'12px'}}>
+        <FormHelperText id={`helper-${props.id || props.label}`} style={{fontSize:'12px'}}>
           {((props.isRequired &&
             isError) || props.error) &&
             (props.labelError || 'This field is required')
