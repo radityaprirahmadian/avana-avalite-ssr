@@ -39,6 +39,7 @@ export default function CategoriesSelection(props) {
             textColor="primary"
             value={props.selectedCategory}
             variant="scrollable"
+            aria-label="product category"
             scrollButtons="off"
          >
             {tabList.map((tab) => (
@@ -51,6 +52,9 @@ export default function CategoriesSelection(props) {
                   style={{
                      minWidth: 'fit-content',
                      fontSize: '.75rem'
+                  }}
+                  {...{
+                     "aria-label": `category-${tab.label}`
                   }}
                />
             ))}
