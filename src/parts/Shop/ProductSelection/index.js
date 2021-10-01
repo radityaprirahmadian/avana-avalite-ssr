@@ -321,6 +321,7 @@ export default function ProductSelection(props) {
                <>
                   <div className="sticky top-0 bg-white z-10">
                      <TextField
+                        id="product-search"
                         type="search"
                         value={props.search}
                         onChange={(e) => fnSearch(e.target.value)}

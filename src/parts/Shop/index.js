@@ -304,7 +304,7 @@ export default function Shop({ shopDetails }) {
             )}
             <a
                ref={refRedirect}
-               href={redirectUrl}
+               href={redirectUrl || '#'}
                rel="nofollow noopener noreferrer"
                className="hidden"
                style={{ display: 'none' }}
