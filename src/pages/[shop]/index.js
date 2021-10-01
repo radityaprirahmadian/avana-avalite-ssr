@@ -5,7 +5,6 @@ import dynamic from 'next/dynamic'
 import shops from 'src/constants/api/shops'
 
 import ErrorBoundary from 'src/parts/ErrorBoundary'
-import Header from 'src/parts/Shop/Header'
 import Spinner from 'src/components/Spinner'
 
 import Unauthenticated from 'src/parts/Unauthenticated'
@@ -95,7 +94,6 @@ function Home(props) {
          >
             {isShopFound ? (
                <ErrorBoundary>
-                  <Header data={props.data?.details?.shop_info} />
                   <Shop shopDetails={props.data} />
                </ErrorBoundary>
             ) : (

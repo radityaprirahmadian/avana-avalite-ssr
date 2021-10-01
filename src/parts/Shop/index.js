@@ -6,6 +6,7 @@ import STORAGE from 'src/helpers/localStorage'
 import mobileTabletCheck from 'src/helpers/mobileTabletCheck';
 import { initiateCheckout as fbInitiateCheckout, pageView as fbPageView} from 'src/helpers/analytics/facebookPixel';
 
+import Header from './Header'
 import CustomerInformation from './CustomerInformation'
 import ProductSelection from './ProductSelection'
 import Checkout from './Checkout'
@@ -266,7 +267,13 @@ export default function Shop({ shopDetails }) {
    }
 
    return (
-      <div>
+      <div
+         className="mx-auto min-h-screen flex flex-col"
+         style={{ minWidth: 300, maxWidth: 375}}
+      >
+         {(!productDetails.isViewProductDetail && !productDetails.isViewProductVariant) && (
+            <Header data={shopDetails.details.shop_info} lang={lang} />
+         )}
          <Context.Provider value={CONTEXT}>
             {(!productDetails.isViewProductDetail && !productDetails.isViewProductVariant) && (
                <CustomerInformation
