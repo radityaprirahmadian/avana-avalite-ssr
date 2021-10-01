@@ -92,8 +92,8 @@ function PrivacyPolicy(props) {
           <div className={`text-xs px-1 pt-2 ${props.isCheckbox ? 'text-left' : 'text-center'}`}>
             {writeLocalization(
               lang?.text__confirm_agree_privacy_policy || 'By providing my personal data herein, I confirm that I have read and agree to [0] [1]',
-              [props?.shopInfo?.shop_name, <u style={{cursor: 'pointer'}} onClick={() => toggle()}>{lang?.btn__privacy_policy || 'privacy policy'}</u>]
-            )}{" "}
+              [props?.shopInfo?.shop_name, <u key="policy-modal-toggler" style={{cursor: 'pointer'}} onClick={() => toggle()}>{lang?.btn__privacy_policy || 'privacy policy'}</u>]
+            )}
           </div>
         </div>
         
