@@ -298,7 +298,7 @@ export default function Shop({ shopDetails }) {
             <a
                ref={refRedirect}
                href={redirectUrl}
-               rel="noopener noreferrer"
+               rel="nofollow noopener noreferrer"
                className="hidden"
                style={{ display: 'none' }}
                target={mobileTabletCheck() ? '_self' : '_blank'}
