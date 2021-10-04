@@ -112,12 +112,11 @@ export async function getServerSideProps(context) {
       'max-age=10, no-cache, no-store, must-revalidate'
    )
    const isYellowpillowShop = shop === 'yellowpillow'
-   let shopToken, shopDetails = {};
    try {
       if (!isYellowpillowShop) {
-         shopToken = await shops.oAuth(shop)
+         const shopToken = await shops.oAuth(shop)
 
-         shopDetails = await shops.details({
+         const shopDetails = await shops.details({
             id: shopToken.shop_id,
             token: shopToken.oauth_access_token,
          })
