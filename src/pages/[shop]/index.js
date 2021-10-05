@@ -9,6 +9,7 @@ import Spinner from 'src/components/Spinner'
 
 import Unauthenticated from 'src/parts/Unauthenticated'
 import FacebookPixel from 'src/helpers/analytics/facebookPixel'
+import loadScript from 'src/helpers/loadScript'
 
 import { setAuthorization, setBaseUrl } from 'src/configs/axios/protected'
 
@@ -28,6 +29,7 @@ const Shop = dynamic(
 )
 
 function Home(props) {
+   
    if (props.errors) return null
    const isShopFound = !!(props?.data?.token && props?.data?.details)
 
@@ -54,6 +56,29 @@ function Home(props) {
 
    setBaseUrl(props?.data?.token?.shop_id)
    setAuthorization(props?.data?.token?.oauth_access_token)
+
+   React.useEffect(() => {
+      if (true || process.env.NEXT_PUBLIC_API_HOST.includes('avana.asia')) {
+         loadScript('https://www.googletagmanager.com/gtag/js?id=G-MMLJL8CZZS')
+            .then((() => {
+               console.log('run')
+               window.dataLayer = window.dataLayer || [];
+               function gtag(){dataLayer.push(arguments);}
+               gtag('js', new Date());
+
+               gtag('config', 'G-MMLJL8CZZS');
+            })())
+         loadScript(() => (function(h,o,t,j,a,r){
+            h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+            h._hjSettings={hjid:2001013,hjsv:6};
+            a=o.getElementsByTagName('head')[0];
+            r=o.createElement('script');r.async=1;
+            r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+            a.appendChild(r);
+         })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv='))
+         FacebookPixel.init({pixelid: props?.data?.details?.shop_info?.facebook_pixel_id})
+      }
+   }, [])
 
    return (
       <>
@@ -83,9 +108,9 @@ function Home(props) {
             <meta property="twitter:title" content={title} />
             <meta property="twitter:description" content={description} />
             <meta property="twitter:image" content={imagePreview} />
-            <FacebookPixel.init
+            {/* <FacebookPixel.init
                pixelid={props?.data?.details?.shop_info?.facebook_pixel_id}
-            />
+            /> */}
          </Head>
 
          <main

@@ -17,7 +17,7 @@ class MyDocument extends Document {
                <meta name="theme-color" content={theme.palette.primary.main} />
                <meta name="title" content="WhatsApp Commerce" />
                <meta name="description" content="Our commerce platform helps automate your business so that you can make money with ease" />
-               {process.env.NEXT_PUBLIC_API_HOST.includes('avana.asia') && (<>
+               {/* {process.env.NEXT_PUBLIC_API_HOST.includes('avana.asia') && (<>
                   <script dangerouslySetInnerHTML={{__html: `
                      (function(h,o,t,j,a,r){
                         h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
@@ -36,7 +36,7 @@ class MyDocument extends Document {
 
                      gtag('config', 'G-MMLJL8CZZS');
                   `}} />
-               </>)}
+               </>)} */}
             </Head>
             <body>
                <Main />
