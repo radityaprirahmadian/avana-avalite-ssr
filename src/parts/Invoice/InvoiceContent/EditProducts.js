@@ -74,6 +74,7 @@ export default function EditProducts(props) {
 
   const fnConfirmEditProducts = useCallback(
     () => {
+      const { shopDetails, formInfoData, additionalInfoForm, orderDetails } = props;
       mixpanel.track('Submit Edit Order', {
         'Order ID': orderDetails.orderId,
         'Order No': orderDetails.orderNo,
