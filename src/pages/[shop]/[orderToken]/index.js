@@ -9,6 +9,7 @@ import ErrorBoundary from 'src/parts/ErrorBoundary';
 import Unauthenticated from 'src/parts/Unauthenticated'
 
 import { setAuthorization, setBaseUrl } from 'src/configs/axios/protected'
+import loadScript from 'src/helpers/loadScript'
 
 import FacebookPixel from 'src/helpers/analytics/facebookPixel';
 
@@ -44,6 +45,12 @@ function OrderInvoice(props) {
 
    setBaseUrl(props?.data?.token?.shop_id)
    setAuthorization(props?.data?.token?.oauth_access_token)
+
+   React.useEffect(() => {
+      if (process.env.NEXT_PUBLIC_API_HOST.includes('avana.asia')) {
+         FacebookPixel.init({pixelid: props?.data?.details?.shop_info?.facebook_pixel_id})
+      }
+   }, [])
    return (
       <>
          <Head>
@@ -72,7 +79,6 @@ function OrderInvoice(props) {
             <meta property="twitter:title" content={title} />
             <meta property="twitter:description" content={description} />
             <meta property="twitter:image" content={imagePreview} />
-            <FacebookPixel.init pixelid={props.data?.details?.shop_info?.facebook_pixel_id} />
          </Head>
          <main>
             {isShopFound ? (

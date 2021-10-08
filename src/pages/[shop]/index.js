@@ -58,24 +58,7 @@ function Home(props) {
    setAuthorization(props?.data?.token?.oauth_access_token)
 
    React.useEffect(() => {
-      if (true || process.env.NEXT_PUBLIC_API_HOST.includes('avana.asia')) {
-         loadScript('https://www.googletagmanager.com/gtag/js?id=G-MMLJL8CZZS')
-            .then((() => {
-               console.log('run')
-               window.dataLayer = window.dataLayer || [];
-               function gtag(){dataLayer.push(arguments);}
-               gtag('js', new Date());
-
-               gtag('config', 'G-MMLJL8CZZS');
-            })())
-         loadScript(() => (function(h,o,t,j,a,r){
-            h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-            h._hjSettings={hjid:2001013,hjsv:6};
-            a=o.getElementsByTagName('head')[0];
-            r=o.createElement('script');r.async=1;
-            r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
-            a.appendChild(r);
-         })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv='))
+      if (process.env.NEXT_PUBLIC_API_HOST.includes('avana.asia')) {
          FacebookPixel.init({pixelid: props?.data?.details?.shop_info?.facebook_pixel_id})
       }
    }, [])
