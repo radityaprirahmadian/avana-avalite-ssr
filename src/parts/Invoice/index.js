@@ -140,12 +140,19 @@ export default function Invoice({ shopDetails, orderToken }) {
                shipping.getServices({
                   params: {
                      courier_name: formInfoData.shippingCourierName,
+                     country_id: formInfoData.country,
+                     state_id: formInfoData.state,
                      city: formInfoData.city,
-                     weight: products.reduce(
+                     total_quantity: products.reduce(
+                        (acc, current) => acc + current.quantity,
+                        0
+                      ),
+                      total_weight: products.reduce(
                         (acc, current) => acc + current.quantity * current.weight,
                         0
                      ),
                      total_product: totalPrice,
+                     is_self_pickup: 0,
                      ...((formInfoData.lat && formInfoData.lng)
                         ? {
                            customer_long: formInfoData.lng,
