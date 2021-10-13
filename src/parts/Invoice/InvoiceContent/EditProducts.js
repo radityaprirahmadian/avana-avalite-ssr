@@ -190,7 +190,7 @@ export default function EditProducts(props) {
             onClick={fnConfirmEditProducts}
             variant="contained"
             color="primary"
-            className="whatsapp w-full"
+            className="whatsapp w-full z-10"
             disabled={!Object.keys(productsCart).length}
           >
             {props.lang?.btn__confirm || 'Confirm'}
