@@ -295,6 +295,9 @@ MATERIAL INJECT STUFF HERE
 .footer-checkout .whatsapp {
    flex: 2 1 0%;
 }
+.MuiButton-containedPrimary.whatsapp.Mui-disabled {
+   background-color: rgba(0, 0, 0, 0.12)!important;
+}
 .MuiButton-containedPrimary.whatsapp {
    color: #fff;
    background-color: #128c7e!important;
