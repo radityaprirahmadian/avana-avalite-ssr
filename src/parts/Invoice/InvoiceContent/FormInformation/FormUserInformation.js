@@ -40,6 +40,7 @@ export default function FormUserInformation({
   return (
     <>
       <TextField
+         id="form-customer-name"
          name="name"
          label={lang?.label__full_name || 'Full Name'}
          value={formInfoData.name}
@@ -49,9 +50,10 @@ export default function FormUserInformation({
       />
       
       <PhoneInput
+         id="form-customer-phone"
          name="phoneNumber"
          country="my"
-         specialLabel={lang?.label__phone || 'Phone Number'}
+         label={lang?.label__phone || 'Phone Number'}
          value={formInfoData.phoneNumber}
          onChange={(phone) =>
             fnChange({
@@ -65,6 +67,7 @@ export default function FormUserInformation({
          }
       />
       <TextField
+         id="form-customer-email"
          name="email"
          label={lang?.label__email || 'Email'}
          type="email"
@@ -77,6 +80,7 @@ export default function FormUserInformation({
       {
          COUNTRIES?.data?.length > 0 && (<>
             <TextField
+               id="form-customer-address1"
                name="address1"
                label={lang?.label__address_1 || 'Address 1'}
                value={formInfoData.address1}
@@ -87,6 +91,7 @@ export default function FormUserInformation({
                statusInput={formInfoStatus.address1}
             />
             <TextField
+               id="form-customer-address2"
                name="address2"
                label={lang?.label__address_2 || 'Address 2 (optional)'}
                value={formInfoData.address2}
@@ -94,25 +99,8 @@ export default function FormUserInformation({
                multiline
                rowsMax={2}
             />
-            {/* <AutoComplete
-               name="country"
-               options={COUNTRIES.data}
-               loading={COUNTRIES.status === 'loading'}
-               disabled={COUNTRIES.status === 'loading'}
-               getOptionLabel={(option) => option?.name ?? ''}
-               value={COUNTRIES.selected}
-               renderInput={{
-                  name: "country_input",
-                  isRequired: true,
-                  statusInput: formInfoStatus.country,
-                  InputProps:{
-                     placeholder: (lang?.placeholder__country || 'Select Country'),
-                  },
-                  label: (lang?.label__country || 'Country')
-               }}
-               onChange={fnChangeCountry}
-            /> */}
             <InputList
+               id="form-customer-country"
                isSearch
                labelSearch={lang?.label_search || 'Search'}
                errorSearch={writeLocalization(
@@ -132,6 +120,7 @@ export default function FormUserInformation({
             {
                formInfoData.country && (<>
                   <InputList
+                     id="form-customer-state"
                      isSearch
                      labelSearch={lang?.label_search || 'Search'}
                      errorSearch={writeLocalization(
@@ -155,6 +144,7 @@ export default function FormUserInformation({
                formInfoData.state && (<>
                {String(formInfoData.country) === '100' ? (
                   <InputList
+                     id="form-customer-city"
                      isSearch
                      limit={20}
                      labelSearch={lang?.label_search || 'Search'}
@@ -175,7 +165,8 @@ export default function FormUserInformation({
                   />
                ) : (
                   <TextField
-                     name="city"
+                     id="form-customer-city"
+                     name="city-input"
                      label={lang?.label__city || 'City'}
                      value={formInfoData.city}
                      onChange={(event) => fnChangeCity(event.target.value)}
@@ -186,6 +177,7 @@ export default function FormUserInformation({
                </>)
             }
             <TextField
+               id="form-customer-postcode"
                name="postcode"
                label="Post Code"
                value={formInfoData.postcode}
@@ -200,6 +192,7 @@ export default function FormUserInformation({
                formInfoData.postcode &&
                (shippingMethod === 'shipper' || isAbleSelfPickup)) && (<>
                   <AutoComplete
+                     id="form-shipper-courier"
                      name="shippingCourierName"
                      onOpen={() => COURIER.data?.length === 0 && fnGetCouriers}
                      getOptionLabel={(option) => option?.name || ''}
@@ -238,6 +231,7 @@ export default function FormUserInformation({
                ((checkCourierSameDay(formInfoData.shippingCourierName) && !! locationAddress) || 
                !checkCourierSameDay(formInfoData.shippingCourierName)) && (<>
                   <AutoComplete
+                     id="form-shipper-service"
                      name="service"
                      onOpen={() => SERVICES.data.length === 0 && fnGetServices}
                      getOptionLabel={(option) => option.rate_name ?
@@ -267,6 +261,7 @@ export default function FormUserInformation({
             {
                formInfoData.shipperRateId && (<>
                   <Select
+                     id="form-shipper-insurance"
                      label={(lang?.label__insurance || 'Insurance')}
                      onChange={fnChangeInsurance}
                      inputProps= {{

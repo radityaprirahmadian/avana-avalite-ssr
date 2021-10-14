@@ -5,13 +5,19 @@ import PhoneInput from 'react-phone-input-2';
 export default function PhoneNumber(props) {
   const { country, value, onChange } = props;
 
-  const phonePlaceholder = 'Label Phone'
+  const phonePlaceholder = 'Label Phone';
+
+  React.useEffect(() => {
+    let phoneInput = document.querySelector('.react-tel-input').querySelector('input');
+    phoneInput.id = props.id;
+  }, [props.id])
 
   return (
     <div className="relative mt-2">
-      <div className="phone-label">{phonePlaceholder}{props.required && (<span style={{color:'red'}}>*</span>)}</div>
+      <div className="phone-label">{props.label || phonePlaceholder}{props.required && (<span style={{color:'red'}}>*</span>)}</div>
       <PhoneInput
-         specialLabel=""
+        id={props.id}
+        specialLabel=""
         country={country}
         value={value}
         onlyCountries={['id', 'my', 'sg']}

@@ -311,6 +311,7 @@ export default function InputList(props) {
     >
       {() => (
           <TextField
+            id={props.id}
             name={props.name}
             label={props.label}
             InputLabelProps={{ shrink: true }}

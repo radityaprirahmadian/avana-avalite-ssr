@@ -8,20 +8,16 @@ export default function CustomerInformation(props) {
       <div>
          <div className="mb-1">
             <TextField
-               id="customer-name"
+               id="form-customer-name"
                name="name"
                defaultValue={props.data.name}
-               // error={errors.customer_name}
-               // helperText={errorMessageHandler(errors.customer_name)}
-               // inputRef={register({
-               //    required: true,
-               // })}
                label={props.lang?.label__name || 'Your Name'}
                onChange={props.fnChange}
             />
          </div>
          <div className="mb-0">
             <PhoneInput
+               id="form-customer-phone"
                value={props.data.phoneNumber}
                country={props.defualtCountry}
                onlyCountries={['id', 'my', 'sg']}
