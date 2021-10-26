@@ -146,8 +146,12 @@ export default function Invoice({ shopDetails, orderToken }) {
                      total_quantity: products.reduce(
                         (acc, current) => acc + current.quantity,
                         0
-                      ),
-                      total_weight: products.reduce(
+                     ),
+                     weight: products.reduce(
+                        (acc, current) => acc + current.quantity * current.weight,
+                        0
+                     ),
+                     total_weight: products.reduce(
                         (acc, current) => acc + current.quantity * current.weight,
                         0
                      ),
