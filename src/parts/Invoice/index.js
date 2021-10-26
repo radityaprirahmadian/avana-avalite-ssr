@@ -175,14 +175,7 @@ export default function Invoice({ shopDetails, orderToken }) {
                         ? service.insuranceRate
                         : 0;
 
-                  const discount = Number(formInfoData.country) === 100 &&
-                     formInfoData.shippingCourierName === 'JNE' &&
-                     subTotal > 50000 &&
-                     discountActive
-                        ? service.finalRate < 10000
-                           ? service.finalRate
-                           : 10000
-                        : 0;
+                  const discount = service?.shipping_price_discount || 0;
                   
                   setPricingCharge((prevState) => ({
                      ...prevState,
