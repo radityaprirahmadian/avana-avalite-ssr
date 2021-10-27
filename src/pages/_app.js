@@ -30,7 +30,6 @@ function MyApp({ Component, pageProps }) {
          document.addEventListener('DOMContentLoaded', () => {
             loadScript('https://www.googletagmanager.com/gtag/js?id=G-MMLJL8CZZS')
                .then((() => {
-                  console.log('run')
                   window.dataLayer = window.dataLayer || [];
                   function gtag(){dataLayer.push(arguments);}
                   gtag('js', new Date());
@@ -46,6 +45,18 @@ function MyApp({ Component, pageProps }) {
                   a.appendChild(r);
                })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv='))
          });
+         datadogRum.init({
+            applicationId: process.env.NEXT_PUBLIC_DATADOG_APPID,
+            clientToken: process.env.NEXT_PUBLIC_DATADOG_CLIENT,
+            site: 'datadoghq.com',
+            service:'whatsapp-commerce',
+            env: process?.env?.NEXT_PUBLIC_STAGE?.toLocaleLowerCase(),
+            // version: '1.0.0',
+            sampleRate: 100,
+            trackInteractions: true,
+            defaultPrivacyLevel: 'mask-user-input'
+         });
+         datadogRum.startSessionReplayRecording();
       }
    }, [])
 
