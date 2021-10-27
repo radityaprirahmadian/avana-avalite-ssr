@@ -30,7 +30,6 @@ function MyApp({ Component, pageProps }) {
          document.addEventListener('DOMContentLoaded', () => {
             loadScript('https://www.googletagmanager.com/gtag/js?id=G-MMLJL8CZZS')
                .then((() => {
-                  console.log('run')
                   window.dataLayer = window.dataLayer || [];
                   function gtag(){dataLayer.push(arguments);}
                   gtag('js', new Date());
