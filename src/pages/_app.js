@@ -7,6 +7,7 @@ import { ThemeProvider } from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import theme from 'src/configs/materialUI/theme'
 import mixpanel from 'mixpanel-browser';
+import { datadogRum } from '@datadog/browser-rum';
 
 import 'react-toastify/dist/ReactToastify.css'
 import 'react-phone-input-2/lib/material.css'
@@ -26,7 +27,7 @@ function MyApp({ Component, pageProps }) {
       if (jssStyles) {
          jssStyles.parentElement.removeChild(jssStyles)
       }
-      if (process.env.NEXT_PUBLIC_API_HOST.includes('avana.asia')) {
+      if (true || process.env.NEXT_PUBLIC_API_HOST.includes('avana.asia')) {
          document.addEventListener('DOMContentLoaded', () => {
             loadScript('https://www.googletagmanager.com/gtag/js?id=G-MMLJL8CZZS')
                .then((() => {
