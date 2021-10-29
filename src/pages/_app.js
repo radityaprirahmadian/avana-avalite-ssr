@@ -53,7 +53,7 @@ function MyApp({ Component, pageProps }) {
             service:'whatsapp-commerce',
             env: process?.env?.NEXT_PUBLIC_STAGE?.toLocaleLowerCase(),
             // version: '1.0.0',
-            sampleRate: 100,
+            sampleRate: 15,
             trackInteractions: true,
             defaultPrivacyLevel: 'mask-user-input'
          });
