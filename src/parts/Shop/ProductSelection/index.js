@@ -273,7 +273,7 @@ export default function ProductSelection(props) {
             }
          });
       },
-      [props.fnChange, props.productsOrdered]
+      [props.fnChange, props.productsOrdered, PRODUCTS.data]
    );
 
    const fnResetMetaList = React.useCallback(
