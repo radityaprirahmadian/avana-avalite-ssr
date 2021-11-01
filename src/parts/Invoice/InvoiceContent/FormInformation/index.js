@@ -427,10 +427,14 @@ export default function FormInformation({
                (acc, current) => acc + current.quantity,
                0
              ),
-             total_weight: products.reduce(
+            weight: products.reduce(
                (acc, current) => acc + current.quantity * current.weight,
                0
-             ),
+            ),
+            total_weight: products.reduce(
+               (acc, current) => acc + current.quantity * current.weight,
+               0
+            ),
             is_self_pickup: 0,
             total_product: totalPrice,
             ...(longlat

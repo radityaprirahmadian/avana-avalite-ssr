@@ -4,6 +4,8 @@ import mixpanel from 'mixpanel-browser';
 import Header from './Header';
 import Spinner from 'src/components/Spinner';
 import ErrorWrapper from 'src/components/ErrorsWrapper';
+import { Snackbar } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 
 import InvoiceContent from './InvoiceContent';
 import StepAction from './StepAction';
@@ -86,6 +88,7 @@ export default function Invoice({ shopDetails, orderToken }) {
       isProcessOrder: false,
       isOrderComplete: false,
       isShowRedirect: false,
+      isShowErrorToast: false,
       isEditOrder: false,
       isProductsEdited: false,
       isConfirmPrivacyPolicy: false,
@@ -146,8 +149,12 @@ export default function Invoice({ shopDetails, orderToken }) {
                      total_quantity: products.reduce(
                         (acc, current) => acc + current.quantity,
                         0
-                      ),
-                      total_weight: products.reduce(
+                     ),
+                     weight: products.reduce(
+                        (acc, current) => acc + current.quantity * current.weight,
+                        0
+                     ),
+                     total_weight: products.reduce(
                         (acc, current) => acc + current.quantity * current.weight,
                         0
                      ),
@@ -171,14 +178,7 @@ export default function Invoice({ shopDetails, orderToken }) {
                         ? service.insuranceRate
                         : 0;
 
-                  const discount = Number(formInfoData.country) === 100 &&
-                     formInfoData.shippingCourierName === 'JNE' &&
-                     subTotal > 50000 &&
-                     discountActive
-                        ? service.finalRate < 10000
-                           ? service.finalRate
-                           : 10000
-                        : 0;
+                  const discount = service?.shipping_price_discount || 0;
                   
                   setPricingCharge((prevState) => ({
                      ...prevState,
@@ -282,6 +282,10 @@ export default function Invoice({ shopDetails, orderToken }) {
       },
       [orders]
    );
+
+   const fnToggleErrorToast = React.useCallback(() => {
+      setError({});
+   }, [setError]);
 
    const fnSelectLocale = React.useCallback((lang) => {
       setLocale(lang);
@@ -667,11 +671,25 @@ export default function Invoice({ shopDetails, orderToken }) {
                }
             })
             .catch(async (error) => {
-               let checkErrCoupon = false;
-               // if ((typeof error?.message === 'object' && !!error?.message?.coupon_code) || (error?.message?.includes('coupon'))) {
-               //    checkErrCoupon = true;
-               //    this._removeCoupon({ error: error.message });
-               // }
+               if ((typeof error?.message === 'object' && !!error?.message?.coupon_code) || (error?.message?.includes('coupon'))) {
+                  setOrderDetails((prevState) => ({
+                     ...prevState,
+                     coupon: {}   
+                  }));
+                  setStep((prev) => ({
+                     current: 2,
+                     previous: prev.current
+                  }));
+               }
+               setStatusState((prevState) => ({
+                  ...prevState,
+                  isProcessOrder: false,
+                  isOrderComplete: false,
+               }))
+               setError(() => ({
+                  message: error.message,
+                  isShowToast: true,
+               }))
                // await this.setState((prevState) => ({
                //    status: {
                //       ...prevState.status,
@@ -701,9 +719,27 @@ export default function Invoice({ shopDetails, orderToken }) {
             className={`mx-auto min-h-screen flex flex-col ${step.current === 4 && 'justify-center'}`}
             style={{ minWidth: 300, maxWidth: 375 }}
          >
+            <Snackbar
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'center',
+              }}
+              open={error?.isShowToast}
+              autoHideDuration={6000}
+              onClose={fnToggleErrorToast}
+            >
+               <Alert
+                  elevation={6}
+                  variant="filled"
+                  onClose={fnToggleErrorToast}
+                  severity="error"
+               >
+                  {error?.message}
+               </Alert>
+            </Snackbar>
             <Context.Provider value={CONTEXT}>
             {
-               Object.keys(error).length > 0 ? (
+               (Object.keys(error).length > 0 && !error?.isShowToast) ? (
                   <ErrorWrapper error={error} />
                ) :
                   statusState.isOrderComplete ? (

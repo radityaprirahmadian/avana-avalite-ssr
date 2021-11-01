@@ -7,7 +7,7 @@ export default function errorHandler(error) {
   if (error) {
     let message;
     if (error.response) {
-      if (error.response.status === 500)
+      if (error.response.status === 500 && !error?.response?.data?.message)
         message = "Something went terribly wrong";
       else message = error.response.data.message;
       if (error?.config?.toastErrorEnabled &&

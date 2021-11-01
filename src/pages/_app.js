@@ -7,6 +7,7 @@ import { ThemeProvider } from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import theme from 'src/configs/materialUI/theme'
 import mixpanel from 'mixpanel-browser';
+import { datadogRum } from '@datadog/browser-rum';
 
 import 'react-toastify/dist/ReactToastify.css'
 import 'react-phone-input-2/lib/material.css'
@@ -26,11 +27,10 @@ function MyApp({ Component, pageProps }) {
       if (jssStyles) {
          jssStyles.parentElement.removeChild(jssStyles)
       }
-      if (process.env.NEXT_PUBLIC_API_HOST.includes('avana.asia')) {
+      if (true || process.env.NEXT_PUBLIC_API_HOST.includes('avana.asia')) {
          document.addEventListener('DOMContentLoaded', () => {
             loadScript('https://www.googletagmanager.com/gtag/js?id=G-MMLJL8CZZS')
                .then((() => {
-                  console.log('run')
                   window.dataLayer = window.dataLayer || [];
                   function gtag(){dataLayer.push(arguments);}
                   gtag('js', new Date());
@@ -46,6 +46,18 @@ function MyApp({ Component, pageProps }) {
                   a.appendChild(r);
                })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv='))
          });
+         datadogRum.init({
+            applicationId: process.env.NEXT_PUBLIC_DATADOG_APPID,
+            clientToken: process.env.NEXT_PUBLIC_DATADOG_CLIENT,
+            site: 'datadoghq.com',
+            service:'whatsapp-commerce',
+            env: process?.env?.NEXT_PUBLIC_STAGE?.toLocaleLowerCase(),
+            // version: '1.0.0',
+            sampleRate: 15,
+            trackInteractions: true,
+            defaultPrivacyLevel: 'mask-user-input'
+         });
+         datadogRum.startSessionReplayRecording();
       }
    }, [])
 

@@ -180,7 +180,12 @@ export default function ProductSelection(props) {
             name: product.name,
             image: product.main_image,
             quantity: 1,
-            price: product.sale_enabled ? product.sale_price : product.price,
+            price: product.sale_enabled
+               ? product.sale_price
+               : (productVariant
+                  ?  productVariant.price
+                  : product.price
+               ),
             weight: product?.weight && product?.weight,
             tax: product?.tax && product.tax.value,
             ...(productVariant ?
