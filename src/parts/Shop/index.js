@@ -73,6 +73,8 @@ export default function Shop({ shopDetails }) {
 
    const fnCreateOrder= React.useCallback((isViaWA) => {
       const { name, phoneNumber, productsOrdered } = data;
+      const { details: waNumberDetails, mixpanelWhatsappInfo } = waRotatorData;
+      const waRotatorId = waNumberDetails.whatsapp_info_id;
       let product_ordered = Object.values(productsOrdered);
 
       setStatusOrder((prevState) => ({
@@ -97,12 +99,11 @@ export default function Shop({ shopDetails }) {
          order_status_id: 0,
          payment_method: '',
          payment_proof: '',
-         product_ordered: product_ordered
+         product_ordered: product_ordered,
+         whatsapp_info_id: waRotatorId,
       })
          .then(async (res) => {
             const { details: shop } = shopDetails;
-            const { details: waNumberDetails, mixpanelWhatsappInfo } = waRotatorData;
-            const waRotatorId = waNumberDetails.whatsapp_info_id;
             mixpanel.track('Order Form', {
                'Order ID': res.order_id,
                'Order No': res.order_no,
