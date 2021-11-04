@@ -10,7 +10,9 @@ export default {
    getRateByState: (options) => avaprotected.get(`/shipping-rate-by-state/${options?.stateId}`, {
       params: { ...options?.params }
    }),
-   getCouriers: () => avaprotected.get(`/shipper/logistic-city`),
+   getCouriers: (options) => avaprotected.get(`/shipper/logistic-city`, {
+      params: { ...options?.params }
+   }),
    getServices: (options) => avaprotected.get(`/shipper/rates`, {
       params: { ...options?.params }
    }),

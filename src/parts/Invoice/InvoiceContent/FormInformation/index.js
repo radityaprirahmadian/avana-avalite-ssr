@@ -108,7 +108,6 @@ export default function FormInformation({
    }, [fnChange]);
 
    const fnChangeState = React.useCallback((eventValue) => {
-      // const eventValue = newValue?.state_id ?? '';
       const changeValue = typeof (eventValue) !== 'string' ? eventValue.toString() : eventValue;
       fnChange({
          target: {
@@ -253,7 +252,7 @@ export default function FormInformation({
          target: {
             type: 'no_persist',
             name: 'city',
-            value: eventValue ?? '',
+            value: eventValue || '',
          },
       });
       setCourier((prevState) => ({
@@ -287,7 +286,7 @@ export default function FormInformation({
             shipperUseInsurance: 4
          });
       }
-      fnGetCouriers();
+      fnGetCouriers(eventValue);
    }, [fnChange, orderDetails]);
 
    const fnChangeCourier = React.useCallback((event, newValue) => {
@@ -483,15 +482,43 @@ export default function FormInformation({
       // }
    }, [fnChange]);
 
-   const fnGetCouriers = React.useCallback(() => {
+   const fnGetCouriers = React.useCallback((city) => {
       const selfPickupData = { name: 'Self Pickup', isSelfPickup: true };
       setCourier((prevState) => ({
          ...prevState,
          data: [],
          status: 'loading',
       }));
+      const products = Object.values(productsOrdered);
+      const subTotal = products.reduce(
+         (acc, { price, quantity }) => acc + price * quantity,
+         0
+       );
+   
+      const totalTax = products.reduce(
+         (acc, { price, quantity, tax }) => acc + ((price * quantity) / 100) * tax,
+         0
+      );
+
+      const totalPrice = subTotal + totalTax;
       if (orderDetails.shippingMethod === 'shipper') {
-         shipping.getCouriers()
+         shipping.getCouriers({
+            params: {
+               country_id: formInfoData.country,
+               state_id: formInfoData.state,
+               city: city || formInfoData.city,
+               total_quantity: products.reduce(
+                  (acc, current) => acc + current.quantity,
+                  0
+               ),
+               total_weight: products.reduce(
+                  (acc, current) => acc + current.quantity * current.weight,
+                  0
+               ),
+               is_self_pickup: 0,
+               total_product: totalPrice
+             }
+         })
             .then((res) => {
                let couriersList = res.data?.filter((courier) => {
                   return courier.name !== 'Alfatrex' && courier.name !== 'Lion Parcel' && courier.name !== 'Tiki';
@@ -528,7 +555,7 @@ export default function FormInformation({
             fnChangeCourier('', { name: orderDetails.shippingCourier?.name })
          }
       }
-   }, [shipping, orderDetails])
+   }, [shipping, orderDetails, formInfoData])
 
    const fnGetSelfPickupInfo = React.useCallback(() => {
       setSelfPickup((prevState) => ({
