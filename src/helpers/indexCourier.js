@@ -79,6 +79,12 @@ const couriers = {
     image: "/assets/images/courier_ninjavan.png",
     shipTo: "Singapore",
   },
+  ninja_xpress: {
+    ids: "ninja_xpress",
+    name: "Ninja Xpress",
+    image: "/assets/images/couriers/ninja-xpress.png",
+    shipTo: "Indonesia",
+  },
   jnt: {
     ids: "jnt",
     name: "JNT",
@@ -106,7 +112,7 @@ const couriers = {
   sicepat: {
     ids: "sicepat",
     name: "Sicepat",
-    image: "/assets/images/couriers/sicepat.png",
+    image: "/assets/images/couriers/sicepat.jpg",
     shipTo: "Indonesia",
   },
   wahana: {
@@ -175,12 +181,16 @@ export const selectCourier = (id) => {
     case "janio":
       return couriers["janio"];
 
+    case "NINJA_VAN":
     case "ninja_van":
     case "ninja van":
       return couriers["ninjavan"];
 
-    case "ninja_van_my_sg":
+    case "Ninja Van Singapore":
+    case "NINJA_VAN_SG":
+    case "ninja van singapore":
     case "ninja_van_sg":
+    case "ninja_van_my_sg":
       return couriers["NINJA_VAN_SG"];
 
     case "jnt":
@@ -226,6 +236,9 @@ export const selectCourier = (id) => {
     case "self pickup":
       return couriers["self_pickup"];
 
+    case "ninja_xpress":
+    case "ninja xpress":
+      return couriers["ninja_xpress"];
     default:
       return [];
   }
