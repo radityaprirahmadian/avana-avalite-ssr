@@ -42,24 +42,13 @@ export default function StepAction({
       )}
       <div
         className={`invoice__footer w-full my-1`}
-        // ${
-        //   status.isEditOrder ? 'is-sticky sticky-bottom' : ''
-        // }
       >
         <div
           className="buttons w-full py-2"
-          // style={{ marginTop: status.isEditOrder ? '0.5rem' : '' }}
         >
           <Button
             variant="contained"
             color="primary"
-            // onClick={
-            //   status.isEditOrder
-            //     ? this._handleSubmitEditOrder
-            //     : stepper.currentStep !== 3
-            //     ? this._handleNextStep
-            //     : this._handleProcessOrder
-            // }
             onClick={
               currentStep !== 3 ?
                 fnNextStep :
@@ -67,7 +56,6 @@ export default function StepAction({
             }
             className="w-full"
             disabled={
-              // isLoading ||
               ((currentStep === 1 &&
                 (Object.values(formInfoStatus).some((x) => x < 3) ||
                 (shopInfo?.is_enabled_privacy_policy && !statusState.isConfirmPrivacyPolicy))
@@ -97,7 +85,6 @@ export default function StepAction({
               onClick={fnPrevStep}
               disableElevation
             >
-              {/* <FormattedMessage id="components.text__Back" /> */}
               {lang?.btn__back || 'Back'}
             </Button>
           </div>
