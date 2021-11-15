@@ -58,7 +58,7 @@ export default function Payments({
     <PaymentsContainer>
       {
         paymentList
-          ?.filter((payment) => payment.code !== 'manual')
+          ?.filter((payment) => payment.code !== 'manual' && payment.code !== 'COD')
           ?.map((payment) => (
             <PaymentsWrapper
               key={payment.code}
