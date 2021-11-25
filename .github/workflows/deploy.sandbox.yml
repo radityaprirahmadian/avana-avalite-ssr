@@ -50,6 +50,7 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
 
       - name: Upload `.serverless` state to S3
         run: aws s3 sync .serverless s3://avalite-ssr-sandbox/.serverless --delete --cache-control max-age=10,no-cache,no-store,must-revalidate
