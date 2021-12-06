@@ -325,7 +325,8 @@ export default function FormInformation({
 
       if (newValue &&
          orderDetails.shippingMethod === 'shipper' &&
-         newValue?.name
+         newValue?.name &&
+         !newValue?.isSelfPickup
       ) {
          fnGetServices(newValue?.name);
       }
