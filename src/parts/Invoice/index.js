@@ -218,7 +218,10 @@ export default function Invoice({ shopDetails, orderToken }) {
                            ? res.shipping_rate
                            : 10000
                         : 0;
-
+                  setOrderDetails((prevState) => ({
+                     ...prevState,
+                     shippingMethod: res.shipping_method   
+                  }));
                   setPricingCharge((prevState) => ({
                      ...prevState,
                      totalTax: totalTax,
