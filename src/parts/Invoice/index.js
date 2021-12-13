@@ -113,7 +113,7 @@ export default function Invoice({ shopDetails, orderToken }) {
          if (isSyncTotal) {
             clearTimeout(isSyncTotal);
          }
-         const discountActive = true;
+         const discountActive = false;
          const products = Object.values(productsOrdered);
          const subTotal = products.reduce(
             (acc, { price, quantity }) => acc + price * quantity,
