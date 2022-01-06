@@ -11,4 +11,6 @@ export default {
       setAuthorization(data.token)
       return avaprotected.get(``).then((res) => res)
    },
+   whitelist: () =>
+      avaprotected.get(`/whitelist-features`).then((res) => res),
 }
