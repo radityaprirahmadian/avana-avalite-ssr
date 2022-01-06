@@ -329,7 +329,12 @@ export default function Shop({ shopDetails }) {
                      statusOrder={statusOrder}
                      fnCreateOrder={fnCreateOrder}
                   />
-                  <Footer fnSelectLocale={fnSelectLocale} lang={lang} />
+                  <Footer
+                     fnSelectLocale={fnSelectLocale}
+                     lang={lang}
+                     loading={loadingData}
+                     whitelistFeature={whitelistFeatures}
+                  />
                </div>
             )}
             <a
