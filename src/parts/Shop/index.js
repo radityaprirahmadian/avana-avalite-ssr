@@ -19,6 +19,7 @@ import Footer from 'src/parts/Footer'
 import Context from '../Context'
 import orders from 'src/constants/api/orders';
 import whatsapp from 'src/constants/api/whatsapp';
+import shops from 'src/constants/api/shops';
 
 import Localization from 'src/configs/lang/shop';
 import { getCurrentLang, setCurrentLang } from 'src/helpers/localization';
@@ -46,6 +47,10 @@ export default function Shop({ shopDetails }) {
       isCreateOrderViaWA: false
    })
 
+   const [loadingData, setLoadingData] = useState({
+      whitelist: false,
+   });
+
    const [locale, setLocale] = React.useState('en');
 
    const [productDetails, setProductDetails] = useState({
@@ -58,6 +63,8 @@ export default function Shop({ shopDetails }) {
       details: {},
       mixpanelWhatsappInfo: {}
    })
+   
+   const [whitelistFeatures, setWhitelistFeature] = useState({});
 
    const lang = Localization[locale];
 
@@ -245,6 +252,27 @@ export default function Shop({ shopDetails }) {
       });
     }
 
+   const fnWhitelistFeatures = () => {
+      setLoadingData((prevState) => ({
+         ...prevState,
+         whitelist: true
+      }))
+      shops.whitelist()
+         .then((data) => {
+            setWhitelistFeature(data.reduce((a, b) => {
+               a[b["code"]] = b;
+               return a;
+             }, {})
+            );
+         })
+         .finally(() => {
+            setLoadingData((prevState) => ({
+               ...prevState,
+               whitelist: false
+            }))
+         })
+   }
+
    const fnSelectLocale = React.useCallback((lang) => {
       setLocale(lang);
       setCurrentLang(lang);
@@ -257,6 +285,7 @@ export default function Shop({ shopDetails }) {
    }, [fnSelectLocale])
 
    React.useEffect(() => {
+      fnWhitelistFeatures();
       fbPageView();
       fnTrackVisit();
    }, []);
