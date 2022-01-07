@@ -259,7 +259,7 @@ export default function Shop({ shopDetails }) {
       }))
       shops.whitelist()
          .then((data) => {
-            setWhitelistFeature(data.reduce((a, b) => {
+            setWhitelistFeature((data || [])?.reduce((a, b) => {
                a[b["code"]] = b;
                return a;
              }, {})
