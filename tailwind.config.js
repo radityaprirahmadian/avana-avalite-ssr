@@ -19,15 +19,15 @@ module.exports = {
       colors: {
          ...colors,
          primary: {
-            orange: colors.orange[5],
-            yellow: colors.yellow[5],
+            orange: colors.orange[500],
+            yellow: colors.yellow[500],
          },
          additional: {
-            normal: colors.neutral[10],
-            disabled: colors.neutral[6],
-            placeholder: colors.neutral[5],
-            inversed: colors.neutral[1],
-            link: colors.blue[5],
+            normal: colors.neutral[10000],
+            disabled: colors.neutral[600],
+            placeholder: colors.neutral[500],
+            inversed: colors.neutral[100],
+            link: colors.blue[500],
          }
       },
       spacing: {
