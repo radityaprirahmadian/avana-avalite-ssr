@@ -11,12 +11,6 @@ const ProductViewer = lazy(() =>
     './ProductViewer'
   )
 );
-const Variation = lazy(() =>
-  import(
-    /* webpackChunkName: "Variation" */ /* webpackPrefetch: true */
-    './Variation'
-  )
-);
 
 export default function ProductLists(props) {
    const { products, selectedVariant, lang } = props
@@ -24,44 +18,32 @@ export default function ProductLists(props) {
    return (
       <Suspense fallback={<Spinner size={0.5} />}>
          {(Object.values(products.data).length > 0) ? (
-            selectedVariant.isSelect ? (
-               <Variation
-               lang={lang}
-                  item={selectedVariant.product}
-                  selectedMeta={props.selectedMetaList[selectedVariant.product.id]}
-                  productsOrdered={props.productsOrdered}
-                  fnSelectProduct={props.fnSelectProduct}
-                  fnChangeRangeProduct={props.fnChangeRangeProduct}
-                  fnToggleSelectVariant={props.fnToggleSelectVariant}
-               />
-            ) : (
-               <>
-                  {Object.values(products.data).map((item) => (
-                     <div key={item.id}>
-                        <ProductViewer
-                           lang={lang}
-                           item={item}
-                           selectedMeta={props.selectedMetaList[item.id]}
-                           productsOrdered={props.productsOrdered}
-                           fnSelectProduct={props.fnSelectProduct}
-                           fnToggleSelectProduct={props.fnToggleSelectProduct}
-                           fnToggleSelectVariant={props.fnToggleSelectVariant}
-                           fnChangeRangeProduct={props.fnChangeRangeProduct}
-                        />
-                     </div>
-                  ))}
-               </>
-            )
+            <>
+               {Object.values(products.data).map((item) => (
+                  <div key={item.id}>
+                     <ProductViewer
+                        lang={lang}
+                        item={item}
+                        selectedMeta={props.selectedMetaList[item.id]}
+                        productsOrdered={props.productsOrdered}
+                        fnSelectProduct={props.fnSelectProduct}
+                        fnToggleSelectProduct={props.fnToggleSelectProduct}
+                        fnToggleSelectVariant={props.fnToggleSelectVariant}
+                        fnChangeRangeProduct={props.fnChangeRangeProduct}
+                     />
+                  </div>
+               ))}
+            </>
          ) : (
             <>
-            {products.status !== 'loading' &&  (
-               <div className="flex flex-col items-center justify-center py-6">
-                  <div className="w-24 h-24 object-contain mb-3">
-                     <img src={images.sad} alt="ava sad" />
+               {products.status !== 'loading' &&  (
+                  <div className="flex flex-col items-center justify-center py-6">
+                     <div className="w-24 h-24 object-contain mb-3">
+                        <img src={images.sad} alt="ava sad" />
+                     </div>
+                     <span>{lang?.text__product_not_found || 'The product you are looking for was not found'}</span>
                   </div>
-                  <span>{lang?.text__product_not_found || 'The product you are looking for was not found'}</span>
-               </div>
-            )}
+               )}
             </>
          )}
          {

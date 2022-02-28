@@ -5,6 +5,8 @@ import Button from 'src/components/Button';
 
 import formatThousand from 'src/helpers/formatThousand';
 
+import GroupButton from 'src/components/Group/Button';
+
 export default function Variation({
   lang,
   item,
@@ -34,6 +36,8 @@ export default function Variation({
         </span>
       </div>
       <div className="py-4 flex-1">
+        <GroupButton
+        />
         {item?.variation?.options
           ?.filter((option) => option.id)
           ?.map(

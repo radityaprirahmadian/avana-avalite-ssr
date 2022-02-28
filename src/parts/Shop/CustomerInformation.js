@@ -5,7 +5,7 @@ import PhoneInput from 'src/components/form/PhoneInput'
 
 export default function CustomerInformation(props) {
    return (
-      <div>
+      <div className="z-20">
          <div className="mb-1">
             <TextField
                id="form-customer-name"

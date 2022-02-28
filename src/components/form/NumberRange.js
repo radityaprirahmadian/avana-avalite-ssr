@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Remove, Add } from '@material-ui/icons';
 
 export default function NumberRange(props) {
@@ -79,6 +79,10 @@ export default function NumberRange(props) {
     }
   )
 
+  useEffect(() => {
+    setValue(props.value);
+  }, [props]);
+
   return (
     <section className="flex align-center">
       <button
@@ -104,9 +108,12 @@ export default function NumberRange(props) {
       />
       <button
         className={`button rounded-full bg-white border border-solid border-neutral-4 h-8 w-8 text-black focus:outline-none
-          ${(!!props.max && value < props.max  || !props.max) ? ' visible' : ' invisible'}
+          ${((!!props.max && value < props.max) || typeof props.max === undefined) ? ' visible' : ' invisible'}
         `}
-        onClick={(e) => (!!props.max && value < props.max  || !props.max) && fnPlus(e)}
+        onClick={(!!props.max && value < props.max  || typeof props.max === undefined)
+          ? (e) => fnPlus(e)
+          : () => {}
+        }
       >
         <Add style={{fontSize: '16px'}} />
       </button>

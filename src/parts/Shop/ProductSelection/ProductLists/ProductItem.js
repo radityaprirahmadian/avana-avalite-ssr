@@ -4,6 +4,7 @@ import { Button, Badge } from '@material-ui/core'
 import { BadgeDiscount, BadgeProductCount } from 'src/components/Badge'
 import NumberRange from 'src/components/form/NumberRange'
 import Image from 'src/components/Container/Image'
+import VariantMiniCart from './VariantMiniCart'
 
 import formatThousand from 'src/helpers/formatThousand'
 
@@ -92,7 +93,13 @@ export default function Row({
                )}
             </div>
          </div>
-         <div className="flex flex-1 items-center cursor-pointer" onClick={() => fnToggleSelectProduct(item)}>
+         <div
+            className="flex flex-1 items-center relative"
+         >
+            <div
+               className="absolute z-10 w-full h-full cursor-pointer"
+               onClick={() => fnToggleSelectProduct(item)}
+            />
             <div className="flex-1 mx-4">
                <div
                   className="text-sm leading-4 font-bold mb-2"
@@ -118,28 +125,42 @@ export default function Row({
                   )}`}
                </div>
             </div>
-            <div className="w-auto">
+            <div className="w-auto z-20">
                {(item.quantity === 0 || item.quantityVariants === 0) ? (
                   <div className="text-sm text-red-5 font-bold">
                      {lang?.text__out_of_stock || 'Out of stock'}
                   </div>
+               ) : (item.variation && isVariant) ? (
+                  // <Button
+                  //    type="button"
+                  //    className="is-radiusless is-shadowless"
+                  //    variant="contained"
+                  //    color="primary"
+                  //    onClick={(e) => handleOnEventChild(e, () => fnToggleSelectVariant(item))}
+                  //    disableElevation
+                  //    disabled={item.quantity === 0 || item.quantityVariants === 0}
+                  // >
+                  //    {(lang?.btn__edit || 'Edit')}
+                  // </Button>
+                  <VariantMiniCart
+                     lang={lang}
+                     productData={item}
+                     productsOrdered={productsOrdered}
+                     fnToggleSelectVariant={fnToggleSelectVariant}
+                     fnChangeRangeProduct={fnChangeRangeProduct}
+                     selectedMeta={selectedMeta}
+                  />
                ) : item.variation ? (
                   <Button
                      type="button"
                      className="is-radiusless is-shadowless"
                      variant="contained"
-                     color={isVariant ?
-                        'default' :
-                        'primary'
-                     }
+                     color="primary"
                      onClick={(e) => handleOnEventChild(e, () => fnToggleSelectVariant(item))}
                      disableElevation
                      disabled={item.quantity === 0 || item.quantityVariants === 0}
                   >
-                     {isVariant ?
-                        (lang?.btn__edit || 'Edit') :
-                        (lang?.btn__buy || 'Buy')
-                     }
+                     {(lang?.btn__buy || 'Buy')}
                   </Button>
                ) : (
                   productsOrdered?.[item.id] ? (

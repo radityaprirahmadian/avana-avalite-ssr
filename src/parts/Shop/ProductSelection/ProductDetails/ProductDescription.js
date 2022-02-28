@@ -1,92 +1,25 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React from 'react';
+
 import Parser from 'html-react-parser';
 // components
 import { ArrowBack } from '@material-ui/icons';
 import ImgSlider from 'src/components/ImgSlider';
 import Button from 'src/components/Button';
 
-import products from 'src/constants/api/products'
-
 // utils
 import formatCurrency from 'src/helpers/formatCurrency';
 
-function ProductDetails(props) {
+export default function ProductDescription(props) {
   const {
     lang,
-    productId,
-    productsOrdered,
-    fnSelectProduct,
-    fnChangeRangeProduct,
+    product,
+    productVariantsQuantity,
+    isProductHasVariant,
     fnToggleSelectVariant,
     fnToggleSelectProduct,
+    handleAddNonVariant,
   } = props;
-
-  const [product, setProduct] = useState({
-    data: {},
-    error: {},
-    status: 'init'
-  })
-
-  const [productVariantsQuantity, setproductVariantsQuantity] = useState(-1)
-
-  const [checkIndexOrder, setCheckIndexOrder] = useState(-1)
-
-  // const indexOrder = payload.order.product_ordered.findIndex(
-  //   (x) =>
-  //     x.product_id === Number(e.target.name) &&
-  //     (variation ? x.variation_option_id === variation.id : true)
-  // );
-
-  const isProductHasVariant = !!product.data?.variation;
-
-  const handleAddNonVariant = useCallback(() => {
-    if (checkIndexOrder) {
-      fnChangeRangeProduct({target:
-        {
-          name: String(productId),
-          value: productsOrdered[productId]?.quantity + 1
-        }
-      })
-    } else {
-      fnSelectProduct(product.data);
-    }
-    fnToggleSelectProduct();
-  }, [product, checkIndexOrder, fnChangeRangeProduct, fnSelectProduct, fnToggleSelectProduct]);
-
-  useEffect(() => {
-    if (productId) {
-      setProduct((prevState) => ({
-        ...prevState,
-        status: 'loading'
-      }))
-      products
-        .details(productId)
-        .then((res) => {
-          setproductVariantsQuantity(!!res.variation
-            ? res?.variation?.options
-                ?.reduce((acc, variant) => {
-                  return acc + variant?.quantity
-                }, 0)
-            : -1
-          );
-          setProduct((prevState) => ({
-            ...prevState,
-            data: res,
-            status: 'ok'
-          }));
-          setCheckIndexOrder(!!productsOrdered[productId])
-        })
-        .catch((err) => {
-          setProduct((prevState) => ({
-            ...prevState,
-            data: {},
-            error: err,
-            status: 'error'
-          }))
-        })
-    }
-  }, [productId, productsOrdered])
-
+  
   return (
     <div
       // className="flex flex-col h-full"
@@ -276,7 +209,5 @@ function ProductDetails(props) {
         </>
       )}
     </div>
-  );
+  )
 }
-
-export default ProductDetails;
