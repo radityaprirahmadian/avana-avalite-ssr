@@ -60,14 +60,13 @@ export default function VariantMiniCart({
               className="relative"
             >
               <section
-                className="pt-2 px-4 relative w-full bg-white rounded-t"
+                className="pt-2 relative w-full bg-white rounded-t"
                 style={{
-                  maxHeight: "50vh",
                   minHeight: "200px"
                 }}
               >
                 <div
-                  className="text-right"
+                  className="text-right px-4"
                 >
                   <Close
                     fontSize="small"
@@ -84,7 +83,7 @@ export default function VariantMiniCart({
                 >
                   {
                     variantOrdered.map((item) => (
-                      <div className="flex flex-col py-4 border-b border-gray-200">
+                      <div className="flex flex-col py-4 border-b border-gray-200 px-4">
                         <div className="flex">
                           <div className="w-auto cursor-pointer">
                             <div className="relative">
@@ -165,7 +164,7 @@ export default function VariantMiniCart({
                     ))
                   }
                 </div>
-                <div className="py-4 w-100">
+                <div className="py-4 px-4 w-100">
                   <Button
                     type="button"
                     className="w-full pl-2 h-full is-radiusless is-shadowless"
