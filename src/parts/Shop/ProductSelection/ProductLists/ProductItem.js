@@ -127,7 +127,7 @@ export default function Row({
             </div>
             <div className="w-auto z-20">
                {(item.quantity === 0 || item.quantityVariants === 0) ? (
-                  <div className="text-sm text-red-5 font-bold">
+                  <div className="text-sm text-red-500 font-bold">
                      {lang?.text__out_of_stock || 'Out of stock'}
                   </div>
                ) : (item.variation && isVariant) ? (
