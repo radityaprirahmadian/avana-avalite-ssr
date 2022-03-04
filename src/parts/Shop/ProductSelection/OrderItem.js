@@ -87,8 +87,6 @@ const OrderItem = ({
             </div>
         </div>
       </div>
-      {console.log(quantity)}
-      {`aw: ${quantity}`}
       <div className="self-end">
         <NumberRange
           name={`${keyItem}`}

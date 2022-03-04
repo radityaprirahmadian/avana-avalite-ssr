@@ -32,10 +32,6 @@ export default function VariantMiniCart({
     []
   );
 
-  useEffect(() => {
-    console.log(productsOrdered,selectedMetaList)
-  }, []);
-
   return (
     <Modal
       in={isDisplay}

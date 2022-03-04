@@ -22,7 +22,6 @@ export default function VariantMiniCart({
     () => Object?.values(productsOrdered)
       ?.filter(
         (product) =>{
-          console.log(product)
           return product.product_id === productData.id}
       ) || [],
     [productsOrdered, selectedId, selectedMeta]

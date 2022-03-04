@@ -8,7 +8,6 @@ export default function VariationSelector({
 }) {
   const selectVariantCombination = useCallback(
     (item) => {
-      console.log('select', item);
       chooseCombination(variant.id, item.id);
     },
     [variant, chooseCombination]
