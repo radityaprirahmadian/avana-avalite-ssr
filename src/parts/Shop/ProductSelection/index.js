@@ -205,9 +205,11 @@ export default function ProductSelection(props) {
                   : !!productVariant?.sale_enabled
                      ? productVariant.sale_percentage
                      : undefined,
-               variation_options: product?.variation?.is_multivariation
+               variation_options: product?.variation && product?.variation?.is_multivariation
                   ? productVariant?.variation_options?.labels
-                  : [productVariant.name],
+                  : product?.variation
+                     ? [productVariant?.name]
+                     : undefined,
             },
             ...(productVariant ?
                   {
