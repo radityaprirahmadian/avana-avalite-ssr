@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import { Button } from '@material-ui/core'
 import { WhatsappButton } from 'src/components/Button'
@@ -7,6 +7,19 @@ import { LocalMall } from '@material-ui/icons'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
 export default function Checkout(props) {
+   const totalPrice = useMemo(
+      () => {
+         return Object.values(props.data.productsOrdered)
+            .reduce(
+               (acc, product) => {
+               return acc + (Number(product.price) * product.quantity)
+               },
+               0
+            );
+      },
+      [Object.values(props.data.productsOrdered)]
+   );
+
    return (
       <div
          className="sticky footer-checkout pb-2 bg-white w-full"
@@ -34,7 +47,7 @@ export default function Checkout(props) {
                   {props.statusOrder.isCreateOrder ? (
                      <CircularProgress size={20} />
                   ) : (
-                     props.lang?.btn__buy || 'Buy'
+                     `${props.lang?.btn__checkout_now || 'Checkout Now'}${totalPrice ? ` (${totalPrice})` : ''}`
                   )}
                </Button>
             </div>
