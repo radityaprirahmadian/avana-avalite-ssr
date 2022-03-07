@@ -3,14 +3,15 @@ import React, { useCallback } from "react";
 import GroupButton from 'src/components/Group/Button';
 
 export default function VariationSelector({
+  idx,
   variant,
   chooseCombination,
 }) {
   const selectVariantCombination = useCallback(
     (item) => {
-      chooseCombination(variant.id, item.id);
+      chooseCombination(idx, item.id);
     },
-    [variant, chooseCombination]
+    [variant, chooseCombination, idx]
   );
 
   return (

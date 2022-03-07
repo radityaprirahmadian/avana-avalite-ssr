@@ -87,10 +87,10 @@ export default function VariationDetails(props) {
         const combinationList = variationData.combination;
         structuredData = combinationList
           ?.filter((combination) => !combination.parent_id)
-          ?.map((combination) => {
+          ?.map((combination, idx) => {
             combination.child = combinationList
               .filter((child) => child.parent_id === combination.id);
-            selectedMeta[combination.id] = null;
+            selectedMeta[idx] = null;
             return combination;
           });
       } else {
@@ -274,8 +274,9 @@ export default function VariationDetails(props) {
       <section className="flex-1">
         <div className="flex flex-col">
           {
-            combinationList?.map((items) => (
+            combinationList?.map((items, idx) => (
               <VariationSelector
+                idx={idx}
                 variant={items}
                 chooseCombination={chooseCombination}
               />
