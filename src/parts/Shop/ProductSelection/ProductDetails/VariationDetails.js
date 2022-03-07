@@ -123,6 +123,10 @@ export default function VariationDetails(props) {
             ? item.variation_options.ids.join('-')
             : item.id;
           reducer[id] =  item;
+          if (!!variationData.is_multivariation) {
+            const idReverse = item.variation_options.ids.reverse().join('-');
+            reducer[idReverse] = item
+          }
           return reducer;
         }, {});
 
@@ -141,7 +145,7 @@ export default function VariationDetails(props) {
 
       if (isCombinationFilled) {
         const selectedId = combination.join("-");
-        const variantOnCart = productsOrdered?.[`${item.id}_${variantList[selectedId].id}`];
+        const variantOnCart = productsOrdered?.[`${item.id}_${variantList[selectedId]?.id}`];
         setVariantSelected((prevState) => ({
           meta: variantList[selectedId],
           quantity: !!variantOnCart
@@ -203,7 +207,7 @@ export default function VariationDetails(props) {
   );
 
   return (
-    <section className="pt-4 flex flex-1 flex-col w-full">
+    <section className="pt-4 flex flex-1 flex-col w-full" id="container-variant">
       <section
         className="relative mb-4 flex items-center text-lg"
         onClick={() => fnToggleSelectVariant()}
@@ -235,7 +239,7 @@ export default function VariationDetails(props) {
             {item.name}
           </div>
           {
-            displayValue?.sale_enabled ? (
+            displayValue?.sale_enabled && !!displayValue?.sale_percentage ? (
               <>
                 <div
                   className="flex items-center"
@@ -297,11 +301,7 @@ export default function VariationDetails(props) {
         <Button
           variant="contained"
           color={
-            orderState === "cancel"
-              ? "default"
-              : orderState === "remove"
-                ? "error"
-                : "primary"
+            "danger"
           }
           disableElevation
           fullWidth
