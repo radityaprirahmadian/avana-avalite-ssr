@@ -16,6 +16,9 @@ const theme = createMuiTheme({
       background: {
          default: '#fff',
       },
+      text: {
+         secondary: 'rgba(0, 0, 0, 1);'
+      },
       // whatsapp: {
       //    main: '#128C7E',
       //    backgroundColor: '#128C7E',
@@ -29,6 +32,9 @@ const theme = createMuiTheme({
             fontWeight: '700',
             fontSize: '14px',
             borderRadius: '8px'
+         },
+         outlinedSecondary: {
+            color: 'rgba(0, 0, 0, 1)'
          },
          // containedPrimary: {
          //    color: '#1A1A1A'

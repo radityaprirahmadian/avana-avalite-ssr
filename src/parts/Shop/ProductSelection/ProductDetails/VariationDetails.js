@@ -104,7 +104,6 @@ export default function VariationDetails(props) {
             }))
         }]
       }
-      
 
       setCombinationList(structuredData);
       setSelectedCombination(() => ({
@@ -152,7 +151,7 @@ export default function VariationDetails(props) {
             ? variantOnCart.quantity
             : prevState.quantity > variantList[selectedId].quantity
               ? variantList[selectedId].quantity
-              : prevState.quantity > 1 
+              : prevState.quantity > 1
                 ? prevState.quantity
                 : variantList[selectedId].quantity !== 0
                   ? 1
@@ -300,9 +299,15 @@ export default function VariationDetails(props) {
       </section>
       <section className="sticky bottom-0 py-4 bg-white">
         <Button
-          variant="contained"
+          variant={
+            orderState === "cancel" || orderState === "remove"
+            ? "outlined"
+            : "contained"
+          }
           color={
-            "danger"
+            orderState === "cancel" || orderState === "remove"
+              ? "secondary"
+              : "primary"
           }
           disableElevation
           fullWidth
