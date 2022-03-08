@@ -75,7 +75,6 @@ export default function Invoice({ shopDetails, orderToken }) {
    const [additionalInfoForm, setAdditionalInfoForm] = React.useState({});
    const [pricingCharge, setPricingCharge] = React.useState({
       totalTax: 0,
-      totalTaxShipping: 0,
       totalPrice: 0,
       subTotal: 0,
       discount: 0,
@@ -114,6 +113,7 @@ export default function Invoice({ shopDetails, orderToken }) {
          if (isSyncTotal) {
             clearTimeout(isSyncTotal);
          }
+         const discountActive = false;
          const products = Object.values(productsOrdered);
          const subTotal = products.reduce(
             (acc, { price, quantity }) => acc + price * quantity,
@@ -183,7 +183,6 @@ export default function Invoice({ shopDetails, orderToken }) {
                   setPricingCharge((prevState) => ({
                      ...prevState,
                      totalTax: totalTax,
-                     totalTaxShipping: 0,
                      subTotal: subTotal,
                      insuranceRate: insuranceRate,
                      discount: discount,
@@ -212,7 +211,13 @@ export default function Invoice({ shopDetails, orderToken }) {
                      is_self_pickup: Number(orderDetails.isShippingSelfPickup)
                    },
                }).then((res) => {
-                  const discount = 0;
+                  const discount = formInfoData.country === 100 &&
+                     subTotal > 50000 &&
+                     discountActive
+                        ? res.shipping_rate < 10000
+                           ? res.shipping_rate
+                           : 10000
+                        : 0;
                   setOrderDetails((prevState) => ({
                      ...prevState,
                      shippingMethod: res.shipping_method   
@@ -220,7 +225,6 @@ export default function Invoice({ shopDetails, orderToken }) {
                   setPricingCharge((prevState) => ({
                      ...prevState,
                      totalTax: totalTax,
-                     totalTaxShipping: res?.calculated_shipping_tax,
                      subTotal: subTotal,
                      discount: discount,
                      totalPrice: totalPrice + res.shipping_rate - discount,
@@ -599,7 +603,6 @@ export default function Invoice({ shopDetails, orderToken }) {
                order_product: Object.values(productsOrdered),
                sub_total: pricingCharge.subTotal,
                order_subtotal: pricingCharge.subTotal,
-               calculated_shipping_tax: pricingCharge.totalTaxShipping,
                total_shipping: pricingCharge.totalShipping - pricingCharge.discount,
                total_price: orderDetails.shippingMethod === 'shipper' ? pricingCharge.totalPrice : 0,
             })
