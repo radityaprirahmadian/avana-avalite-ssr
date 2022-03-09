@@ -426,9 +426,9 @@ export default function Invoice({ shopDetails, orderToken }) {
                   ...customFieldStatus
                });
                
-               setProductsOrdered(order?.order_product?.reduce((productsOrdered, product) => {
-                     const productKey = product.product_option_value_id ?
-                        `${product.product_id}_${product.product_option_value_id}` :
+               setProductsOrdered(order?.order_product?.reduce((productsOrdered, product, idx) => {
+                     const productKey = product.variations ?
+                        `${product.product_id}_${product.product_option_value_id}_${idx}` :
                         product.product_id;
                      return {
                         ...productsOrdered,
@@ -440,9 +440,9 @@ export default function Invoice({ shopDetails, orderToken }) {
                            price: product.price,
                            tax: product.tax_value,
                            weight: product.weight,
-                           variation: product.product_option_value
-                              ? product.product_option_value
-                              : null,
+                           variation: product.variations
+                              ? product.variations
+                              : (product?.product_option_value || null),
                            variation_option_id: product.product_option_value_id
                               ? product.product_option_value_id
                               : null
