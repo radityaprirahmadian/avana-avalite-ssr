@@ -89,7 +89,15 @@ export default function VariationDetails(props) {
           ?.filter((combination) => !combination.parent_id)
           ?.map((combination, idx) => {
             combination.child = combinationList
-              .filter((child) => child.parent_id === combination.id);
+              .filter((child) => child.parent_id === combination.id)
+              .sort(function(a, b) {
+                const keyA = a.name,
+                  keyB = b.name;
+                // Compare the 2 dates
+                if (keyA < keyB) return -1;
+                if (keyA > keyB) return 1;
+                return 0;
+              });
             selectedMeta[idx] = null;
             return combination;
           });
