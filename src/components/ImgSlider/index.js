@@ -207,6 +207,7 @@ export default function ImgDrawer(props) {
   }, [props]);
 
   useEffect(() => {
+    if (props?.images?.length === 1) return;
     setImgSelected(1);
     imgContainer.current.classList.add('shifting');
     imgContainer.current.style.left = `${-300}px`;
