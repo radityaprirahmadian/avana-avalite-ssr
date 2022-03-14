@@ -426,9 +426,9 @@ export default function Invoice({ shopDetails, orderToken }) {
                   ...customFieldStatus
                });
                
-               setProductsOrdered(order?.order_product?.reduce((productsOrdered, product, idx) => {
-                     const productKey = product.variations ?
-                        `${product.product_id}_${product.product_option_value_id}_${idx}` :
+               setProductsOrdered(order?.order_product?.reduce((productsOrdered, product) => {
+                     const productKey = product.product_variation_id || product.product_option_value_id ?
+                        `${product.product_id}_${product?.product_variation_id || product.product_option_value_id}` :
                         product.product_id;
                      return {
                         ...productsOrdered,
@@ -443,9 +443,9 @@ export default function Invoice({ shopDetails, orderToken }) {
                            variation: product.variations
                               ? product.variations
                               : (product?.product_option_value || null),
-                           variation_option_id: product.product_option_value_id
-                              ? product.product_option_value_id
-                              : null
+                           variation_option_id: product?.product_variation_id
+                              ? product?.product_variation_id
+                              : product?.product_option_value_id || null,
                         }
                      }
                   }, {})
