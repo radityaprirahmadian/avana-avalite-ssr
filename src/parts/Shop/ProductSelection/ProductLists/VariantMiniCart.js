@@ -26,6 +26,19 @@ export default function VariantMiniCart({
       ) || [],
     [productsOrdered, selectedId, selectedMeta]
   );
+  const optionData = useMemo(
+    () => {
+      return productData.variation.options
+        .reduce(
+          (reducer, item) => {
+            reducer[item.id] = item
+            return reducer;
+          },
+          {}
+        );
+    },
+    [productData]
+  );
 
   const toggleCart = useCallback(
     (event) => {
@@ -154,7 +167,7 @@ export default function VariantMiniCart({
                           <NumberRange
                             name={`${item.product_id}_${item.variation_option_id}`}
                             min="0"
-                            max={item.meta?.maxQuantity}
+                            max={item.meta?.maxQuantity || optionData?.[item.variation_option_id]?.quantity}
                             value={item?.quantity}
                             fnChange={fnChangeRangeProduct}
                           />
