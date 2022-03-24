@@ -44,7 +44,7 @@ jobs:
         run: aws s3 sync s3://avalite-ssr-production/.serverless .serverless --delete
 
       - name: serverless deploy
-        uses: serverless/github-action@master
+        uses: serverless/github-action@v2
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
