@@ -292,7 +292,11 @@ export default function VariationDetails(props) {
         </div>
         <div className="flex justify-end">
           {
-            selectedCombination.isFilledAll && (
+            (selectedCombination.isFilledAll && Number(variantSelected?.meta?.quantity) === 0) ? (
+              <div className="text-sm text-red-500 font-bold">
+                {lang?.text__out_of_stock || 'Out of stock'}
+              </div>
+            ) : selectedCombination.isFilledAll ? (
               <NumberRange
                 name={`${item.id}_${variantSelected?.meta?.id}`}
                 min="0"
@@ -301,7 +305,7 @@ export default function VariationDetails(props) {
                 fnChange={changeRangeQuantity}
                 // fnChange={() => {}}
               />
-            )
+            ) : null
           }
         </div>
       </section>
