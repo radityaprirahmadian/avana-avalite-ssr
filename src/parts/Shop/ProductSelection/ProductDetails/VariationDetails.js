@@ -201,6 +201,13 @@ export default function VariationDetails(props) {
         orderQuantity: variantSelected.quantity,
       };
       fnSelectProduct(productOrdered, {...variantSelected.meta, isSelected: true})
+    } else {
+      fnChangeRangeProduct({
+        target: {
+          name: `${item.id}_${variantSelected?.meta?.id}`,
+          value: 0,
+        }
+      })
     }
     fnToggleSelectVariant();
   }, [variantSelected]);
