@@ -1,21 +1,14 @@
-import React, { useCallback, useEffect, useContext, useState } from "react";
+import React, { useCallback, useState } from "react";
 import Button from "src/components/Button";
 import { Close } from '@material-ui/icons';
 import Modal from "src/components/Modal";
-import Image from "src/components/Container/Image";
-import NumberRange from "src/components/form/NumberRange";
 import OrderItem from "./OrderItem";
 
 import useChildEvent from "src/helpers/useChildEvent";
-import formatThousand from 'src/helpers/formatThousand';
 
 export default function VariantMiniCart({
-  lang,
   productsOrdered,
-  selectedMetaList,
   CheckoutComponent,
-  fnToggleSelectProduct,
-  fnToggleSelectVariant,
   fnChangeRangeProduct,
 }) {
   const [isDisplay, setIsDisplay] = useState(false);
