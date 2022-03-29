@@ -22,6 +22,7 @@ let timeoutSearch = null
 export default function ProductSelection(props) {
    const MAINCONTEXT = React.useContext(MainContext);
    const lang = Localization[MAINCONTEXT?.locale];
+   const whitelistFeatures= MAINCONTEXT?.whitelistFeatures;
    // const [lang, setLang] = React.useState({});
    const [PRODUCTS, setProducts] = React.useState({
       data: {},
@@ -323,31 +324,34 @@ export default function ProductSelection(props) {
       <div className="px-4 -mx-4 relative flex flex-col flex-1">
          {
             (!selectedVariant.isSelect && !props.productDetails.isViewProductDetail) && (
-               <>
-                  <div className="sticky top-0 bg-white z-10">
-                     <TextField
-                        id="product-search"
-                        type="search"
-                        value={props.search}
-                        onChange={(e) => fnSearch(e.target.value)}
-                        label={lang?.text__search || 'Search Product'}
-                        InputProps={{
-                           startAdornment: (
-                              <InputAdornment position="start">
-                                 <Search />
-                              </InputAdornment>
-                           ),
-                        }}
+               <div className="z-30 sticky top-0 bg-white flex flex-col flex-1">
+                  <div className="flex items-end">
+                     <div className="flex-1 mr-2">
+                        <TextField
+                           id="product-search"
+                           type="search"
+                           value={props.search}
+                           onChange={(e) => fnSearch(e.target.value)}
+                           label={lang?.text__search || 'Search Product'}
+                           InputProps={{
+                              startAdornment: (
+                                 <InputAdornment position="start">
+                                    <Search />
+                                 </InputAdornment>
+                              ),
+                           }}
+                        />
+                     </div>
+                  </div>
+                  <div>
+                     <CategoriesSelection
+                        lang={lang}
+                        categories={CATEGORIES}
+                        selectedCategory={selectedCategory}
+                        setSelectedCategory={setSelectedCategory}
                      />
                   </div>
-
-                  <CategoriesSelection
-                     lang={lang}
-                     categories={CATEGORIES}
-                     selectedCategory={selectedCategory}
-                     setSelectedCategory={setSelectedCategory}
-                  />
-               </>
+               </div>
             )
          }
          {
@@ -357,6 +361,7 @@ export default function ProductSelection(props) {
                   productId={props.productDetails.id}
                   productsOrdered={props.productsOrdered}
                   fnSelectProduct={fnSelectProduct}
+                  whitelistFeatures={whitelistFeatures}
                   fnChangeRangeProduct={fnChangeRangeProduct}
                   fnToggleSelectVariant={fnToggleSelectVariant}
                   fnToggleSelectProduct={fnToggleSelectProduct}
@@ -368,6 +373,7 @@ export default function ProductSelection(props) {
                   selectedMetaList={selectedMetaList}
                   productsOrdered={props.productsOrdered}
                   selectedVariant={selectedVariant}
+                  whitelistFeatures={whitelistFeatures}
                   fnToggleSelectVariant={fnToggleSelectVariant}
                   fnToggleSelectProduct={fnToggleSelectProduct}
                   fnSelectProduct={fnSelectProduct}
