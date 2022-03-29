@@ -294,6 +294,7 @@ export default function Shop({ shopDetails }) {
    const CONTEXT = {
       data,
       locale,
+      whitelistFeatures,
    }
 
    return (
