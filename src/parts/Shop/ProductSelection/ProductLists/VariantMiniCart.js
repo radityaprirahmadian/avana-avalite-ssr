@@ -1,7 +1,9 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useContext, useMemo, useState } from "react";
 import { Button } from "@material-ui/core";
 import { Close } from '@material-ui/icons';
 import Modal from "src/components/Modal";
+
+import MainContext from "src/parts/Context";
 
 import useChildEvent from "src/helpers/useChildEvent";
 import VariantItem from "./VariantItem";
@@ -16,6 +18,8 @@ export default function VariantMiniCart({
   fnChangeRangeProduct,
 }) {
   const [isDisplay, setIsDisplay] = useState(false);
+  const MAINCONTEXT = useContext(MainContext);
+  const whitelistFeatures = MAINCONTEXT?.whitelistFeatures;
   const variantOrdered = useMemo(
     () => Object?.values(productsOrdered)
       ?.filter(
@@ -50,6 +54,18 @@ export default function VariantMiniCart({
     },
     [toggleCart]
   );
+  const handleCancelProduct = useCallback(
+    (id) => {
+       fnChangeRangeProduct({
+          target: {
+             type: 'no_persist',
+             name: id,
+             value: 0,
+          }
+       })
+    },
+    [fnChangeRangeProduct],
+ );
 
   return (
     <Modal
@@ -95,7 +111,10 @@ export default function VariantMiniCart({
                     variantOrdered.map((item) => (
                       <VariantItem
                         item={item}
+                        lang={lang}
+                        whitelistFeatures={whitelistFeatures}
                         optionData={optionData}
+                        handleCancelProduct={handleCancelProduct}
                         fnChangeRangeProduct={fnChangeRangeProduct}
                       />
                     ))

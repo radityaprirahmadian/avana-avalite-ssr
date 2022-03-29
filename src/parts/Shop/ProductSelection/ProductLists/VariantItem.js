@@ -1,11 +1,15 @@
 import React from "react";
 import Image from 'src/components/Container/Image';
+import Button from "src/components/Button";
 import NumberRange from 'src/components/form/NumberRange';
 import formatThousand from 'src/helpers/formatThousand';
 
 export default function VariantItem({
   item,
   optionData,
+  lang,
+  whitelistFeatures,
+  handleCancelProduct,
   fnChangeRangeProduct,
 }) {
   return (
@@ -78,13 +82,26 @@ export default function VariantItem({
         </div>
       </div>
       <div className="self-end">
-        <NumberRange
-          name={`${item.product_id}_${item.variation_option_id}`}
-          min="0"
-          max={item.meta?.maxQuantity || optionData?.[item.variation_option_id]?.quantity}
-          value={item?.quantity}
-          fnChange={fnChangeRangeProduct}
-        />
+        {!whitelistFeatures?.['catalog_wacommerce'] ? (
+            <NumberRange
+              name={`${item.product_id}_${item.variation_option_id}`}
+              min="0"
+              max={item.meta?.maxQuantity || optionData?.[item.variation_option_id]?.quantity}
+              value={item?.quantity}
+              fnChange={fnChangeRangeProduct}
+            />
+          ) : (
+            <Button
+              type="button"
+              className="is-radiusless is-shadowless"
+              variant="outlined"
+              color="secondary"
+              onClick={() => handleCancelProduct(`${item.product_id}_${item.variation_option_id}`)}
+              disableElevation
+            >
+              {(lang?.btn__cancel || 'Cancel')}
+            </Button>
+        )}
       </div>
     </div>
   )

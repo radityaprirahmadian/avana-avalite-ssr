@@ -9,6 +9,7 @@ import products from 'src/constants/api/products';
 function ProductDetails(props) {
   const {
     lang,
+    whitelistFeatures,
     productId,
     productsOrdered,
     selectedVariant,
@@ -90,6 +91,7 @@ function ProductDetails(props) {
       // />
       <VariationDetails
         lang={lang}
+        whitelistFeatures={whitelistFeatures}
         item={selectedVariant.product}
         selectedMeta={selectedMetaList?.[selectedVariant?.product?.id] || {}}
         productsOrdered={productsOrdered}

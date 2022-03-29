@@ -7,9 +7,11 @@ import OrderItem from "./OrderItem";
 import useChildEvent from "src/helpers/useChildEvent";
 
 export default function VariantMiniCart({
+  lang,
   productsOrdered,
   CheckoutComponent,
   fnChangeRangeProduct,
+  whitelistFeatures,
 }) {
   const [isDisplay, setIsDisplay] = useState(false);
   const toggleCart = useCallback(
@@ -68,6 +70,8 @@ export default function VariantMiniCart({
                   {
                     Object.keys(productsOrdered || {}).map((key) => (
                       <OrderItem
+                        lang={lang}
+                        whitelistFeatures={whitelistFeatures}
                         item={productsOrdered[key]}
                         keyItem={key}
                         fnChangeRangeProduct={fnChangeRangeProduct}

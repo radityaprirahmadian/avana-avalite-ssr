@@ -1,5 +1,6 @@
-import React, { lazy, Suspense } from 'react'
+import React, { lazy, Suspense, useContext } from 'react'
 
+import MainContext from "src/parts/Context";
 // import ProductViewer from './ProductViewer'
 // import Variation from './Variation'
 import images from 'src/constants/images'
@@ -13,17 +14,20 @@ const ProductViewer = lazy(() =>
 );
 
 export default function ProductLists(props) {
-   const { products, selectedVariant, lang } = props
+   const { products, selectedVariant, lang, whitelistFeatures } = props;
+   const MAINCONTEXT = useContext(MainContext);
+   const isLoadingData = MAINCONTEXT?.isLoadingData;
    
    return (
       <Suspense fallback={<Spinner size={0.5} />}>
-         {(Object.values(products.data).length > 0) ? (
+         {(!isLoadingData && Object.values(products.data).length > 0) ? (
             <>
                {Object.values(products.data).map((item) => (
                   <div key={item.id}>
                      <ProductViewer
                         lang={lang}
                         item={item}
+                        whitelistFeatures={whitelistFeatures}
                         selectedMeta={props.selectedMetaList[item.id]}
                         productsOrdered={props.productsOrdered}
                         fnSelectProduct={props.fnSelectProduct}
@@ -47,7 +51,7 @@ export default function ProductLists(props) {
             </>
          )}
          {
-            (products.status === 'loading' && !selectedVariant.isSelect) && (
+            (isLoadingData || products.status === 'loading' && !selectedVariant.isSelect) && (
                <div className="my-2">
                   {Array(3)
                      .fill()

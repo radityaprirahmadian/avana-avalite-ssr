@@ -18,6 +18,7 @@ export default function VariationDetails(props) {
   const {
     lang,
     item,
+    whitelistFeatures,
     productsOrdered,
     fnSelectProduct,
     fnChangeRangeProduct,
@@ -54,27 +55,39 @@ export default function VariationDetails(props) {
   const orderState = useMemo(
     () => {
       const isOrdered = productsOrdered?.[`${item.id}_${variantSelected?.meta?.id}`];
-      
-      return variantSelected?.quantity > 0 && isOrdered
-        ? 'update'
-        : variantSelected?.quantity > 0
-          ? 'buy'
-          : variantSelected?.quantity === 0 && isOrdered
-            ? 'remove'
-            : 'cancel';
+      const catalogWhitelist = whitelistFeatures?.['catalog_wacommerce'];
+      if (catalogWhitelist) {
+        return variantSelected?.quantity > 0 && isOrdered
+          ? "remove"
+          : variantSelected?.meta?.id
+            ? "choose"
+            : "cancel"
+      } else {
+        return variantSelected?.quantity > 0 && isOrdered
+          ? 'update'
+          : variantSelected?.quantity > 0
+            ? 'buy'
+            : variantSelected?.quantity === 0 && isOrdered
+              ? 'remove'
+              : 'cancel';
+      }
     },
     [variantSelected]
   );
 
   const submitButtonLang = useMemo(
     () => {
+      const catalogWhitelist = whitelistFeatures?.['catalog_wacommerce'];
+      if (orderState === 'remove' && catalogWhitelist) return lang?.btn__cancel || 'Cancel'
       return orderState === 'update'
         ? lang?.btn__update || 'Update'
-        : orderState === 'buy'
-          ? lang?.btn__buy || 'Buy'
-          : orderState === 'remove'
-            ? lang?.btn__remove || 'Remove'
-            : lang?.btn__back || 'Back';
+        : orderState === 'choose'
+          ? lang?.btn__choose || 'Choose'
+          : orderState === 'buy'
+            ? lang?.btn__buy || 'Buy'
+            : orderState === 'remove' && catalogWhitelist
+              ? lang?.btn__remove || 'Remove'
+              : lang?.btn__back || 'Back';
     },
     [orderState]
   );
@@ -195,7 +208,7 @@ export default function VariationDetails(props) {
   );
 
   const handleSubmitProduct = useCallback(() => {
-    if (variantSelected.quantity > 0) {
+    if (orderState !== "remove" && orderState !== "cancel") {
       const productOrdered = {
         ...item,
         orderQuantity: variantSelected.quantity,
@@ -210,7 +223,7 @@ export default function VariationDetails(props) {
       })
     }
     fnToggleSelectVariant();
-  }, [variantSelected]);
+  }, [variantSelected, orderState]);
 
   useEffect(
     () => {
@@ -299,11 +312,12 @@ export default function VariationDetails(props) {
         </div>
         <div className="flex justify-end">
           {
-            (selectedCombination.isFilledAll && Number(variantSelected?.meta?.quantity) === 0) ? (
+            (!whitelistFeatures?.['catalog_wacommerce']
+              && (selectedCombination.isFilledAll && Number(variantSelected?.meta?.quantity) === 0)) ? (
               <div className="text-sm text-red-500 font-bold">
                 {lang?.text__out_of_stock || 'Out of stock'}
               </div>
-            ) : selectedCombination.isFilledAll ? (
+            ) : selectedCombination.isFilledAll && !whitelistFeatures?.['catalog_wacommerce'] ? (
               <NumberRange
                 name={`${item.id}_${variantSelected?.meta?.id}`}
                 min="0"

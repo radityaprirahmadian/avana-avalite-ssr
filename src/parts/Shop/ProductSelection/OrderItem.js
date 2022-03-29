@@ -1,7 +1,9 @@
-import React, { memo, useMemo } from "react";
+import React, { memo, useMemo, useCallback } from "react";
 import Image from "src/components/Container/Image";
 import NumberRange from "src/components/form/NumberRange";
 import formatThousand from 'src/helpers/formatThousand';
+import { Button } from '@material-ui/core';
+
 const OrderItem = ({
   item,
   keyItem,
@@ -13,14 +15,29 @@ const OrderItem = ({
     quantity,
     price,
     meta,
+    lang,
+    whitelistFeatures,
   } = useMemo(
     () => item,
     [item]
   );
 
+  const handleCancelProduct = useCallback(
+    (id) => {
+       fnChangeRangeProduct({
+          target: {
+             type: 'no_persist',
+             name: id,
+             value: 0,
+          }
+       })
+    },
+    [fnChangeRangeProduct],
+ );
+
   return (
     <div className="flex flex-col py-4 border-b border-gray-200 px-2">
-      <div className="flex">
+      <div className="flex items-center">
         <div className="w-auto cursor-pointer">
           <div className="relative">
             <div
@@ -86,15 +103,31 @@ const OrderItem = ({
               </div>
             </div>
         </div>
-      </div>
-      <div className="self-end">
-        <NumberRange
-          name={`${keyItem}`}
-          min="0"
-          max={meta?.maxQuantity}
-          value={quantity}
-          fnChange={fnChangeRangeProduct}
-        />
+        {!whitelistFeatures?.['catalog_wacommerce'] ? (
+          <div className="self-end">
+            <NumberRange
+              name={`${keyItem}`}
+              min="0"
+              max={meta?.maxQuantity}
+              value={quantity}
+              fnChange={fnChangeRangeProduct}
+            />
+          </div>
+        ) : (
+          <div>
+          <Button
+            type="button"
+            className="is-radiusless is-shadowless"
+            variant="outlined"
+            color="secondary"
+            onClick={() => handleCancelProduct(keyItem)}
+            disableElevation
+          >
+            {(lang?.btn__cancel || 'Cancel')}
+          </Button>
+          </div>
+        )
+      }
       </div>
     </div>
   )

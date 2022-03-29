@@ -75,6 +75,7 @@ export default function ProductViewer(props) {
           onClick={() => toggle()}
           lang={props.lang}
           item={props.item}
+          whitelistFeatures={props.whitelistFeatures}
           selectedMeta={props.selectedMeta}
           productsOrdered={props.productsOrdered}
           fnSelectProduct={props.fnSelectProduct}

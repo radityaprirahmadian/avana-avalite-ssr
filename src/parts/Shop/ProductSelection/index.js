@@ -23,6 +23,7 @@ let timeoutSearch = null
 export default function ProductSelection(props) {
    const MAINCONTEXT = React.useContext(MainContext);
    const lang = Localization[MAINCONTEXT?.locale];
+   const whitelistFeatures= MAINCONTEXT?.whitelistFeatures;
    // const [lang, setLang] = React.useState({});
    const [PRODUCTS, setProducts] = React.useState({
       data: {},
@@ -372,6 +373,7 @@ export default function ProductSelection(props) {
                            productsOrdered={props.productsOrdered}
                            selectedMetaList={selectedMetaList}
                            fnSelectProduct={fnSelectProduct}
+                           whitelistFeatures={whitelistFeatures}
                            fnChangeRangeProduct={fnChangeRangeProduct}
                            fnToggleSelectVariant={fnToggleSelectVariant}
                            fnToggleSelectProduct={fnToggleSelectProduct}
@@ -398,6 +400,7 @@ export default function ProductSelection(props) {
                   productsOrdered={props.productsOrdered}
                   selectedVariant={selectedVariant}
                   fnSelectProduct={fnSelectProduct}
+                  whitelistFeatures={whitelistFeatures}
                   fnChangeRangeProduct={fnChangeRangeProduct}
                   fnToggleSelectVariant={fnToggleSelectVariant}
                   fnToggleSelectProduct={fnToggleSelectProduct}
@@ -409,6 +412,7 @@ export default function ProductSelection(props) {
                   selectedMetaList={selectedMetaList}
                   productsOrdered={props.productsOrdered}
                   selectedVariant={selectedVariant}
+                  whitelistFeatures={whitelistFeatures}
                   fnToggleSelectVariant={fnToggleSelectVariant}
                   fnToggleSelectProduct={fnToggleSelectProduct}
                   fnSelectProduct={fnSelectProduct}
