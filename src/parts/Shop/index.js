@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import mixpanel from 'mixpanel-browser';
 
@@ -78,10 +78,78 @@ export default function Shop({ shopDetails }) {
       [setData, setStatus]
    )
 
+   const handleRedirectAnalyticsOrder = useCallback(
+      async ({
+         product_ordered,
+         order_id,
+         isViaWA,
+         waRotatorId,
+      }) => {
+         const { name, phoneNumber } = data;
+         const catalogWhitelist = whitelistFeatures?.['catalog_wacommerce'];
+         let urlRedirect = `/${router?.query?.shop}/${btoa(btoa(order_id))}`;
+         if (isViaWA) {
+            const products = product_ordered
+               .map(
+                  (product, idx) =>
+                     `${idx + 1}. ${product.name}${
+                        product.variation ? ` (${product.variation}) ` : ' '
+                     }${catalogWhitelist
+                        ? ""
+                        : `*x ${product.quantity}*\n`
+                     }`
+               )
+               .join(''); 
+            let messages = encodeURIComponent(writeLocalization(
+               lang?.text__whatsapp_order_message || `Hi [0], I'm [1].\n\nI'm interested to order[2].[3]`,
+               [
+                  shopDetails.details.shop_info.shop_name,
+                  name,
+                  products.length
+                     ? `:\n${products}`
+                     : "",
+                  catalogWhitelist
+                     ? ""
+                     : `\n${lang?.text__whatsapp_order_link || "Order link: "} ${window.location.origin}${urlRedirect}`
+               ]
+            ).join(''));
+            const waPhoneNumber = await whatsapp.whatsappRotator({
+                  phone_number: phoneNumber,
+                  ...(waRotatorId ? {whatsapp_info_id: waRotatorId} : {})
+               }).then(({whatsapp}) => {
+                  return whatsapp.phone_no
+               }).catch(() => {}) || shopDetails.details.whatsapp_no?.split('+')?.pop();
+
+            urlRedirect = mobileTabletCheck()
+               ? `whatsapp://send?phone=${waPhoneNumber}&text=${messages}`
+               : `https://web.whatsapp.com/send?phone=${waPhoneNumber}&text=${messages}`;
+               urlRedirect
+            setRedirectUrl(urlRedirect);
+            fnAnalyticsOrderCreated(order_id).finally(() => {
+               if (refRedirect.current) {
+                  refRedirect.current.click();
+               } else {
+                  window.open(urlRedirect, '_blank');
+               }
+            })
+         } else {
+            fnAnalyticsOrderCreated(order_id).finally(() => {
+               window.location = urlRedirect;
+            })
+         }
+         setStatusOrder((prevState) => ({
+            ...prevState,
+            isCreateOrder: false,
+            isCreateOrderViaWA: false,
+         }))
+      }
+   );
+
    const fnCreateOrder= React.useCallback((isViaWA) => {
       const { name, phoneNumber, productsOrdered } = data;
       const { details: waNumberDetails, mixpanelWhatsappInfo } = waRotatorData;
       const waRotatorId = waNumberDetails.whatsapp_info_id;
+      const catalogWhitelist = whitelistFeatures?.['catalog_wacommerce'];
       let product_ordered = Object.values(productsOrdered);
 
       setStatusOrder((prevState) => ({
@@ -91,7 +159,14 @@ export default function Shop({ shopDetails }) {
       }))
 
       fbInitiateCheckout();
-
+      if (catalogWhitelist) {
+         handleRedirectOrder({
+            product_ordered,
+            isViaWA,
+            order_id: null,
+            waRotatorId: waRotatorId,
+         })
+      } else 
       orders.create({
          checkout_platform: 'avalite',
          customer_address1: '',
@@ -143,44 +218,12 @@ export default function Shop({ shopDetails }) {
                $phone: phoneNumber,
             });
 
-            let urlRedirect = `/${router?.query?.shop}/${btoa(btoa(res.order_id))}`;
-            if (isViaWA) {
-               const products = product_ordered
-                  .map(
-                  (product, idx) =>
-                     `${idx + 1}. ${product.name}${
-                        product.variation ? ` (${product.variation}) ` : ' '
-                     }*x ${product.quantity}*\n`
-                  )
-                  .join(''); 
-               let messages = encodeURIComponent(writeLocalization(
-                  lang?.text__whatsapp_order_message || `Hi [0], I'm [1].\n\nI'm interested to order :\n[2].\nOrder link : [3]`,
-                  [shopDetails.details.shop_info.shop_name, name, products, `${window.location.origin}${urlRedirect}`]
-               ).join(''));
-               const waPhoneNumber = await whatsapp.whatsappRotator({
-                     phone_number: phoneNumber,
-                     ...(waRotatorId ? {whatsapp_info_id: waRotatorId} : {})
-                  }).then(({whatsapp}) => {
-                     return whatsapp.phone_no
-                  }).catch(() => {}) || shopDetails.details.whatsapp_no?.split('+')?.pop();;
-
-               urlRedirect = mobileTabletCheck()
-                  ? `whatsapp://send?phone=${waPhoneNumber}&text=${messages}`
-                  : `https://web.whatsapp.com/send?phone=${waPhoneNumber}&text=${messages}`;
-                  urlRedirect
-               setRedirectUrl(urlRedirect);
-               fnAnalyticsOrderCreated(res.order_id).finally(() => {
-                  if (refRedirect.current) {
-                     refRedirect.current.click();
-                  } else {
-                     window.open(urlRedirect, '_blank');
-                  }
-               })
-            } else {
-               fnAnalyticsOrderCreated(res.order_id).finally(() => {
-                  window.location = urlRedirect;
-               })
-            }
+            handleRedirectAnalyticsOrder({
+               product_ordered: product_ordered,
+               order_id: res.product_ordered,
+               isViaWA: isViaWA,
+               waRotatorId: waRotatorId,
+            })
             // router.push(urlRedirect);
          }).catch(() => {
             setStatusOrder((prevState) => ({
@@ -294,6 +337,8 @@ export default function Shop({ shopDetails }) {
    const CONTEXT = {
       data,
       locale,
+      whitelistFeatures,
+      isLoadingData: Object.values(loadingData).every(item => item),
    }
 
    return (

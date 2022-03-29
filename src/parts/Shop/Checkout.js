@@ -4,9 +4,15 @@ import { Button } from '@material-ui/core'
 import { WhatsappButton } from 'src/components/Button'
 import { LocalMall } from '@material-ui/icons'
 
+import MainContext from 'src/parts/Context';
+
 import CircularProgress from '@material-ui/core/CircularProgress'
 
 export default function Checkout(props) {
+   const MAINCONTEXT = React.useContext(MainContext);
+   const whitelistFeatures = MAINCONTEXT?.whitelistFeatures;
+   const isLoadingData = MAINCONTEXT?.isLoadingData;
+
    return (
       <div
          className="sticky footer-checkout pb-2 bg-white w-full"
@@ -24,9 +30,9 @@ export default function Checkout(props) {
                      }
                   }
                   disabled={
-                     props.data.name === '' ||
-                     Object.values(props.data.productsOrdered).length === 0 ||
-                     props.status.isCreatingOrder
+                     props.data.name === ''
+                     || (!whitelistFeatures?.['catalog_wacommerce'] && Object.values(props.data.productsOrdered).length === 0)
+                     || props.status.isCreatingOrder
                   }
                   loading={props.statusOrder.isCreateOrderViaWA}
                >
@@ -34,27 +40,41 @@ export default function Checkout(props) {
                </WhatsappButton>
             </div>
             <div>
-               <Button
-                  variant="contained"
-                  color="primary"
-                  className="w-auto pl-2 h-full"
-                  disableElevation
-                  startIcon={props.statusOrder.isCreateOrder || <LocalMall />}
-                  onClick={() => {
-                     !props.statusOrder.isCreateOrder && props.fnCreateOrder();
-                  }}
-                  disabled={
-                     props.data.name === '' ||
-                     Object.values(props.data.productsOrdered).length === 0 ||
-                     props.statusOrder.isCreateOrder
-                  }
-               >
-                  {props.statusOrder.isCreateOrder ? (
-                     <CircularProgress size={20} />
-                  ) : (
-                     props.lang?.btn__buy || 'Buy'
-                  )}
-               </Button>
+               {
+                  isLoadingData ? (
+                     <div
+                        className="flex items-center mb-2"
+                     >
+                        <div className="flex-1">
+                           <div className="loading rounded h-8">
+                              <div className="invisible">loading</div>
+                           </div>
+                        </div>
+                     </div>
+                  ) : !whitelistFeatures?.['catalog_wacommerce'] ? (
+                     <Button
+                        variant="contained"
+                        color="primary"
+                        className="w-auto pl-2 h-full"
+                        disableElevation
+                        startIcon={props.statusOrder.isCreateOrder || <LocalMall />}
+                        onClick={() => {
+                           !props.statusOrder.isCreateOrder && props.fnCreateOrder();
+                        }}
+                        disabled={
+                           props.data.name === '' ||
+                           Object.values(props.data.productsOrdered).length === 0 ||
+                           props.statusOrder.isCreateOrder
+                        }
+                     >
+                        {props.statusOrder.isCreateOrder ? (
+                           <CircularProgress size={20} />
+                        ) : (
+                           props.lang?.btn__buy || 'Buy'
+                        )}
+                     </Button>
+                  ) : null
+               }
             </div>
          </div>
       </div>
