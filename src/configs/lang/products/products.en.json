@@ -1,5 +1,7 @@
 {
   "btn__buy": "Buy",
+  "btn__choose": "Choose",
+  "btn__cancel": "Cancel",
   "btn__edit": "Edit",
   "btn__view": "View",
   "btn__add_more_variants": "Add more variants",

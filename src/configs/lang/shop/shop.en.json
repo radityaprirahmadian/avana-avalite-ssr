@@ -1,5 +1,6 @@
 {
-  "text__whatsapp_order_message": "Hi [0], I'm [1].\n\nI'm interested to order :\n[2].\nOrder link : [3]",
+  "text__whatsapp_order_message": "Hi [0], I'm [1].\n\nI'm interested to order[2].[3]",
+  "text__whatsapp_order_link": "Order link: ",
   "text__greeting": "Welcome to",
   "text__powered_by": "Powered By",
   "label__name": "Your Name",
