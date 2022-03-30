@@ -160,13 +160,13 @@ export default function Shop({ shopDetails }) {
 
       fbInitiateCheckout();
       if (catalogWhitelist) {
-         handleRedirectOrder({
+         handleRedirectAnalyticsOrder({
             product_ordered,
             isViaWA,
             order_id: null,
             waRotatorId: waRotatorId,
          })
-      } else 
+      } else
       orders.create({
          checkout_platform: 'avalite',
          customer_address1: '',
