@@ -220,7 +220,7 @@ export default function Shop({ shopDetails }) {
 
             handleRedirectAnalyticsOrder({
                product_ordered: product_ordered,
-               order_id: res.product_ordered,
+               order_id: res.order_id,
                isViaWA: isViaWA,
                waRotatorId: waRotatorId,
             })
