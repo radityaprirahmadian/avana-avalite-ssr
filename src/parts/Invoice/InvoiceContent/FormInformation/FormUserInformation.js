@@ -25,6 +25,7 @@ export default function FormUserInformation({
    locationAddress,
    isAbleSelfPickup,
    isShippingSelfPickup,
+   isInsuranceMandatory,
    fnGetStates,
    fnGetCities,
    fnGetCouriers,
@@ -267,6 +268,7 @@ export default function FormUserInformation({
                      inputProps= {{
                         name: 'shipperUseInsurance',
                      }}
+                     disabled={isInsuranceMandatory}
                      value={formInfoData.shipperUseInsurance}
                   >
                      <option aria-label="None" value={0}>

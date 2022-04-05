@@ -44,6 +44,7 @@ export default function FormInformation({
    const [isLoadShipping, setIsLoadShipping] = useState(false);
    const MAINCONTEXT = useContext(MainContext);
    const lang = Localization[MAINCONTEXT?.locale];
+   const [isInsuranceMandatory, setIsInsuranceMandatory] = useState(false);
    
    const fnInitFormsInfo = React.useCallback(() => {
       fnGetCountries()
@@ -99,6 +100,7 @@ export default function FormInformation({
          shipperRateId: 0,
          shipperUseInsurance: 4
       });
+      setIsInsuranceMandatory(false);
       fnUpdateOrderDetails((prevState) => ({
          ...prevState,
          selectedCountry: COUNTRIES.data?.find((el) => el.country_id === changeValue),
@@ -134,6 +136,7 @@ export default function FormInformation({
          shipperRateId: 0,
          shipperUseInsurance: 4
       });
+      setIsInsuranceMandatory(true);
       fnUpdateOrderDetails((prevState) => ({
          ...prevState,
          selectedState: STATES.data?.find((el) => el.country_id === changeValue),
@@ -286,6 +289,7 @@ export default function FormInformation({
             shipperUseInsurance: 4
          });
       }
+      setIsInsuranceMandatory(true);
       fnGetCouriers(eventValue);
    }, [fnChange, orderDetails]);
 
@@ -318,6 +322,11 @@ export default function FormInformation({
             : 4,
          shipperUseInsurance: 4,
       });
+      setService((prevState) => ({
+         ...prevState,
+         selected: null,
+      }));
+      setIsInsuranceMandatory(true);
       fnUpdateOrderDetails((prevState) => ({
          ...prevState,
          isShippingSelfPickup: !!newValue?.isSelfPickup
@@ -346,10 +355,25 @@ export default function FormInformation({
          ...prevState,
          selected: newValue,
       }));
+      console.log(newValue)
+      if (!!newValue?.compulsory_insurance) {
+         fnChange({
+            target: {
+               type: 'no_persist',
+               name: 'shipperUseInsurance',
+               value: "1",
+            },
+         });
+         setIsInsuranceMandatory(true);
+      } else {
+         setIsInsuranceMandatory(false);
+      }
    }, [fnChange]);
 
    const fnChangeInsurance = React.useCallback((event) => {
-      fnChange(event);
+      console.log(event.target);
+      if (!isInsuranceMandatory)
+         fnChange(event);
    }, [fnChange]);
 
    const fnGetStates = React.useCallback((countryId = null) => {
@@ -629,7 +653,9 @@ export default function FormInformation({
 
    React.useEffect(() => {
       fnInitFormsInfo();
-   }, [fnInitFormsInfo]);
+      if (SERVICES?.selected)
+         setIsInsuranceMandatory(SERVICES.selected?.compulsory_insurance)
+   }, [fnInitFormsInfo, SERVICES]);
 
 
    const CONTEXT = {
@@ -661,6 +687,7 @@ export default function FormInformation({
                locationAddress={orderDetails.locationAddress}
                isAbleSelfPickup={orderDetails.isAbleSelfPickup}
                isShippingSelfPickup={orderDetails.isShippingSelfPickup}
+               isInsuranceMandatory={isInsuranceMandatory}
                fnGetStates={fnGetStates}
                fnGetCities={fnGetCities}
                fnGetCouriers={fnGetCouriers}
