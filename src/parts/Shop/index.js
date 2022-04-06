@@ -366,7 +366,7 @@ export default function Shop({ shopDetails }) {
                fnSetProductDetails={setProductDetails}
             />
             {(!productDetails.isViewProductDetail && !productDetails.isViewProductVariant) && (
-               <div className="text-xs text-center py-2 sticky bottom-0 bg-white z-10">
+               <div className="text-xs text-center py-2 sticky bottom-0 bg-white z-20">
                   <Checkout
                      lang={lang}
                      data={data}
