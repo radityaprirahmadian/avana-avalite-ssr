@@ -13,4 +13,6 @@ export default {
    },
    whitelist: () =>
       avaprotected.get(`/whitelist-features`).then((res) => res),
+   sliders: () =>
+      avaprotected.get(`/sliders`).then((res) => res),
 }
