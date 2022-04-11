@@ -26,6 +26,11 @@ export default (props) => (
                      <Spinner
                         className="m-0 flex-none justify-start"
                         size={0.25}
+                        style={{
+                           margin:'0',
+                           position: 'absolute',
+                           right: '45px'
+                        }}
                      />
                }
                {params.InputProps?.endAdornment}
