@@ -10,16 +10,23 @@ export default function writeLocalization(string = '', collections = []) {
   });
 };
 
-export const getCurrentLang = () => {
+export const getCurrentLang = (shopOriginLang) => {
+  const defaultLang = shopOriginLang === "id" ? shopOriginLang : "en";
   try {
     const lang = localStorage.get('lang');
-    return lang?.toLowerCase() ?? navigator.language.split("-")[0];
+
+    return lang?.toLowerCase()
+      ? lang?.toLowerCase()
+      : shopOriginLang === "id"
+        ? shopOriginLang
+        : navigator.language.split("-")[0];
   } catch(e) {
-    return 'en'
+    return defaultLang
   }
 };
 
 export const setCurrentLang = (lang) => {
+  console.log('setting', lang)
   localStorage.set('lang', lang);
   document.querySelector('html').setAttribute('lang', lang);
 };
