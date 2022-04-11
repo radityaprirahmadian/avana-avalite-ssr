@@ -316,15 +316,16 @@ export default function Shop({ shopDetails }) {
          })
    }
 
-   const fnSelectLocale = React.useCallback((lang) => {
-      setLocale(lang);
-      setCurrentLang(lang);
+   const fnSelectLocale = React.useCallback((selectedLang) => {
+      setLocale(selectedLang);
+      setCurrentLang(selectedLang);
    }, [setLocale, setCurrentLang]);
 
    React.useEffect(() => {
       STORAGE.set('token', shopDetails.token)
       STORAGE.set('details', shopDetails.details)
-      fnSelectLocale(getCurrentLang());
+      const locale = getCurrentLang(shopDetails.details.country.iso_code.toLowerCase());
+      fnSelectLocale(locale);
    }, [fnSelectLocale])
 
    React.useEffect(() => {

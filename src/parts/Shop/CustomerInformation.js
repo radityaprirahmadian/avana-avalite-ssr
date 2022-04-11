@@ -18,6 +18,7 @@ export default function CustomerInformation(props) {
          <div className="mb-0">
             <PhoneInput
                id="form-customer-phone"
+               label={props?.lang?.label__phone || 'Phone Number'}
                value={props.data.phoneNumber}
                country={props.defualtCountry}
                onlyCountries={['id', 'my', 'sg']}
