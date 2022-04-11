@@ -1,4 +1,4 @@
-import React, { useRef, useState, useCallback, useEffect } from 'react';
+import React, { useRef, useMemo, useState, useCallback, useEffect } from 'react';
 
 import { ChevronRight, ChevronLeft, FiberManualRecord as Dots } from '@material-ui/icons';
 import Img from '../Container/Image';
@@ -32,7 +32,20 @@ export default function ImgDrawer(props) {
 
   const [imgWidth, setImgWidth] = useState(0);
   const [imgContainerWidth, setImgContainerWidth] = useState(0);
-  // const [offset, setOffset] = useState(0);
+
+  const invervalSlideId = useRef();
+
+  const imgList = useMemo(
+    () => {
+      setImgSelected(1)
+      return (props?.imgKey
+        ? props?.images
+            ?.map((data) => data?.[props?.imgKey] || '')
+        : props?.images
+      ) || [];
+    },
+    [props?.images]
+  )
 
   const nextImg = useCallback((e) => {
     if (swipe.onTransition) {
@@ -41,12 +54,12 @@ export default function ImgDrawer(props) {
     setSwipe((prev) => {
       let arrPosition
       if (prev.listPosition.length === 0) {
-        arrPosition = (props?.images?.map((_, idx) => {
+        arrPosition = (imgList?.map((_, idx) => {
           return imgContainer.current.offsetLeft * (idx + 1);
         }));
         if (arrPosition?.length) {
           arrPosition.unshift(imgContainer.current.offsetLeft - imgContainer.current.offsetLeft);
-          arrPosition.push(imgContainer.current.offsetLeft * (props?.images?.length + 1));
+          arrPosition.push(imgContainer.current.offsetLeft * (imgList?.length + 1));
         }
       } else {
         arrPosition = prev.listPosition;
@@ -70,12 +83,12 @@ export default function ImgDrawer(props) {
     setSwipe((prev) => {
       let arrPosition
       if (prev.listPosition.length === 0) {
-        arrPosition = (props?.images?.map((_, idx) => {
+        arrPosition = (imgList?.map((_, idx) => {
           return imgContainer.current.offsetLeft * (idx + 1);
         }));
         if (arrPosition?.length) {
           arrPosition.unshift(imgContainer.current.offsetLeft - imgContainer.current.offsetLeft);
-          arrPosition.push(imgContainer.current.offsetLeft * (props?.images?.length + 1));
+          arrPosition.push(imgContainer.current.offsetLeft * (imgList?.length + 1));
         }
       } else {
         arrPosition = prev.listPosition;
@@ -110,7 +123,7 @@ export default function ImgDrawer(props) {
   const fnTouchMove = useCallback((e) => {
     e.persist && e.persist();
     let touch = e.type === 'touchmove' ? e.touches[0] : e;
-    if (!swipe.swiped && !swipe.onTwoFinger && props?.images?.length > 1) {
+    if (!swipe.swiped && !swipe.onTwoFinger && imgList?.length > 1) {
       setSwipe((prev) => {
         let posx2 = prev.x - touch.clientX;
         imgContainer.current.style.left = `${imgContainer.current.offsetLeft - posx2}px`;
@@ -140,10 +153,10 @@ export default function ImgDrawer(props) {
 
   const fnTouchEnd = useCallback((e) => {
     e.persist && e.persist();
-    if (!swipe.onTwoFinger && props?.images?.length > 1) {
+    if ((!swipe.swiped && swipe.swiping) && !swipe.onTwoFinger && imgList?.length > 1) {
       const touch = e.type === 'touchend' ? e.changedTouches[0] : e;
       const absX = Math.abs(touch.clientX - swipe.initX);
-      const imgMoreThanOne = props?.images?.length > 1;
+      const imgMoreThanOne = imgList?.length > 1;
       if (swipe.swiping && absX > minDistance && touch.clientX > swipe.initX && imgMoreThanOne) {
         prevImg();
       } else if (swipe.swiping && absX > minDistance && touch.clientX < swipe.initX && imgMoreThanOne) {
@@ -152,10 +165,16 @@ export default function ImgDrawer(props) {
         imgContainer.current.classList.add('shifting');
         imgContainer.current.style.left = `${swipe?.listPosition?.[imgSelected]}px`;
       }
+    } else if ((swipe.swiped || !swipe.swiping) && typeof props.onClick === "function") {
+      //onclickEvent here
+      const selectedIdx = imgSelected <= imgList.length
+        ? imgSelected - 1
+        : 0
+      props.onClick(props?.images?.[selectedIdx], selectedIdx);
     }
     setSwipe((prev) => ({
       ...prev,
-      onTransition: swipe.onOneFinger ? true : false,
+      onTransition: false,
       swiping: false,
       swiped: true,
       x: 0,
@@ -178,12 +197,12 @@ export default function ImgDrawer(props) {
     setSwipe((prev) => {
       let arrPosition
       if (prev.listPosition.length === 0) {
-        arrPosition = (props?.images?.map((_, idx) => {
+        arrPosition = (imgList?.map((_, idx) => {
           return imgContainer.current.offsetLeft * (idx + 1);
         }));
         if (arrPosition?.length) {
           arrPosition.unshift(imgContainer.current.offsetLeft - imgContainer.current.offsetLeft);
-          arrPosition.push(imgContainer.current.offsetLeft * (props?.images?.length + 1));
+          arrPosition.push(imgContainer.current.offsetLeft * (imgList?.length + 1));
         }
       }
       return {
@@ -201,9 +220,10 @@ export default function ImgDrawer(props) {
   useEffect(() => {
     const width = MainContainer?.current?.clientWidth;
     setImgWidth(width);
-    setImgContainerWidth(width*(props?.images?.length || 1) * 3);
+    setImgContainerWidth(width*(imgList?.length || 1) * 3);
     // setOffset(MainContainer?.current?.offsetWidth);
     // imgContainer.current.onmousemove = fnTouchMove;
+    // if (props.)
   }, [props]);
 
   useEffect(() => {
@@ -221,12 +241,12 @@ export default function ImgDrawer(props) {
       <div
         className="flex w-full h-full items-center absolute"
         style={{
-          justifyContent: props?.images?.length > 1 ? 'space-between' : 'center',
+          justifyContent: imgList?.length > 1 ? 'space-between' : 'center',
           visibility: swipe.onTwoFinger ? 'hidden' : 'visible',
         }}
       >
         {
-          props?.images?.length > 1 && (
+          imgList?.length > 1 && (
             <div
               onClick={prevImg}
               className="z-10 cursor-pointer relative m-1"
@@ -245,7 +265,7 @@ export default function ImgDrawer(props) {
         <div
           className="z-10 self-end p-4"
         >
-          {props?.images?.map((_, idx) => (
+          {imgList?.map((_, idx) => (
             <Dots
               className="z-10"
               style={{
@@ -256,7 +276,7 @@ export default function ImgDrawer(props) {
           ))}
         </div>
         {
-          props?.images?.length > 1 && (
+          imgList?.length > 1 && (
             <div
               onClick={nextImg}
               className="z-10 cursor-pointer relative m-1"
@@ -294,7 +314,7 @@ export default function ImgDrawer(props) {
                   ref={ImgRef}
                 >
                   <Img
-                    src={props?.images[imgSelected - 1].replace('thumbnail', 'large')}
+                    src={imgList[imgSelected - 1].replace('thumbnail', 'large')}
                     className="w-full h-full object-cover absolute top-0 bottom-0 left-0 right-0 bg-white select-none"
                   />
                 </div>
@@ -320,23 +340,23 @@ export default function ImgDrawer(props) {
             onTouchEnd={fnTouchEnd}
             onMouseDown={fnTouchStart}
             onMouseMove={(e) => {!swipe.swiped && fnTouchMove(e)}}
-            onMouseUp={(e) => {(!swipe.swiped && swipe.swiping) && fnTouchEnd(e)}}
+            onMouseUp={fnTouchEnd}
           >
             <div
               style={{ width: `${imgWidth}px` }}
               className="img-item relative h-full"
             >
               {
-                props?.images?.length > 1 && (
+                imgList?.length > 1 && (
                   <Img
-                    src={props?.images[props?.images?.length - 1].replace('thumbnail', 'large')}
+                    src={imgList[imgList?.length - 1].replace('thumbnail', 'large')}
                     className="w-full h-full object-cover absolute top-0 bottom-0 left-0 right-0 bg-white select-none"
                   />
                 )
               }
             </div>
             {
-              props?.images?.map((img, idx) => (
+              imgList?.map((img, idx) => (
                 <div
                   style={{
                     position: 'relative',
@@ -357,9 +377,9 @@ export default function ImgDrawer(props) {
               className="img-item relative h-full"
             >
               {
-                props?.images?.length > 1 && (
+                imgList?.length > 1 && (
                   <Img
-                    src={props?.images[0].replace('thumbnail', 'large')}
+                    src={imgList[0].replace('thumbnail', 'large')}
                     className="w-full h-full object-cover absolute top-0 bottom-0 left-0 right-0 bg-white select-none"
                   />
                 )
