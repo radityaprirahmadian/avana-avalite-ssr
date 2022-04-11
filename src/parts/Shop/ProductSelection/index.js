@@ -354,9 +354,15 @@ export default function ProductSelection(props) {
                      />
                   </div>
                </div>
-               <Slider
-                  setSelectedCategory={setSelectedCategory}
-               />
+               {
+                  whitelistFeatures?.catalog_wacommerce ? (
+                     <Slider
+                        setSelectedCategory={setSelectedCategory}
+                     />
+                  ) : (
+                     null
+                  )
+               }
             </>   
             )
          }
