@@ -9,6 +9,7 @@ import CategoriesSelection from './CategoriesSelection';
 import ProductLists from './ProductLists';
 import ProductDetails from './ProductDetails';
 import OrderCart from './OrderCart';
+import Slider from './Sliders';
 
 import products from 'src/constants/api/products';
 
@@ -348,6 +349,7 @@ export default function ProductSelection(props) {
       <div className="px-4 -mx-4 relative flex flex-col flex-1 z-10">
          {
             (!selectedVariant.isSelect && !props.productDetails.isViewProductDetail) && (
+            <>
                <div className="z-30 sticky top-0 bg-white flex flex-col flex-1">
                   <div className="flex items-end">
                      <div className="flex-1 mr-2">
@@ -389,6 +391,10 @@ export default function ProductSelection(props) {
                      />
                   </div>
                </div>
+               <Slider
+                  setSelectedCategory={setSelectedCategory}
+               />
+            </>   
             )
          }
          {
