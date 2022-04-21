@@ -111,7 +111,7 @@ export default function Variation({
           disableElevation
           fullWidth
           onClick={() => fnToggleSelectVariant()}
-          disabled={!item?.quantity || !selectedMeta?.quantity}
+          disabled={!whitelistFeatures?.['catalog_wacommerce'] && (!item?.quantity || !selectedMeta?.quantity)}
         >
           {whitelistFeatures?.['catalog_wacommerce']
             ? (lang?.btn__choose || 'Choose')
