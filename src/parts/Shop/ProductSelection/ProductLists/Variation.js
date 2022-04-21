@@ -51,7 +51,7 @@ export default function Variation({
                           id={`${item.id}_${option.id}`}
                           name={`${item.id}_${option.id}`}
                           color="primary"
-                          disabled={option.quantity === 0}
+                          disabled={!whitelistFeatures?.['catalog_wacommerce'] && option.quantity === 0}
                           onChange={(e) => {
                             e.persist()
                             fnSelectProduct(item, {...option, isSelected: e.target.checked})
@@ -62,11 +62,11 @@ export default function Variation({
                       </div>
                       <div className="w-full px-4">
                         <div>{option.name}</div>
-                        {option.quantity === 0 && (
+                        {(!whitelistFeatures?.['catalog_wacommerce'] && option.quantity === 0) ? (
                           <div className="text-sm text-red-5 leading-3">
                             {lang?.text__out_of_stock || 'Out of stock'}
                           </div>
-                        )}
+                        ): null}
                       </div>
                       <div className="flex-none">
                           <span className="">

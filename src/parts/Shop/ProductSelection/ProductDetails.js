@@ -299,7 +299,7 @@ function ProductDetails(props) {
                     : () => handleAddNonVariant()
                     
                   }
-                  disabled={!product.data?.quantity || !productVariantsQuantity}
+                  disabled={!whitelistFeatures?.['catalog_wacommerce'] && (!product.data?.quantity || !productVariantsQuantity)}
                 >
                   {whitelistFeatures?.['catalog_wacommerce']
                     ? (lang?.btn__choose || 'Choose')
