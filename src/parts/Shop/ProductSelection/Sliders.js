@@ -58,7 +58,7 @@ export default function Sliders({
           <div className="w-auto py-2">
             <div className="h-32 loading rounded"></div>
           </div>
-        ) : (
+        ) : sliderList.data.length ? (
           <section
             style={{  
               margin: '1rem 0',
@@ -73,7 +73,7 @@ export default function Sliders({
               onClick={selectSlider}
             />
           </section>
-        )
+        ) : null
       }
     </>
   )
