@@ -59,7 +59,7 @@ export default function SummaryDetails({lang, orderDetails, pricingCharge}) {
                {lang?.text__tax || 'Tax'}
             </PriceTitle>
             <PriceAmmount>
-               {calculateWrapper(pricingCharge.totalTax)}
+               {calculateWrapper(pricingCharge.totalTax + pricingCharge.totalTaxShipping)}
             </PriceAmmount>
          </PriceSummary>
          <PriceSummary>
@@ -77,7 +77,7 @@ export default function SummaryDetails({lang, orderDetails, pricingCharge}) {
                   {lang?.text__total || 'Total'}
                </PriceTitle>
                <PriceAmmount>
-                  {calculateWrapper(pricingCharge.totalPrice - (orderDetails.coupon?.total_discount || 0))}
+                  {calculateWrapper(pricingCharge.totalPrice + pricingCharge.totalTaxShipping - (orderDetails.coupon?.total_discount || 0))}
                </PriceAmmount>
             </PriceSummary>
          </h6>

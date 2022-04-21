@@ -1,10 +1,13 @@
-import React from 'react';
-
+import React, { useEffect, useState, useCallback, useContext } from 'react';
 import Parser from 'html-react-parser';
 // components
 import { ArrowBack } from '@material-ui/icons';
 import ImgSlider from 'src/components/ImgSlider';
 import Button from 'src/components/Button';
+
+import products from 'src/constants/api/products'
+
+import MainContext from 'src/parts/Context';
 
 // utils
 import formatCurrency from 'src/helpers/formatCurrency';
@@ -19,7 +22,89 @@ export default function ProductDescription(props) {
     fnToggleSelectProduct,
     handleAddNonVariant,
   } = props;
-  
+
+  const MAINCONTEXT = useContext(MainContext);
+  const whitelistFeatures = MAINCONTEXT?.whitelistFeatures;
+  const [product, setProduct] = useState({
+    data: {},
+    error: {},
+    status: 'init'
+  })
+
+  const [productVariantsQuantity, setproductVariantsQuantity] = useState(-1)
+
+  const [checkIndexOrder, setCheckIndexOrder] = useState(-1)
+
+  // const indexOrder = payload.order.product_ordered.findIndex(
+  //   (x) =>
+  //     x.product_id === Number(e.target.name) &&
+  //     (variation ? x.variation_option_id === variation.id : true)
+  // );
+
+  const isProductHasVariant = !!product.data?.variation;
+
+  const handleAddNonVariant = useCallback(() => {
+    if (checkIndexOrder) {
+      fnChangeRangeProduct({target:
+        {
+          name: String(productId),
+          value: productsOrdered[productId]?.quantity + 1
+        }
+      })
+    } else {
+      fnSelectProduct(product.data);
+    }
+    fnToggleSelectProduct();
+  }, [product, checkIndexOrder, fnChangeRangeProduct, fnSelectProduct, fnToggleSelectProduct]);
+
+  const handleCancelProduct = useCallback(
+    (id) => {
+       fnChangeRangeProduct({
+          target: {
+             type: 'no_persist',
+             name: id,
+             value: 0,
+          }
+       });
+       fnToggleSelectProduct();
+    },
+    [fnChangeRangeProduct],
+ );
+
+  useEffect(() => {
+    if (productId) {
+      setProduct((prevState) => ({
+        ...prevState,
+        status: 'loading'
+      }))
+      products
+        .details(productId)
+        .then((res) => {
+          setproductVariantsQuantity(!!res.variation
+            ? res?.variation?.options
+                ?.reduce((acc, variant) => {
+                  return acc + variant?.quantity
+                }, 0)
+            : -1
+          );
+          setProduct((prevState) => ({
+            ...prevState,
+            data: res,
+            status: 'ok'
+          }));
+          setCheckIndexOrder(!!productsOrdered[productId])
+        })
+        .catch((err) => {
+          setProduct((prevState) => ({
+            ...prevState,
+            data: {},
+            error: err,
+            status: 'error'
+          }))
+        })
+    }
+  }, [productId, productsOrdered])
+
   return (
     <div
       // className="flex flex-col h-full"
@@ -140,7 +225,7 @@ export default function ProductDescription(props) {
               </div>
               {(product.data?.quantity < 10 || (productVariantsQuantity < 10 && !!product.data?.variation)) && (
                 <div className="text-red-500 mt-2">
-                  {(product.data?.quantity === 0 || (productVariantsQuantity === 0 && !!product.data?.variation))
+                  {(!whitelistFeatures?.['catalog_wacommerce'] && (product.data?.quantity === 0 || (productVariantsQuantity === 0 && !!product.data?.variation)))
                     ? lang?.text__out_of_stock
                     : (<>
                       {lang?.text__stock_left || 'Stock left:'}
@@ -191,20 +276,38 @@ export default function ProductDescription(props) {
             )}
           </section>
           <section className="sticky bottom-0 py-4 bg-white">
-            <Button
-              variant="contained"
-              color="primary"
-              disableElevation
-              fullWidth
-              onClick={isProductHasVariant
-                ? () => fnToggleSelectVariant(product.data)
-                : () => handleAddNonVariant()
-                
-              }
-              disabled={!product.data?.quantity || !productVariantsQuantity}
-            >
-              {lang?.btn__buy || 'Buy'}
-            </Button>
+            {
+              productsOrdered?.[productId] && whitelistFeatures?.['catalog_wacommerce'] ? (
+                <Button
+                   type="button"
+                   className="is-radiusless is-shadowless"
+                   variant="outlined"
+                   color="secondary"
+                   onClick={() => handleCancelProduct(productId)}
+                   disableElevation
+                >
+                   {(lang?.btn__cancel || 'Cancel')}
+                </Button>
+              ) : (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  disableElevation
+                  fullWidth
+                  onClick={isProductHasVariant
+                    ? () => fnToggleSelectVariant(product.data)
+                    : () => handleAddNonVariant()
+                    
+                  }
+                  disabled={!whitelistFeatures?.['catalog_wacommerce'] && (!product.data?.quantity || !productVariantsQuantity)}
+                >
+                  {whitelistFeatures?.['catalog_wacommerce']
+                    ? (lang?.btn__choose || 'Choose')
+                    : (lang?.btn__buy || 'Buy')
+                  }
+                </Button>
+              )
+            }
           </section>
         </>
       )}

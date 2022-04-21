@@ -99,7 +99,7 @@ export default function Shop({ shopDetails }) {
                         : `*x ${product.quantity}*\n`
                      }`
                )
-               .join(''); 
+               .join('');
             let messages = encodeURIComponent(writeLocalization(
                lang?.text__whatsapp_order_message || `Hi [0], I'm [1].\n\nI'm interested to order[2].[3]`,
                [
@@ -118,12 +118,11 @@ export default function Shop({ shopDetails }) {
                   ...(waRotatorId ? {whatsapp_info_id: waRotatorId} : {})
                }).then(({whatsapp}) => {
                   return whatsapp.phone_no
-               }).catch(() => {}) || shopDetails.details.whatsapp_no?.split('+')?.pop();
+               }).catch(() => {return shopDetails.details.whatsapp_no?.split('+')?.pop()});
 
             urlRedirect = mobileTabletCheck()
                ? `whatsapp://send?phone=${waPhoneNumber}&text=${messages}`
                : `https://web.whatsapp.com/send?phone=${waPhoneNumber}&text=${messages}`;
-               urlRedirect
             setRedirectUrl(urlRedirect);
             fnAnalyticsOrderCreated(order_id).finally(() => {
                if (refRedirect.current) {
@@ -139,7 +138,7 @@ export default function Shop({ shopDetails }) {
          }
          setStatusOrder((prevState) => ({
             ...prevState,
-            isCreateOrder: false,
+            // isCreateOrder: false,
             isCreateOrderViaWA: false,
          }))
       }
@@ -228,7 +227,7 @@ export default function Shop({ shopDetails }) {
          }).catch(() => {
             setStatusOrder((prevState) => ({
                ...prevState,
-               isCreateOrder: false,
+               // isCreateOrder: false,
                isCreateOrderViaWA: false,
             }))
          })

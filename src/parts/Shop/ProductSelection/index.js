@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import TextField from 'src/components/form/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
