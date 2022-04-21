@@ -157,11 +157,13 @@ export default function Row({
                         && (item.quantity === 0 || item.quantityVariants === 0)
                      }
                   >
-                     {isVariant
-                        ? (lang?.btn__edit || 'Edit')
+                     {isVariant && whitelistFeatures?.['catalog_wacommerce']
+                        ? (lang?.btn__view || 'View')
                         : whitelistFeatures?.['catalog_wacommerce']
                            ? (lang?.btn__choose || 'Choose')
-                           : (lang?.btn__buy || 'Buy')
+                           : isVariant
+                              ? (lang?.btn__edit || 'Edit')
+                              : (lang?.btn__buy || 'Buy')
                      }
                   </Button>
                ) : (

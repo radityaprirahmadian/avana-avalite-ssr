@@ -8,13 +8,16 @@ const theme = createMuiTheme({
       //    main: '#FDB814',
       // },
       secondary: {
-         main: '#19857b',
+         main: '#767676',
       },
       error: {
          main: red.A400,
       },
       background: {
          default: '#fff',
+      },
+      text: {
+         secondary: 'rgba(0, 0, 0, 1);'
       },
       // whatsapp: {
       //    main: '#128C7E',
@@ -29,6 +32,9 @@ const theme = createMuiTheme({
             fontWeight: '700',
             fontSize: '14px',
             borderRadius: '8px'
+         },
+         outlinedSecondary: {
+            color: 'rgba(0, 0, 0, 1)'
          },
          // containedPrimary: {
          //    color: '#1A1A1A'

@@ -1,6 +1,10 @@
 {
   "btn__buy": "Beli",
+  "btn__choose": "Pilih",
+  "btn__cancel": "Batal",
   "btn__edit": "Edit",
+  "btn__view": "Lihat",
+  "btn__add_more_variants": "Tambah variasi lain",
   "text__all": "Semua",
   "text__search": "Cari Produk",
   "text__out_of_stock": "Stock Kosong",

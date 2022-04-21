@@ -1,9 +1,12 @@
+import React, { useContext } from 'react';
 import NumberRange from 'src/components/form/NumberRange';
 import { Checkbox } from '@material-ui/core';
 import { ArrowBack } from '@material-ui/icons';
 import Button from 'src/components/Button';
 
 import formatThousand from 'src/helpers/formatThousand';
+
+import MainContext from 'src/parts/Context';
 
 export default function Variation({
   lang,
@@ -14,6 +17,8 @@ export default function Variation({
   fnChangeRangeProduct,
   fnToggleSelectVariant
 }) {
+  const MAINCONTEXT = useContext(MainContext);
+  const whitelistFeatures = MAINCONTEXT?.whitelistFeatures;
   return (
     <section className="pt-4 flex-1 flex flex-col">
       <div
@@ -74,17 +79,19 @@ export default function Variation({
                           </span>
                       </div>
                     </div>
-                    {productsOrdered?.[`${item.id}_${option.id}`] && (
-                      <div className="self-end py-2">
-                        <NumberRange
-                          name={`${item.id}_${option.id}`}
-                          min="0"
-                          max={option.quantity}
-                          value={productsOrdered?.[`${item.id}_${option.id}`]?.quantity}
-                          fnChange={fnChangeRangeProduct}
-                        />
-                      </div>
-                    )}
+                    {(productsOrdered?.[`${item.id}_${option.id}`] && !whitelistFeatures?.['catalog_wacommerce'])
+                      ? (
+                        <div className="self-end py-2">
+                          <NumberRange
+                            name={`${item.id}_${option.id}`}
+                            min="0"
+                            max={option.quantity}
+                            value={productsOrdered?.[`${item.id}_${option.id}`]?.quantity}
+                            fnChange={fnChangeRangeProduct}
+                          />
+                        </div>
+                      ) : null
+                    }
                   </div>
               )
             }
@@ -106,7 +113,10 @@ export default function Variation({
           onClick={() => fnToggleSelectVariant()}
           disabled={!item?.quantity || !selectedMeta?.quantity}
         >
-          {lang?.btn__buy || 'Buy'}
+          {whitelistFeatures?.['catalog_wacommerce']
+            ? (lang?.btn__choose || 'Choose')
+            : (lang?.btn__buy || 'Buy')
+          }
         </Button>
       </section>
   </section>

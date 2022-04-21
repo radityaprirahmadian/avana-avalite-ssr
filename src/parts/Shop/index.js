@@ -118,12 +118,12 @@ export default function Shop({ shopDetails }) {
                   ...(waRotatorId ? {whatsapp_info_id: waRotatorId} : {})
                }).then(({whatsapp}) => {
                   return whatsapp.phone_no
-               }).catch(() => {}) || shopDetails.details.whatsapp_no?.split('+')?.pop();
+               }).catch(() => {return shopDetails.details.whatsapp_no?.split('+')?.pop()});
 
             urlRedirect = mobileTabletCheck()
                ? `whatsapp://send?phone=${waPhoneNumber}&text=${messages}`
                : `https://web.whatsapp.com/send?phone=${waPhoneNumber}&text=${messages}`;
-               urlRedirect
+
             setRedirectUrl(urlRedirect);
             fnAnalyticsOrderCreated(order_id).finally(() => {
                if (refRedirect.current) {
