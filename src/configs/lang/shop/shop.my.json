@@ -1,10 +1,10 @@
 {
-  "text__whatsapp_order_message": "Hai [0], Saya [1].\n\nSaya ingin pesan :\n[2].\nKlik untuk pesan: [3]",
+  "text__whatsapp_order_message": "Hai [0], Saya [1].\n\nSaya ingin pesan[2].[3]",
+  "text__whatsapp_order_link":"\nKlik untuk pesan: ",
   "text__greeting": "Selamat Datang ke",
   "text__powered_by": "Powered By",
   "label__name": "Nama Anda",
   "label__phone": "No Telefon Anda",
-  "btn__buy": "Beli",
   "btn__order_via_whatsapp":  "Pesan melalui WhatsApp",
   "text__complete_phone_number": "Harap lengkapi nomor telephone anda"
 }

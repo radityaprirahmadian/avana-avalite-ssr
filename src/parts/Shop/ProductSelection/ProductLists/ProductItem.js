@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 
 import { Button, Badge } from '@material-ui/core'
 import { BadgeDiscount, BadgeProductCount } from 'src/components/Badge'
@@ -11,6 +11,7 @@ export default function Row({
    onClick,
    lang,
    item,
+   whitelistFeatures,
    selectedMeta,
    productsOrdered,
    fnSelectProduct,
@@ -29,32 +30,50 @@ export default function Row({
          onClickEvent(e)
       },
       []
-   )
+   );
+   const handleCancelProduct = useCallback(
+      (id) => {
+         fnChangeRangeProduct({
+            target: {
+               type: 'no_persist',
+               name: id,
+               value: 0,
+            }
+         })
+      },
+      [fnChangeRangeProduct],
+   );
 
    return (
       <div className="flex py-4 border-b border-gray-200" >
          <div className="w-auto cursor-pointer" onClick={onClick}>
             <div className="relative">
-               <div
-                  className="absolute"
-                  style={{ width: 80, height: 80 }}
-               >
-                  <BadgeProductCount
-                     content={countProduct}
-                     styleBadge={{
-                        right: countProduct > 99
-                           ? '20px'
-                           : countProduct > 9
-                           ? '18px'
-                           : '16px'
-                     }}
-                  >
+               {
+                  !whitelistFeatures?.['catalog_wacommerce'] ? (
                      <div
-                        className="object-cover rounded overflow-hidden"
+                        className="absolute"
                         style={{ width: 80, height: 80 }}
-                     />
-                  </BadgeProductCount>
-               </div >
+                     >
+                        <BadgeProductCount
+                           content={countProduct}
+                           styleBadge={{
+                              right: countProduct > 99
+                                 ? '20px'
+                                 : countProduct > 9
+                                 ? '18px'
+                                 : '16px'
+                           }}
+                        >
+                           <div
+                              className="object-cover rounded overflow-hidden"
+                              style={{ width: 80, height: 80 }}
+                           />
+                        </BadgeProductCount>
+                     </div >
+                  ) : (
+                     null
+                  )
+               }
                {item.sale_enabled && item.sale_percentage ? (
                   <BadgeDiscount
                      content={`${Math.round(
@@ -118,9 +137,9 @@ export default function Row({
                   )}`}
                </div>
             </div>
-            <div className="w-auto">
-               {(item.quantity === 0 || item.quantityVariants === 0) ? (
-                  <div className="text-sm text-red-5 font-bold">
+            <div className="w-auto z-20">
+               {(!whitelistFeatures?.['catalog_wacommerce'] && (item.quantity === 0 || item.quantityVariants === 0)) ? (
+                  <div className="text-sm text-red-500 font-bold">
                      {lang?.text__out_of_stock || 'Out of stock'}
                   </div>
                ) : item.variation ? (
@@ -134,15 +153,32 @@ export default function Row({
                      }
                      onClick={(e) => handleOnEventChild(e, () => fnToggleSelectVariant(item))}
                      disableElevation
-                     disabled={item.quantity === 0 || item.quantityVariants === 0}
+                     disabled={!whitelistFeatures?.['catalog_wacommerce']
+                        && (item.quantity === 0 || item.quantityVariants === 0)
+                     }
                   >
-                     {isVariant ?
-                        (lang?.btn__edit || 'Edit') :
-                        (lang?.btn__buy || 'Buy')
+                     {isVariant && whitelistFeatures?.['catalog_wacommerce']
+                        ? (lang?.btn__view || 'View')
+                        : whitelistFeatures?.['catalog_wacommerce']
+                           ? (lang?.btn__choose || 'Choose')
+                           : isVariant
+                              ? (lang?.btn__edit || 'Edit')
+                              : (lang?.btn__buy || 'Buy')
                      }
                   </Button>
                ) : (
-                  productsOrdered?.[item.id] ? (
+                  productsOrdered?.[item.id] && whitelistFeatures?.['catalog_wacommerce'] ? (
+                     <Button
+                        type="button"
+                        className="is-radiusless is-shadowless"
+                        variant="outlined"
+                        color="secondary"
+                        onClick={(e) => handleOnEventChild(e,() => handleCancelProduct(item.id))}
+                        disableElevation
+                     >
+                        {(lang?.btn__cancel || 'Cancel')}
+                     </Button>
+                  ) : productsOrdered?.[item.id] ? (
                      <NumberRange
                         name={item.id}
                         min="0"
@@ -151,17 +187,20 @@ export default function Row({
                         fnChange={fnChangeRangeProduct}
                      />
                   ) :  (
-                  <Button
-                     type="button"
-                     className="is-radiusless is-shadowless"
-                     variant="contained"
-                     color="primary"
-                     onClick={(e) => handleOnEventChild(e,() => fnSelectProduct(item))}
-                     disableElevation
-                     disabled={item.quantity === 0}
-                  >
-                     {lang?.btn__buy || 'Buy'}
-                  </Button>
+                     <Button
+                        type="button"
+                        className="is-radiusless is-shadowless"
+                        variant="contained"
+                        color="primary"
+                        onClick={(e) => handleOnEventChild(e,() => fnSelectProduct(item))}
+                        disableElevation
+                        disabled={!whitelistFeatures?.['catalog_wacommerce'] && item.quantity === 0}
+                     >
+                        {whitelistFeatures?.['catalog_wacommerce']
+                           ? (lang?.btn__choose || 'Choose')
+                           : (lang?.btn__buy || 'Buy')
+                        }
+                     </Button>
                   )
                )}
             </div>

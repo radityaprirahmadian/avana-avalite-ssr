@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useContext } from 'react';
 import Parser from 'html-react-parser';
 // components
 import { ArrowBack } from '@material-ui/icons';
@@ -6,6 +6,8 @@ import ImgSlider from 'src/components/ImgSlider';
 import Button from 'src/components/Button';
 
 import products from 'src/constants/api/products'
+
+import MainContext from 'src/parts/Context';
 
 // utils
 import formatCurrency from 'src/helpers/formatCurrency';
@@ -21,6 +23,8 @@ function ProductDetails(props) {
     fnToggleSelectProduct,
   } = props;
 
+  const MAINCONTEXT = useContext(MainContext);
+  const whitelistFeatures = MAINCONTEXT?.whitelistFeatures;
   const [product, setProduct] = useState({
     data: {},
     error: {},
@@ -52,6 +56,20 @@ function ProductDetails(props) {
     }
     fnToggleSelectProduct();
   }, [product, checkIndexOrder, fnChangeRangeProduct, fnSelectProduct, fnToggleSelectProduct]);
+
+  const handleCancelProduct = useCallback(
+    (id) => {
+       fnChangeRangeProduct({
+          target: {
+             type: 'no_persist',
+             name: id,
+             value: 0,
+          }
+       });
+       fnToggleSelectProduct();
+    },
+    [fnChangeRangeProduct],
+ );
 
   useEffect(() => {
     if (productId) {
@@ -258,20 +276,38 @@ function ProductDetails(props) {
             )}
           </section>
           <section className="sticky bottom-0 py-4 bg-white">
-            <Button
-              variant="contained"
-              color="primary"
-              disableElevation
-              fullWidth
-              onClick={isProductHasVariant
-                ? () => fnToggleSelectVariant(product.data)
-                : () => handleAddNonVariant()
-                
-              }
-              disabled={!product.data?.quantity || !productVariantsQuantity}
-            >
-              {lang?.btn__buy || 'Buy'}
-            </Button>
+            {
+              productsOrdered?.[productId] && whitelistFeatures?.['catalog_wacommerce'] ? (
+                <Button
+                   type="button"
+                   className="is-radiusless is-shadowless"
+                   variant="outlined"
+                   color="secondary"
+                   onClick={() => handleCancelProduct(productId)}
+                   disableElevation
+                >
+                   {(lang?.btn__cancel || 'Cancel')}
+                </Button>
+              ) : (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  disableElevation
+                  fullWidth
+                  onClick={isProductHasVariant
+                    ? () => fnToggleSelectVariant(product.data)
+                    : () => handleAddNonVariant()
+                    
+                  }
+                  disabled={!product.data?.quantity || !productVariantsQuantity}
+                >
+                  {whitelistFeatures?.['catalog_wacommerce']
+                    ? (lang?.btn__choose || 'Choose')
+                    : (lang?.btn__buy || 'Buy')
+                  }
+                </Button>
+              )
+            }
           </section>
         </>
       )}
