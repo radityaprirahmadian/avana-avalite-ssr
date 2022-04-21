@@ -103,10 +103,12 @@ function ProductDetails(props) {
       <ProductDescription
         lang={lang}
         product={product}
+        productsOrdered={productsOrdered}
         productVariantsQuantity={productVariantsQuantity}
         isProductHasVariant={isProductHasVariant}
         fnToggleSelectVariant={fnToggleSelectVariant}
         fnToggleSelectProduct={fnToggleSelectProduct}
+        fnChangeRangeProduct={fnChangeRangeProduct}
         handleAddNonVariant={handleAddNonVariant}
       />
     )
