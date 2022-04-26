@@ -95,7 +95,7 @@ export default function Shop({ shopDetails }) {
                      `${idx + 1}. ${product.name}${
                         product.variation ? ` (${product.variation}) ` : ' '
                      }${catalogWhitelist
-                        ? ""
+                        ? "\n"
                         : `*x ${product.quantity}*\n`
                      }`
                )
