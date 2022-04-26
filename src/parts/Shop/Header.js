@@ -4,7 +4,7 @@ import PrivacyPolicy from 'src/parts/PrivacyPolicy'
 import Image from 'src/components/Container/Image'
 import images from 'src/constants/images'
 
-import Localization from 'src/configs/lang/errors';
+import Localization from 'src/configs/lang/shop';
 import { getCurrentLang } from 'src/helpers/localization';
 
 export default function Header({ data }) {
