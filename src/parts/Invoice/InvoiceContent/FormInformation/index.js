@@ -355,7 +355,6 @@ export default function FormInformation({
          ...prevState,
          selected: newValue,
       }));
-      console.log(newValue)
       if (!!newValue?.compulsory_insurance) {
          fnChange({
             target: {
@@ -371,7 +370,6 @@ export default function FormInformation({
    }, [fnChange]);
 
    const fnChangeInsurance = React.useCallback((event) => {
-      console.log(event.target);
       if (!isInsuranceMandatory)
          fnChange(event);
    }, [fnChange]);
@@ -535,7 +533,6 @@ export default function FormInformation({
 
       const totalPrice = subTotal + totalTax;
       if (orderDetails.shippingMethod === 'shipper') {
-         console.log(formInfoData.lng,formInfoData )
          shipping.getCouriers({
             params: {
                country_id: formInfoData.country,
