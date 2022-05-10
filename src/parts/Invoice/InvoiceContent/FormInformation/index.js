@@ -571,6 +571,13 @@ export default function FormInformation({
                   status: 'ok',
                }));
             })
+            .catch(() => {
+               setCourier((prevState) => ({
+                  ...prevState,
+                  data: [],
+                  status: 'ok',
+               }));
+            })
       } else {
          setCourier((prevState) => ({
             ...prevState,
@@ -668,7 +675,7 @@ export default function FormInformation({
    const fnChangeCourierType = useCallback((event) => {
       setCourierType(event.target.value)
       fnGetCouriers(null, event.target.value)
-   }, [])
+   }, [fnGetCouriers, setCourierType])
 
    React.useEffect(() => {
       fnInitFormsInfo();
