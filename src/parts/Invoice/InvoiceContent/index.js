@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import FormInformation from './FormInformation';
 import Summary from './Summary';
@@ -55,6 +55,8 @@ export default function InvoiceContent({
     errors: [],
   });
 
+  const [courierType, setCourierType] = useState("regular");
+
   const [SELFPICKUP, setSelfPickup] = React.useState({
     data: {},
     status: 'idle',
@@ -76,6 +78,7 @@ export default function InvoiceContent({
           orderDetails={orderDetails}
           productsOrdered={productsOrdered}
           additionalInfoForm={additionalInfoForm}
+          courierType={courierType}
           meta={meta}
           updateFormInfoData={updateFormInfoData}
           updateFormInfoStatus={updateFormInfoStatus}
@@ -85,6 +88,7 @@ export default function InvoiceContent({
           setCourier={setCourier}
           setService={setService}
           setSelfPickup={setSelfPickup}
+          setCourierType={setCourierType}
           fnChange={fnChange}
           fnSyncTotalPayment={fnSyncTotalPayment}
           fnUpdateOrderDetails={fnUpdateOrderDetails}

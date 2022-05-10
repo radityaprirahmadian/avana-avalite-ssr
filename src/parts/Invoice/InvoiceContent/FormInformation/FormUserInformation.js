@@ -19,6 +19,7 @@ export default function FormUserInformation({
    COURIER,
    SERVICES,
    SELFPICKUP,
+   courierType,
    formInfoData,
    formInfoStatus,
    shippingMethod,
@@ -36,6 +37,7 @@ export default function FormUserInformation({
    fnChangeCourier,
    fnChangeService,
    fnChangeInsurance,
+   fnChangeCourierType,
    fnChange,
 }) {
   return (
@@ -189,6 +191,32 @@ export default function FormUserInformation({
                isRequired
                statusInput={formInfoStatus.postcode}
             />
+            {(formInfoData.state && formInfoData.postcode &&
+               (shippingMethod === "shipper")) ? (
+               <Select
+                  id="form-courier-type"
+                  label={(lang?.label__courier_type || "Courier Type")}
+                  onChange={fnChangeCourierType}
+                  inputProps= {{
+                     name: 'courierType',
+                  }}
+                  value={courierType}
+               >
+                  <option aria-label="None" value={"regular"}>
+                     {lang?.option__reguler || "Reguler"}
+                  </option>
+                  <option value={"same_day"}>
+                     {lang?.option__same_day || "Same Day"}
+                  </option>
+               </Select>
+            ) : null}
+            {(shippingMethod === "shipper" && !isShippingSelfPickup && 
+               courierType === "same_day" && formInfoData.postcode) ? (
+               // checkCourierSameDay(formInfoData.shippingCourierName)) && (
+                  <LocationModal
+                     lang={lang}
+                  />
+            ) : null}
             {(formInfoData.state &&
                formInfoData.postcode &&
                (shippingMethod === 'shipper' || isAbleSelfPickup)) && (<>
@@ -214,13 +242,6 @@ export default function FormUserInformation({
                   />
                </>)
             }
-            {(shippingMethod === 'shipper' && !isShippingSelfPickup && formInfoData.shippingCourierName &&
-               formInfoData.postcode &&
-               checkCourierSameDay(formInfoData.shippingCourierName)) && (
-                  <LocationModal
-                     lang={lang}
-                  />
-            )}
             {isShippingSelfPickup && (
                <SelfPickupInformation
                   selfPickupInfo={SELFPICKUP.data}

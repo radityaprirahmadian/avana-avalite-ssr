@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 
 import STORAGE from 'src/helpers/localStorage';
 
@@ -24,6 +24,7 @@ export default function FormInformation({
    COURIER,
    SERVICES,
    SELFPICKUP,
+   courierType,
    formInfoData,
    formInfoStatus,
    orderDetails,
@@ -38,6 +39,7 @@ export default function FormInformation({
    setCourier,
    setService,
    setSelfPickup,
+   setCourierType,
    fnChange,
    fnUpdateOrderDetails
 }) {
@@ -311,8 +313,6 @@ export default function FormInformation({
          selected: newValue,
       }));
       updateFormInfoData({
-         lat: null,
-         lng: null,
          shipperRateId: null,
          shipperUseInsurance: null
       })
@@ -425,6 +425,10 @@ export default function FormInformation({
    }, [orders]);
 
    const fnGetServices = React.useCallback((courier = null, longlat = null) => {
+      const customerLongLat = longlat || {
+         lat: formInfoData.lat,
+         lng: formInfoData.lng
+      }
       setService((prevState) => ({
          ...prevState,
          status: 'loading',
@@ -462,10 +466,10 @@ export default function FormInformation({
             ),
             is_self_pickup: 0,
             total_product: totalPrice,
-            ...(longlat
+            ...(customerLongLat
                   ? {
-                     customer_long: longlat.lng,
-                     customer_lat: longlat.lat
+                     customer_long: customerLongLat.lng,
+                     customer_lat: customerLongLat.lat
                   }
                   : {}
                )
@@ -501,13 +505,17 @@ export default function FormInformation({
          lng: longlat.lng,
          lat: longlat.lat,
       });
-
+      fnGetCouriers(null, null, longlat);
       // if (newValue) {
       //    fnGetServices(COURIER?.selected?.name, longlat);
       // }
    }, [fnChange]);
 
-   const fnGetCouriers = React.useCallback((city) => {
+   const fnGetCouriers = React.useCallback((city, courierTypeParams, longlat) => {
+      const customerLongLat = longlat || {
+         lat: formInfoData.lat,
+         lng: formInfoData.lng
+      }
       const selfPickupData = { name: 'Self Pickup', isSelfPickup: true };
       setCourier((prevState) => ({
          ...prevState,
@@ -527,6 +535,7 @@ export default function FormInformation({
 
       const totalPrice = subTotal + totalTax;
       if (orderDetails.shippingMethod === 'shipper') {
+         console.log(formInfoData.lng,formInfoData )
          shipping.getCouriers({
             params: {
                country_id: formInfoData.country,
@@ -540,8 +549,16 @@ export default function FormInformation({
                   (acc, current) => acc + current.quantity * current.weight,
                   0
                ),
+               courier_type: courierTypeParams || courierType,
                is_self_pickup: 0,
-               total_product: totalPrice
+               total_product: totalPrice,
+               ...(customerLongLat.lng && customerLongLat.lat && courierType === "same_day"
+                  ? {
+                     customer_long: customerLongLat.lng,
+                     customer_lat: customerLongLat.lat
+                  }
+                  : {}
+               )
              }
          })
             .then((res) => {
@@ -580,7 +597,7 @@ export default function FormInformation({
             fnChangeCourier('', { name: orderDetails.shippingCourier?.name })
          }
       }
-   }, [shipping, orderDetails, formInfoData])
+   }, [shipping, orderDetails, formInfoData, courierType])
 
    const fnGetSelfPickupInfo = React.useCallback(() => {
       setSelfPickup((prevState) => ({
@@ -651,6 +668,11 @@ export default function FormInformation({
          })
    }, [shipping]);
 
+   const fnChangeCourierType = useCallback((event) => {
+      setCourierType(event.target.value)
+      fnGetCouriers(null, event.target.value)
+   }, [])
+
    React.useEffect(() => {
       fnInitFormsInfo();
       if (SERVICES?.selected)
@@ -681,6 +703,7 @@ export default function FormInformation({
                COURIER={COURIER}
                SERVICES={SERVICES}
                SELFPICKUP={SELFPICKUP}
+               courierType={courierType}
                formInfoData={formInfoData}
                formInfoStatus={formInfoStatus}
                shippingMethod={orderDetails.shippingMethod}
@@ -698,6 +721,7 @@ export default function FormInformation({
                fnChangeCourier={fnChangeCourier}
                fnChangeService={fnChangeService}
                fnChangeInsurance={fnChangeInsurance}
+               fnChangeCourierType={fnChangeCourierType}
                fnChange={fnChange}
             />
             <FormAdditionalInfo

@@ -33,7 +33,7 @@ export default function LocationMaps({ lang, ...props }) {
   const FORMCONTEXT = useContext(FormContext);
 
   const handleChange = React.useCallback(({address, center}, isLonglatChange = false) => {
-    FORMCONTEXT.fnCheckServiceLocation(center);
+    // FORMCONTEXT.fnCheckServiceLocation(center);
     if (isLonglatChange) {
       setLonglatChange(true);
     }
@@ -141,16 +141,16 @@ export default function LocationMaps({ lang, ...props }) {
               )
             }
           </div>
-          {
+          {/* {
             (Address.details && !FORMCONTEXT.isAvailableService && !FORMCONTEXT.isLoadService && !Loading) && (
               <div className="text-red-5 py-2">
                 {lang?.text__courier_service_not_available || 'No courier service available'}
               </div>
             )
-          }
+          } */}
           <div className="">
             <Button
-              disabled={!Address.details || !FORMCONTEXT.isAvailableService || FORMCONTEXT.isLoadService || Loading}
+              disabled={!Address.details || Loading}
               variant="contained"
               color="primary"
               onClick={handleConfirm}
