@@ -10,6 +10,7 @@ import SelfPickupInformation from './SelfPickupInformation';
 import writeLocalization from 'src/helpers/localization';
 
 import checkCourierSameDay from 'src/helpers/checkCourierSameDay';
+import MainContext from 'src/parts/Context';
 
 export default function FormUserInformation({
    lang,
@@ -40,7 +41,8 @@ export default function FormUserInformation({
    fnChangeCourierType,
    fnChange,
 }) {
-  return (
+   const MAINCONTEXT = useContext(MainContext);
+   return (
     <>
       <TextField
          id="form-customer-name"
@@ -192,7 +194,7 @@ export default function FormUserInformation({
                statusInput={formInfoStatus.postcode}
             />
             {(formInfoData.state && formInfoData.postcode &&
-               (shippingMethod === "shipper")) ? (
+               (shippingMethod === "shipper" && MAINCONTEXT.shop?.shop_info?.use_sameday_delivery)) ? (
                <Select
                   id="form-courier-type"
                   label={(lang?.label__courier_type || "Courier Type")}
