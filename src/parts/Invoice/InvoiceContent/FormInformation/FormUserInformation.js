@@ -227,7 +227,7 @@ export default function FormUserInformation({
                   <AutoComplete
                      id="form-shipper-courier"
                      name="shippingCourierName"
-                     onOpen={() => COURIER.data?.length === 0 && fnGetCouriers}
+                     onOpen={() => COURIER.data?.length === 0 ? fnGetCouriers() : null}
                      getOptionLabel={(option) => option?.name || ''}
                      loading={COURIER.status === 'loading'}
                      disabled={COURIER.status === 'loading'}

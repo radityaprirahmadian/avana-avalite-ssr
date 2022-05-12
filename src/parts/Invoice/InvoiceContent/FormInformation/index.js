@@ -503,17 +503,18 @@ export default function FormInformation({
          lng: longlat.lng,
          lat: longlat.lat,
       });
-      fnGetCouriers(null, null, longlat);
+      fnGetCouriers(null, courierType, longlat);
       // if (newValue) {
       //    fnGetServices(COURIER?.selected?.name, longlat);
       // }
-   }, [fnChange]);
+   }, [fnChange, fnGetCouriers, courierType]);
 
-   const fnGetCouriers = React.useCallback((city, courierTypeParams, longlat) => {
+   const fnGetCouriers = useCallback((city, courierTypeParams, longlat) => {
       const customerLongLat = longlat || {
          lat: formInfoData.lat,
          lng: formInfoData.lng
       }
+      const selectedCourierType = courierTypeParams || courierType;
       const selfPickupData = { name: 'Self Pickup', isSelfPickup: true };
       setCourier((prevState) => ({
          ...prevState,
@@ -546,10 +547,10 @@ export default function FormInformation({
                   (acc, current) => acc + current.quantity * current.weight,
                   0
                ),
-               courier_type: courierTypeParams || courierType,
+               courier_type: selectedCourierType,
                is_self_pickup: 0,
                total_product: totalPrice,
-               ...(customerLongLat.lng && customerLongLat.lat && courierType === "same_day"
+               ...(customerLongLat.lng && customerLongLat.lat && selectedCourierType === "same_day"
                   ? {
                      customer_long: customerLongLat.lng,
                      customer_lat: customerLongLat.lat
@@ -675,7 +676,7 @@ export default function FormInformation({
    const fnChangeCourierType = useCallback((event) => {
       setCourierType(event.target.value)
       fnGetCouriers(null, event.target.value)
-   }, [fnGetCouriers, setCourierType])
+   }, [fnGetCouriers])
 
    React.useEffect(() => {
       fnInitFormsInfo();
