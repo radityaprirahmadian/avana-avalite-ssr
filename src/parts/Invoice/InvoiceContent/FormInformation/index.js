@@ -701,8 +701,6 @@ export default function FormInformation({
 
    const fnChangeCourierType = useCallback((event) => {
       updateFormInfoData({
-         lng: null,
-         lat: null,
          shippingCourierName: null,
          shipperRateId: null,
          shipperUseInsurance: null
