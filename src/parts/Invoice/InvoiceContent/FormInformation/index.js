@@ -674,8 +674,21 @@ export default function FormInformation({
    }, [shipping]);
 
    const fnChangeCourierType = useCallback((event) => {
-      setCourierType(event.target.value)
-      fnGetCouriers(null, event.target.value)
+      updateFormInfoData({
+         shippingCourierName: null,
+         shipperRateId: null,
+         shipperUseInsurance: null
+      });
+      setCourier((prevState) => ({
+         ...prevState,
+         selected: null,
+      }));
+      setService((prevState) => ({
+         ...prevState,
+         selected: null,
+      }));
+      setCourierType(event.target.value);
+      fnGetCouriers(null, event.target.value);
    }, [fnGetCouriers])
 
    React.useEffect(() => {
