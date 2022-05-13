@@ -503,6 +503,19 @@ export default function FormInformation({
          lng: longlat.lng,
          lat: longlat.lat,
       });
+      updateFormInfoData({
+         shippingCourierName: null,
+         shipperRateId: null,
+         shipperUseInsurance: null
+      });
+      setCourier((prevState) => ({
+         ...prevState,
+         selected: null,
+      }));
+      setService((prevState) => ({
+         ...prevState,
+         selected: null,
+      }));
       fnGetCouriers(null, courierType, longlat);
       // if (newValue) {
       //    fnGetServices(COURIER?.selected?.name, longlat);
