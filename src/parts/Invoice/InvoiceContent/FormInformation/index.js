@@ -138,6 +138,7 @@ export default function FormInformation({
          shipperRateId: 0,
          shipperUseInsurance: 4
       });
+      setCourierType('reguler');
       setIsInsuranceMandatory(true);
       fnUpdateOrderDetails((prevState) => ({
          ...prevState,
@@ -260,11 +261,19 @@ export default function FormInformation({
             value: eventValue || '',
          },
       });
+      fnUpdateOrderDetails((prevState) => ({
+         ...prevState,
+         locationAddress: null,
+      }));
       setCourier((prevState) => ({
          ...prevState,
          data: [],
          selected: null,
          status: 'loading',
+      }));
+      setService((prevState) => ({
+         ...prevState,
+         selected: null,
       }));
       if (fetchCityTimeout) {
          clearTimeout(fetchCityTimeout);
@@ -623,6 +632,10 @@ export default function FormInformation({
          data: {},
          status: 'loading'
       }));
+      fnUpdateOrderDetails((prevState) => ({
+         ...prevState,
+         locationAddress: null,
+      }));
       shipping.getSelfPickupInfo()
          .then((res) => {
             const openHours = res.open_hour.split(":");
@@ -688,9 +701,16 @@ export default function FormInformation({
 
    const fnChangeCourierType = useCallback((event) => {
       updateFormInfoData({
+         lng: null,
+         lat: null,
          shippingCourierName: null,
          shipperRateId: null,
          shipperUseInsurance: null
+      });
+      updateFormInfoStatus({
+         shippingCourierName: 0,
+         shipperRateId: 0,
+         shipperUseInsurance: 4
       });
       setCourier((prevState) => ({
          ...prevState,
