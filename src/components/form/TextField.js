@@ -94,7 +94,8 @@ export default function Text({label, onClick, endIcon, ...props}) {
           name={props.name}
           aria-describedby={'helper'+props.id}
           defaultValue={props.defaultValue}
-          {...(props.value ? {value: props.value} : {})}
+          value={props.value}
+          // {...(props.value ? {value: props.value} : {})}
           size={props.size}
           onChange={props.onChange}
           margin="dense"

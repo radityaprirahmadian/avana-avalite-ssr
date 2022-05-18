@@ -1,3 +1,5 @@
+import React, { useContext } from 'react';
+
 import TextField from 'src/components/form/TextField';
 import AutoComplete from 'src/components/form/AutoComplete';
 import PhoneInput from 'src/components/form/PhoneInput';
@@ -10,6 +12,7 @@ import SelfPickupInformation from './SelfPickupInformation';
 import writeLocalization from 'src/helpers/localization';
 
 import checkCourierSameDay from 'src/helpers/checkCourierSameDay';
+import MainContext from 'src/parts/Context';
 
 export default function FormUserInformation({
    lang,
@@ -19,6 +22,7 @@ export default function FormUserInformation({
    COURIER,
    SERVICES,
    SELFPICKUP,
+   courierType,
    formInfoData,
    formInfoStatus,
    shippingMethod,
@@ -36,9 +40,11 @@ export default function FormUserInformation({
    fnChangeCourier,
    fnChangeService,
    fnChangeInsurance,
+   fnChangeCourierType,
    fnChange,
 }) {
-  return (
+   const MAINCONTEXT = useContext(MainContext);
+   return (
     <>
       <TextField
          id="form-customer-name"
@@ -189,13 +195,39 @@ export default function FormUserInformation({
                isRequired
                statusInput={formInfoStatus.postcode}
             />
+            {(formInfoData.state && formInfoData.postcode &&
+               (shippingMethod === "shipper" && MAINCONTEXT.shop?.shop_info?.use_sameday_delivery)) ? (
+               <Select
+                  id="form-courier-type"
+                  label={(lang?.label__courier_type || "Courier Type")}
+                  onChange={fnChangeCourierType}
+                  inputProps= {{
+                     name: 'courierType',
+                  }}
+                  value={courierType}
+               >
+                  <option aria-label="None" value={"regular"}>
+                     {lang?.option__reguler || "Reguler"}
+                  </option>
+                  <option value={"same_day"}>
+                     {lang?.option__same_day || "Same Day"}
+                  </option>
+               </Select>
+            ) : null}
+            {(shippingMethod === "shipper" && !isShippingSelfPickup && 
+               courierType === "same_day" && formInfoData.postcode) ? (
+               // checkCourierSameDay(formInfoData.shippingCourierName)) && (
+                  <LocationModal
+                     lang={lang}
+                  />
+            ) : null}
             {(formInfoData.state &&
                formInfoData.postcode &&
                (shippingMethod === 'shipper' || isAbleSelfPickup)) && (<>
                   <AutoComplete
                      id="form-shipper-courier"
                      name="shippingCourierName"
-                     onOpen={() => COURIER.data?.length === 0 && fnGetCouriers}
+                     onOpen={() => COURIER.data?.length === 0 ? fnGetCouriers() : null}
                      getOptionLabel={(option) => option?.name || ''}
                      loading={COURIER.status === 'loading'}
                      disabled={COURIER.status === 'loading'}
@@ -214,13 +246,6 @@ export default function FormUserInformation({
                   />
                </>)
             }
-            {(shippingMethod === 'shipper' && !isShippingSelfPickup && formInfoData.shippingCourierName &&
-               formInfoData.postcode &&
-               checkCourierSameDay(formInfoData.shippingCourierName)) && (
-                  <LocationModal
-                     lang={lang}
-                  />
-            )}
             {isShippingSelfPickup && (
                <SelfPickupInformation
                   selfPickupInfo={SELFPICKUP.data}

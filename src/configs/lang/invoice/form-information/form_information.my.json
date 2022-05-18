@@ -12,6 +12,7 @@
   "label__services": "Perkhidmatan",
   "label__insurance": "Insurans",
   "label__customer_location": "Lokasi Pelanggan",
+  "label__courier_type": "Taip Kurier",
   "label__optional": "optional",
   "label__search": "Carian",
   "placeholder__country": "Pilih Negara",
@@ -46,6 +47,8 @@
   "text__weekends": "Hujung minggu",
   "text__weekdays": "Hari minggu",
   "btn__confirm": "Konfirmasi",
+  "option_reguler": "Reguler",
+  "option__same_day": "Same Day",
   "option__no": "Tidak",
   "option__yes": "Ya"
 }
