@@ -181,7 +181,7 @@ export default function ProductSelection(props) {
          const addProduct = {
             product_id: product.id,
             name: product.name,
-            image: !!productVariant
+            image: !!productVariant && !!productVariant.variation_image
                ? productVariant.variation_image
                : product.main_image,
             quantity: product.orderQuantity || 1,
