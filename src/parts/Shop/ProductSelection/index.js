@@ -289,7 +289,7 @@ export default function ProductSelection(props) {
                }))[0];
             facebookPixel.addToCart(product);
          }
-         console.log('check result', productsOrdered)
+
          fnResetMetaList(productsOrdered)
 
          props.fnChange({
