@@ -158,9 +158,9 @@ export default function ProductDescription(props) {
                   )}
                 </b>
               </div>
-              {(product.data?.quantity < 10 || (productVariantsQuantity < 10 && !!product.data?.variation)) && (
+              {(!whitelistFeatures?.['catalog_wacommerce'] && (product.data?.quantity < 10 || (productVariantsQuantity < 10 && !!product.data?.variation))) && (
                 <div className="text-red-500 mt-2">
-                  {(!whitelistFeatures?.['catalog_wacommerce'] && (product.data?.quantity === 0 || (productVariantsQuantity === 0 && !!product.data?.variation)))
+                  {(product.data?.quantity === 0 || (productVariantsQuantity === 0 && !!product.data?.variation))
                     ? lang?.text__out_of_stock
                     : (<>
                       {lang?.text__stock_left || 'Stock left:'}
