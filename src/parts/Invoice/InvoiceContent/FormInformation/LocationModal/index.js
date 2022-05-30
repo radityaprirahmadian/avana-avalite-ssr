@@ -65,7 +65,8 @@ export default function LocationModals(props) {
             ),
           }}
           placeholder={lang?.placeholder__choose_location|| 'Click to choose location'}
-          value={FORMCONTEXT?.orderDetails?.locationAddress?.details}
+          defaultValue={FORMCONTEXT?.orderDetails?.locationAddress?.details || ''}
+          value={FORMCONTEXT?.orderDetails?.locationAddress?.details || ''}
           onClick={toggleModal}
         />
       )}

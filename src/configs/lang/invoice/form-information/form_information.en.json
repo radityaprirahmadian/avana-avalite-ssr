@@ -12,6 +12,7 @@
   "label__services": "Services",
   "label__insurance": "Insurance",
   "label__customer_location": "Customer Location",
+  "label__courier_type": "Courier Type",
   "label__optional": "optional",
   "label__search": "Search",
   "placeholder__country": "Select Country",
@@ -46,6 +47,8 @@
   "text__weekends": "Weekends",
   "text__weekdays": "Weekdays",
   "btn__confirm": "Confirm",
+  "option_reguler": "Reguler",
+  "option__same_day": "Same Day",
   "option__no": "No",
   "option__yes": "Yes"
 }

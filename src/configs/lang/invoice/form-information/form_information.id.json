@@ -12,6 +12,7 @@
   "label__services": "Servis",
   "label__insurance": "Asuransi",
   "label__customer_location": "Lokasi Pengguna",
+  "label__courier_type": "Tipe Kurir",
   "label__optional": "tidak wajib",
   "label__search": "Cari",
   "placeholder__country": "Pilih Negara",
@@ -46,6 +47,8 @@
   "text__weekends": "Akhir pekan",
   "text__weekdays": "Hari kerja",
   "btn__confirm": "Konfirmasi",
+  "option_reguler": "Reguler",
+  "option__same_day": "Same Day",
   "option__no": "Tidak",
   "option__yes": "Ya"
 }
