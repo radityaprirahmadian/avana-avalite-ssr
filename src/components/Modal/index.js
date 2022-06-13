@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import propTypes from "prop-types";
 import { createPortal } from "react-dom";
 
@@ -10,25 +10,34 @@ export default function Modal(props) {
   const [Allow, setAllow] = useState(() => true);
 
   const ModalRef = useRef(null);
-  const idModal = "modal";
+  const idModal = useMemo(() => "modal");
 
-  function toggleAllow() {
-    setAllow(!Allow);
-  }
+  const toggleAllow = useCallback(
+    () => {
+      setAllow(!Allow);
+    },
+    [Allow]
+  );
 
-  function toggle() {
-    if (props.toggleModal) props.toggleModal();
-    else setDisplay(!Display);
-  }
+  const toggle = useCallback(
+    (e) => {
+      if (props.toggleModal) props.toggleModal(e);
+      else setDisplay(!Display);
+    },
+    [props, Display]
+  )
 
-  function handleClickOutside(event) {
-    if (
-      ModalRef?.current &&
-      !ModalRef?.current?.contains?.(event.target) &&
-      Allow
-    )
-      toggle();
-  }
+  const handleClickOutside = useCallback(
+    (event) => {
+      if (
+        ModalRef?.current &&
+        !ModalRef?.current?.contains?.(event.target) &&
+        Allow
+      )
+        toggle();
+    },
+    [ModalRef, toggle]
+  );
 
   useEffect(() => {
     const rootContainer = document.createElement("div");
@@ -79,9 +88,9 @@ export default function Modal(props) {
                     ref={ModalRef}
                     className="bg-white shadow-2xl max-w-3xl max-h-2xl"
                   >
-                    <div className="relative">
+                    {/* <div className="relative">
                       <span className="modal-close" onClick={toggle}></span>
-                    </div>
+                    </div> */}
 
                     {props.content(toggle)}
                   </div>

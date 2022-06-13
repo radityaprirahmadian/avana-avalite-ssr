@@ -82,7 +82,7 @@ export default function Text({label, onClick, endIcon, ...props}) {
       >
         {
           label && (
-            <Label {...props.InputLabelProps} shrink htmlFor={props.id}>{label}{props.isRequired && (<span className="text-red-5">*</span>)}</Label>
+            <Label {...props.InputLabelProps} shrink htmlFor={props.id}>{label}{props.isRequired && (<span className="text-red-500">*</span>)}</Label>
           )
         }
         <Input

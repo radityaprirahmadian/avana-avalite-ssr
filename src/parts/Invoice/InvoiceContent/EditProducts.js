@@ -184,7 +184,7 @@ export default function EditProducts(props) {
       />
       {(!productDetails.isViewProductDetail && !productDetails.isViewProductVariant) && (
         <div
-          className="sticky bg-white bottom-0 py-2"
+          className="sticky bg-white bottom-0 py-2 z-10"
         >
           <Button
             onClick={fnConfirmEditProducts}

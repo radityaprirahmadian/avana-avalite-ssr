@@ -7,16 +7,25 @@ export default function SummaryProducts({orderDetails, productsOrdered}) {
             <div key={product.product_id} className="flex flex-row my-3">
                <img src={product.image} alt="" className="object-cover rounded-lg" style={{height: '75px', width: '75px'}}/>
                <div className="flex-1 mx-3">
-               <span className="block" style={{minWidth: '100px'}}>{product.name}</span>
-                  {product.variation && (
-                     <span className="product-variation">{`(${product.variation})`}</span>
-                  )}
+                  <h5 className="block font-bold" style={{minWidth: '100px'}}>{product.name}</h5>
+                  {
+                     Array.isArray(product.variation) ? (
+                        product.variation.map((variant) => (
+                           <div className="product-variation">
+                              <span>{variant.option}</span>
+                              <span className="font-semibold">{`: ${variant.value}`} </span>  
+                           </div>
+                        ))
+                     ) : product.variation ? (
+                        <span className="product-variation">{`(${product.variation})`}</span>
+                     ) : null
+                  }
                </div>
                <div>
-               <span className="block text-right">
+               <span className="block text-right font-semibold text-primary-orange">
                   {formatCurrency(product.price, orderDetails.currencyCode)}
                </span>
-               <span className="block text-right">{`x ${product.quantity}`}</span>
+               <span className="block text-right font-semibold">{`x ${product.quantity}`}</span>
                </div>
             </div>
          ))}

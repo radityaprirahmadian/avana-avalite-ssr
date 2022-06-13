@@ -12,12 +12,6 @@ const ProductViewer = lazy(() =>
     './ProductViewer'
   )
 );
-const Variation = lazy(() =>
-  import(
-    /* webpackChunkName: "Variation" */ /* webpackPrefetch: true */
-    './Variation'
-  )
-);
 
 export default function ProductLists(props) {
    const { products, selectedVariant, lang, whitelistFeatures } = props;
@@ -26,19 +20,7 @@ export default function ProductLists(props) {
    
    return (
       <Suspense fallback={<Spinner size={0.5} />}>
-         {(!isLoadingData && Object.values(products.data).length > 0) ? 
-            selectedVariant.isSelect ? (
-               <Variation
-                  lang={lang}
-                  item={selectedVariant.product}
-                  whitelistFeatures={whitelistFeatures}
-                  selectedMeta={props.selectedMetaList[selectedVariant.product.id]}
-                  productsOrdered={props.productsOrdered}
-                  fnSelectProduct={props.fnSelectProduct}
-                  fnChangeRangeProduct={props.fnChangeRangeProduct}
-                  fnToggleSelectVariant={props.fnToggleSelectVariant}
-               />
-            ) : (
+         {(!isLoadingData && Object.values(products.data).length > 0) ? (
             <>
                {Object.values(products.data).map((item) => (
                   <div key={item.id}>
@@ -58,14 +40,14 @@ export default function ProductLists(props) {
             </>
          ) : (
             <>
-            {products.status !== 'loading' &&  (
-               <div className="flex flex-col items-center justify-center py-6">
-                  <div className="w-24 h-24 object-contain mb-3">
-                     <img src={images.sad} alt="ava sad" />
+               {products.status !== 'loading' &&  (
+                  <div className="flex flex-col items-center justify-center py-6">
+                     <div className="w-24 h-24 object-contain mb-3">
+                        <img src={images.sad} alt="ava sad" />
+                     </div>
+                     <span>{lang?.text__product_not_found || 'The product you are looking for was not found'}</span>
                   </div>
-                  <span>{lang?.text__product_not_found || 'The product you are looking for was not found'}</span>
-               </div>
-            )}
+               )}
             </>
          )}
          {

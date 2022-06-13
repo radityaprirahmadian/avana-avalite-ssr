@@ -29,7 +29,7 @@ export default function CategoriesSelection(props) {
 
    return (
       <div
-         className="sticky bg-white pb-2 z-10"
+         className="sticky bg-white pb-2 z-30"
          style={{
             top: '5.25rem'
          }}

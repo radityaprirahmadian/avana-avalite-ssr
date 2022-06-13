@@ -5,57 +5,26 @@ import { ArrowBack } from '@material-ui/icons';
 import ImgSlider from 'src/components/ImgSlider';
 import Button from 'src/components/Button';
 
-import products from 'src/constants/api/products'
-
 import MainContext from 'src/parts/Context';
 
 // utils
 import formatCurrency from 'src/helpers/formatCurrency';
 
-function ProductDetails(props) {
+export default function ProductDescription(props) {
   const {
     lang,
-    productId,
+    product,
     productsOrdered,
-    fnSelectProduct,
-    fnChangeRangeProduct,
+    productVariantsQuantity,
+    isProductHasVariant,
     fnToggleSelectVariant,
     fnToggleSelectProduct,
+    handleAddNonVariant,
+    fnChangeRangeProduct,
   } = props;
 
   const MAINCONTEXT = useContext(MainContext);
   const whitelistFeatures = MAINCONTEXT?.whitelistFeatures;
-  const [product, setProduct] = useState({
-    data: {},
-    error: {},
-    status: 'init'
-  })
-
-  const [productVariantsQuantity, setproductVariantsQuantity] = useState(-1)
-
-  const [checkIndexOrder, setCheckIndexOrder] = useState(-1)
-
-  // const indexOrder = payload.order.product_ordered.findIndex(
-  //   (x) =>
-  //     x.product_id === Number(e.target.name) &&
-  //     (variation ? x.variation_option_id === variation.id : true)
-  // );
-
-  const isProductHasVariant = !!product.data?.variation;
-
-  const handleAddNonVariant = useCallback(() => {
-    if (checkIndexOrder) {
-      fnChangeRangeProduct({target:
-        {
-          name: String(productId),
-          value: productsOrdered[productId]?.quantity + 1
-        }
-      })
-    } else {
-      fnSelectProduct(product.data);
-    }
-    fnToggleSelectProduct();
-  }, [product, checkIndexOrder, fnChangeRangeProduct, fnSelectProduct, fnToggleSelectProduct]);
 
   const handleCancelProduct = useCallback(
     (id) => {
@@ -70,40 +39,6 @@ function ProductDetails(props) {
     },
     [fnChangeRangeProduct],
  );
-
-  useEffect(() => {
-    if (productId) {
-      setProduct((prevState) => ({
-        ...prevState,
-        status: 'loading'
-      }))
-      products
-        .details(productId)
-        .then((res) => {
-          setproductVariantsQuantity(!!res.variation
-            ? res?.variation?.options
-                ?.reduce((acc, variant) => {
-                  return acc + variant?.quantity
-                }, 0)
-            : -1
-          );
-          setProduct((prevState) => ({
-            ...prevState,
-            data: res,
-            status: 'ok'
-          }));
-          setCheckIndexOrder(!!productsOrdered[productId])
-        })
-        .catch((err) => {
-          setProduct((prevState) => ({
-            ...prevState,
-            data: {},
-            error: err,
-            status: 'error'
-          }))
-        })
-    }
-  }, [productId, productsOrdered])
 
   return (
     <div
@@ -277,7 +212,7 @@ function ProductDetails(props) {
           </section>
           <section className="sticky bottom-0 py-4 bg-white">
             {
-              productsOrdered?.[productId] && whitelistFeatures?.['catalog_wacommerce'] ? (
+              productsOrdered?.[product.id] && whitelistFeatures?.['catalog_wacommerce'] ? (
                 <Button
                    type="button"
                    className="is-radiusless is-shadowless"
@@ -312,7 +247,5 @@ function ProductDetails(props) {
         </>
       )}
     </div>
-  );
+  )
 }
-
-export default ProductDetails;

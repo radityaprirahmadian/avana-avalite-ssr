@@ -4,7 +4,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import "./components/phoneNumber.css";
+@import "./components/index.css";
 
 :root {
    --font-family-nunito: "Nunito", sans-serif;
@@ -136,7 +136,7 @@ svg#svg-star {
 
 .stars .star:not(.placeholder) {
    z-index: 2;
-   @apply .bg-yellow-4;
+   @apply .bg-yellow-400;
 }
 
 .stars .star.placeholder {
@@ -301,4 +301,20 @@ MATERIAL INJECT STUFF HERE
 .MuiButton-containedPrimary.whatsapp {
    color: #fff;
    background-color: #128c7e!important;
+}
+
+.group-button {
+   @apply .flex .flex-row .flex-wrap;
+}
+
+.group-button > * {
+   @apply .mr-2 .mb-2
+}
+
+.group-button > *:last-child {
+   @apply .m-0
+}
+
+.group-button > button.active-group-button {
+   @apply .text-yellow-500 .font-semibold .border-yellow-500 .bg-yellow-100
 }

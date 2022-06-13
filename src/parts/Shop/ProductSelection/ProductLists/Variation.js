@@ -6,6 +6,7 @@ import Button from 'src/components/Button';
 
 import formatThousand from 'src/helpers/formatThousand';
 
+import GroupButton from 'src/components/Group/Button';
 import MainContext from 'src/parts/Context';
 
 export default function Variation({
@@ -39,6 +40,8 @@ export default function Variation({
         </span>
       </div>
       <div className="py-4 flex-1">
+        <GroupButton
+        />
         {item?.variation?.options
           ?.filter((option) => option.id)
           ?.map(
@@ -63,7 +66,7 @@ export default function Variation({
                       <div className="w-full px-4">
                         <div>{option.name}</div>
                         {(!whitelistFeatures?.['catalog_wacommerce'] && option.quantity === 0) ? (
-                          <div className="text-sm text-red-5 leading-3">
+                          <div className="text-sm text-red-500 leading-3">
                             {lang?.text__out_of_stock || 'Out of stock'}
                           </div>
                         ): null}

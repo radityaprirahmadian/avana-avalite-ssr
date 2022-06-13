@@ -65,7 +65,8 @@ export default function ImgDrawer(props) {
         arrPosition = prev.listPosition;
       }
       imgContainer.current.classList.add('shifting');
-      imgContainer.current.style.left = `${arrPosition?.[imgSelected + 1]}px`;
+      console.log(`${arrPosition?.[imgSelected + 1]}px`, arrPosition, imgSelected + 1)
+      imgContainer.current.style.left = `${arrPosition?.[imgSelected + 1] || -300}px`;
       setImgSelected(imgSelected + 1);
       return {
         ...prev,
@@ -93,7 +94,8 @@ export default function ImgDrawer(props) {
         arrPosition = prev.listPosition;
       }
       imgContainer.current.classList.add('shifting');
-      imgContainer.current.style.left = `${arrPosition?.[imgSelected - 1]}px`;
+      console.log(`${arrPosition?.[imgSelected - 1]}px`, arrPosition, imgSelected - 1)
+      imgContainer.current.style.left = `${arrPosition?.[imgSelected - 1] ?? -300}px`;
       setImgSelected(imgSelected - 1);
       return {
         ...prev,
@@ -223,6 +225,13 @@ export default function ImgDrawer(props) {
     // imgContainer.current.onmousemove = fnTouchMove;
     // if (props.)
   }, [props]);
+
+  useEffect(() => {
+    if (props?.images?.length === 1) return;
+    setImgSelected(1);
+    imgContainer.current.classList.add('shifting');
+    imgContainer.current.style.left = `${-300}px`;
+  }, [props.images]);
 
   return (
     <div

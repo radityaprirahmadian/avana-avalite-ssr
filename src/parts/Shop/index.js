@@ -123,7 +123,6 @@ export default function Shop({ shopDetails }) {
             urlRedirect = mobileTabletCheck()
                ? `whatsapp://send?phone=${waPhoneNumber}&text=${messages}`
                : `https://web.whatsapp.com/send?phone=${waPhoneNumber}&text=${messages}`;
-
             setRedirectUrl(urlRedirect);
             fnAnalyticsOrderCreated(order_id).finally(() => {
                if (refRedirect.current) {
@@ -363,6 +362,15 @@ export default function Shop({ shopDetails }) {
             <ProductSelection
                productsOrdered={data.productsOrdered}
                productDetails={productDetails}
+               CheckoutComponent={
+                  <Checkout
+                     lang={lang}
+                     data={data}
+                     status={status}
+                     statusOrder={statusOrder}
+                     fnCreateOrder={fnCreateOrder}
+                  />
+               }
                fnChange={fnChange}
                fnSetProductDetails={setProductDetails}
             />
