@@ -429,6 +429,7 @@ export default function Invoice({ shopDetails, orderToken }) {
                      return {
                         ...productsOrdered,
                         [productKey]: {
+                           order_product_id: product.order_product_id,
                            product_id: product.product_id,
                            name: product.product_name,
                            image: product.product_image,
