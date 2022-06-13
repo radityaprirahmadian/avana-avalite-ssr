@@ -44,6 +44,13 @@ export default function Row({
       [fnChangeRangeProduct],
    );
 
+   const maximumOrderQuantity = (quantity, maxPurchaseOnTransaction) => {
+      if (maxPurchaseOnTransaction) {
+         return Math.min(quantity, maxPurchaseOnTransaction)
+      }
+      return quantity
+   }
+      
    return (
       <div className="flex py-4 border-b border-gray-200" >
          <div className="w-auto cursor-pointer" onClick={onClick}>
@@ -182,7 +189,7 @@ export default function Row({
                      <NumberRange
                         name={item.id}
                         min="0"
-                        max={item.quantity}
+                        max={maximumOrderQuantity(item.quantity, item.max_purchase_on_transaction)}
                         value={productsOrdered?.[item.id]?.quantity}
                         fnChange={fnChangeRangeProduct}
                      />
