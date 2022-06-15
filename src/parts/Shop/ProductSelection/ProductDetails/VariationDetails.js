@@ -13,6 +13,7 @@ import VariationSelector from './VariationSelector';
 // utils
 import formatCurrency from "src/helpers/formatCurrency";
 import sortArrayByKey from "src/helpers/sortArrayByKey";
+import maximumOrderQuantity from "src/helpers/maxOrderQuantity";
 
 export default function VariationDetails(props) {
   const {
@@ -321,7 +322,7 @@ export default function VariationDetails(props) {
               <NumberRange
                 name={`${item.id}_${variantSelected?.meta?.id}`}
                 min="0"
-                max={variantSelected?.meta?.quantity}
+                max={maximumOrderQuantity(variantSelected?.meta?.quantity, variantSelected?.meta?.max_purchase_on_transaction)}
                 value={variantSelected?.quantity}
                 fnChange={changeRangeQuantity}
                 // fnChange={() => {}}
