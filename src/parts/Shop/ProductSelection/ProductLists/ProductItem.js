@@ -7,6 +7,7 @@ import Image from 'src/components/Container/Image'
 import VariantMiniCart from './VariantMiniCart'
 
 import formatThousand from 'src/helpers/formatThousand'
+import maximumOrderQuantity from 'src/helpers/maxOrderQuantity'
 
 export default function Row({
    onClick,
@@ -44,13 +45,6 @@ export default function Row({
       },
       [fnChangeRangeProduct],
    );
-
-   const maximumOrderQuantity = (quantity, maxPurchaseOnTransaction) => {
-      if (maxPurchaseOnTransaction) {
-         return Math.min(quantity, maxPurchaseOnTransaction)
-      }
-      return quantity
-   }
       
    return (
       <div className="flex py-4 border-b border-gray-200" >
