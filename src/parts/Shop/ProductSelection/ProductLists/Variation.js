@@ -8,6 +8,7 @@ import formatThousand from 'src/helpers/formatThousand';
 
 import GroupButton from 'src/components/Group/Button';
 import MainContext from 'src/parts/Context';
+import maximumOrderQuantity from 'src/helpers/maxOrderQuantity';
 
 export default function Variation({
   lang,
@@ -88,7 +89,7 @@ export default function Variation({
                           <NumberRange
                             name={`${item.id}_${option.id}`}
                             min="0"
-                            max={option.quantity}
+                            max={maximumOrderQuantity(option.quantity, item.max_purchase_on_transaction)}
                             value={productsOrdered?.[`${item.id}_${option.id}`]?.quantity}
                             fnChange={fnChangeRangeProduct}
                           />
