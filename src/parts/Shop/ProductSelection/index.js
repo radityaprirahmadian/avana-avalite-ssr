@@ -9,7 +9,7 @@ import CategoriesSelection from './CategoriesSelection';
 import ProductLists from './ProductLists';
 import ProductDetails from './ProductDetails';
 import OrderCart from './OrderCart';
-import Slider from './Sliders';
+import SlidersWithSlick from './SlidersWithSlick';
 
 import products from 'src/constants/api/products';
 
@@ -393,7 +393,7 @@ export default function ProductSelection(props) {
                </div>
                {
                   whitelistFeatures?.catalog_wacommerce ? (
-                     <Slider
+                     <SlidersWithSlick
                         setSelectedCategory={setSelectedCategory}
                      />
                   ) : (
