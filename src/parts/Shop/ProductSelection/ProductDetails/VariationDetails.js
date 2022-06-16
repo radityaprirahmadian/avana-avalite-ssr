@@ -322,7 +322,7 @@ export default function VariationDetails(props) {
               <NumberRange
                 name={`${item.id}_${variantSelected?.meta?.id}`}
                 min="0"
-                max={maximumOrderQuantity(variantSelected?.meta?.quantity, variantSelected?.meta?.max_purchase_on_transaction)}
+                max={maximumOrderQuantity(variantSelected?.meta?.quantity, item.max_purchase_on_transaction)}
                 value={variantSelected?.quantity}
                 fnChange={changeRangeQuantity}
                 // fnChange={() => {}}
