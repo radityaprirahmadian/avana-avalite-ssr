@@ -49,11 +49,15 @@ const SlidersWithSlick = ({ setSelectedCategory }) => {
          ) : (
             <>
             <SlickSlider
-              imgKey="image"
-              images={sliderList.data || []}
-              onClick={selectSlider}
+               imgKey="image"
+               images={sliderList.data || []}
+               onClick={selectSlider}
             />
-            <SmallBanner />
+            <SmallBanner
+               imgKey="image"
+               images={sliderList.data || []}
+               onClick={selectSlider}
+            />
             </>
          )
 }
