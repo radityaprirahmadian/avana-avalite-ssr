@@ -3,7 +3,7 @@ import styles from './SlickSlider.module.css'
 import Slider from 'react-slick'
 import { ChevronRight, ChevronLeft } from '@material-ui/icons'
 import Img from '../Container/Image'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 
 const SlickSlider = (props) => {
 
@@ -21,10 +21,13 @@ const SlickSlider = (props) => {
       dotsClass: `slick-dots ${styles.dots}`,
    }
 
+   // Get only the primary banner image
    const imgList = useMemo(() => {
+      const primaryBannerFilter = (imageObject) => imageObject.type === 0;
+
       return (
          (props?.imgKey
-            ? props?.images?.map((data) => data?.[props?.imgKey] || '')
+            ? props?.images?.filter(primaryBannerFilter).map((data) => data?.[props?.imgKey] || '')
             : props?.images) || []
       )
    }, [props?.images])
