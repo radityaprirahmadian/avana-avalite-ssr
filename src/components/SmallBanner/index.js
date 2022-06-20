@@ -18,8 +18,8 @@ const SmallBanner = (props) => {
     <section className="grid grid-cols-4">
       {imgList.map((image, index) => (
         <div key={index} className="relative w-full border border-transparent">
-          <h2 style={{ top: "50%", left: "50%", transform: "translate(-50%, -50%)"}} className="absolute z-10 text-white text-xl">Overlay</h2>
-          <Img src={image.replace('thumbnail', 'large')}className="h-full w-full opacity-75" />
+          <h2 style={{ top: "50%", left: "50%", transform: "translate(-50%, -50%)"}} className="absolute z-10 text-white text-xl">{/*Overlay*/}</h2>
+          <Img src={image.replace('thumbnail', 'large')}className="h-full w-full opacity-50" />
         </div>
       ))}
     </section>
