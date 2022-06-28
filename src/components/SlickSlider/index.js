@@ -32,12 +32,17 @@ const SlickSlider = (props) => {
       )
    }, [props?.images])
 
-
+   const handleOnClick = (imgSelected) => {
+      const selectedIdx = imgSelected <= imgList.length
+            ? imgSelected - 1
+            : 0
+          props.onClick(props?.images?.[selectedIdx], selectedIdx);
+     }
 
    return (
       <Slider className="mt-4" {...settings}>
          {imgList.map((data, index) => (
-            <a href={data.url} target="_blank" rel="nofollow noindex" key={index}>
+            <a href={data.url} target="_blank" rel="nofollow noindex" key={index} onClick={() => handleOnClick(data)}>
                <Img
                   src={data.image.replace('thumbnail', 'large')}
                   style={{ width: '375px', height: '150px' }}
