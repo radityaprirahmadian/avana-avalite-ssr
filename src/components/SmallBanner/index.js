@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import Img from '../Container/Image'
 
 const SmallBanner = (props) => {
@@ -7,18 +7,28 @@ const SmallBanner = (props) => {
   const imgList = useMemo(() => {
     const smallBannerFilter = (imageObject) => imageObject.type === 1;
 
+    console.log(props?.images);
+
     return (
        (props?.imgKey
-          ? props?.images?.filter(smallBannerFilter).map((data) => data?.[props?.imgKey] || '')
+          ? props?.images?.filter(smallBannerFilter)
           : props?.images) || []
     )
  }, [props?.images])
+
+ const handleOnClick = (imgSelected) => {
+  console.log("handleOnClick", imgSelected);
+  // const selectedIdx = imgSelected <= imgList.length
+  //       ? imgSelected - 1
+  //       : 0
+      props.onClick(imgSelected);
+ }
   
   return (
     <section className="grid grid-cols-4">
-      {imgList.map((image, index) => (
-        <div key={index} className="relative w-full border border-transparent">
-          <Img src={image.replace('thumbnail', 'large')} style={{ height: "93.75px", width: "93.75px"}} />
+      {imgList.map((data, index) => (
+        <div key={index} style={{ cursor: "pointer" }} className="relative w-full border border-transparent" onClick={() => handleOnClick(data)}>
+          <Img src={data.image.replace('thumbnail', 'large')} style={{ height: "93.75px", width: "93.75px"}} />
         </div>
       ))}
     </section>
