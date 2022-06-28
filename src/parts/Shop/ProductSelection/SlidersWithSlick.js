@@ -5,7 +5,7 @@ import React, { useState, useCallback, useEffect } from 'react'
 import shops from 'src/constants/api/shops'
 import SmallBanner from 'src/components/SmallBanner'
 
-const SlidersWithSlick = ({ setSelectedCategory }) => {
+const SlidersWithSlick = ({ setSelectedCategory, setSelectedCollection }) => {
    const [sliderList, setSliderList] = useState({
       data: [],
       isLoading: false,
@@ -29,14 +29,29 @@ const SlidersWithSlick = ({ setSelectedCategory }) => {
    }, [])
 
    const selectSlider = useCallback((data) => {
-      console.log(data)
-      const urlCategoryId = data.url.includes('/category/')
+      const urlCategoryId = data?.url?.includes('/category/')
          ? data.url.split('/category/')[1]
+         : ''
+      const urlCollectionId = data?.url?.includes('/collection/')
+         ? data.url.split('/collection/')[1]
          : ''
       if (urlCategoryId) {
          setSelectedCategory(Number(urlCategoryId))
       }
+      if (urlCollectionId) {
+         setSelectedCollection(Number(urlCollectionId))
+      }
    }, [])
+
+   const selectSmallSlider = useCallback((data) => {
+      const urlCollectionId = data?.url?.includes('/collection/')
+         ? data.url.split('/collection/')[1]
+         : ''
+         if (urlCollectionId) {
+            setSelectedCollection(Number(urlCollectionId))
+         }
+         console.log("selectSmallSlider", data)
+   })
 
    useEffect(() => {
       getSlider()
@@ -56,7 +71,7 @@ const SlidersWithSlick = ({ setSelectedCategory }) => {
             <SmallBanner
                imgKey="image"
                images={sliderList.data || []}
-               onClick={selectSlider}
+               onClick={selectSmallSlider}
             />
             </>
          )
