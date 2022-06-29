@@ -27,23 +27,28 @@ const SlickSlider = (props) => {
 
       return (
          (props?.imgKey
-            ? props?.images?.filter(primaryBannerFilter).map((data) => data?.[props?.imgKey] || '')
+            ? props?.images?.filter(primaryBannerFilter)
             : props?.images) || []
       )
    }, [props?.images])
 
-
+   const handleOnClick = (imgSelected) => {
+      const selectedIdx = imgSelected <= imgList.length
+            ? imgSelected - 1
+            : 0
+          props.onClick(props?.images?.[selectedIdx], selectedIdx);
+     }
 
    return (
       <Slider className="mt-4" {...settings}>
-         {imgList.map((image, index) => (
-            <div key={index}>
+         {imgList.map((data, index) => (
+            <a href={data.url} target="_blank" rel="nofollow noindex" key={index} onClick={() => handleOnClick(data)}>
                <Img
-                  src={image.replace('thumbnail', 'large')}
+                  src={data.image.replace('thumbnail', 'large')}
                   style={{ width: '375px', height: '150px' }}
                   className="rounded-lg object-cover h-full"
                />
-            </div>
+            </a>
          ))}
       </Slider>
    )

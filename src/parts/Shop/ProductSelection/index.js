@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 
 import TextField from 'src/components/form/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -45,6 +45,7 @@ export default function ProductSelection(props) {
 
    const [search, setSearch] = React.useState('')
    const [selectedCategory, setSelectedCategory] = React.useState('')
+   const [selectedCollection, setSelectedCollection] = React.useState('')
    const [selectedVariant, setSelectedVariant] = React.useState({
       product: {},
       isSelect: false
@@ -62,7 +63,7 @@ export default function ProductSelection(props) {
    )
 
    const fnGetProducts = React.useCallback(
-      (search, selectedCategory, page = 1 ) => {
+      (search, selectedCategory, selectedCollection, page = 1 ) => {
          setProducts((prev) => ({
             ...prev,
             data: page === 1 ? {} : prev.data,
@@ -76,6 +77,7 @@ export default function ProductSelection(props) {
                   sortValue: 'desc',
                   limit: '10',
                   categories: selectedCategory ? [selectedCategory] : undefined,
+                  collections: selectedCollection ? [selectedCollection] : undefined,
                   name: search,
                   page: page
                },
@@ -123,10 +125,10 @@ export default function ProductSelection(props) {
             (PRODUCTS.page.currentPage < PRODUCTS.page.lastPage) &&
             (PRODUCTS.status !== 'loading')
          ) {
-            fnGetProducts(search, selectedCategory, PRODUCTS.page.currentPage + 1);
+            fnGetProducts(search, selectedCategory, selectedCollection, PRODUCTS.page.currentPage + 1);
          }
       },
-      [setProducts, fnGetProducts, search, selectedVariant.isSelect, selectedCategory, props.productDetails.isViewProductDetail, PRODUCTS]
+      [setProducts, fnGetProducts, search, selectedVariant.isSelect, selectedCategory, selectedCollection, props.productDetails.isViewProductDetail, PRODUCTS]
    )
 
    const fnGetCategories = React.useCallback(() => {
@@ -328,8 +330,8 @@ export default function ProductSelection(props) {
    );
 
    React.useEffect(() => {
-      fnGetProducts(search, selectedCategory);
-   }, [fnGetProducts, search, selectedCategory]);
+      fnGetProducts(search, selectedCategory, selectedCollection);
+   }, [fnGetProducts, search, selectedCategory, selectedCollection]);
 
    React.useEffect(() => {
       fnGetCategories();
@@ -395,6 +397,7 @@ export default function ProductSelection(props) {
                   whitelistFeatures?.catalog_wacommerce ? (
                      <SlidersWithSlick
                         setSelectedCategory={setSelectedCategory}
+                        setSelectedCollection={setSelectedCollection}
                      />
                   ) : (
                      null

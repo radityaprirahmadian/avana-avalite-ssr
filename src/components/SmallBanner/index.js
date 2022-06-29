@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import Img from '../Container/Image'
 
 const SmallBanner = (props) => {
@@ -9,17 +9,20 @@ const SmallBanner = (props) => {
 
     return (
        (props?.imgKey
-          ? props?.images?.filter(smallBannerFilter).map((data) => data?.[props?.imgKey] || '')
+          ? props?.images?.filter(smallBannerFilter)
           : props?.images) || []
     )
  }, [props?.images])
+
+ const handleOnClick = (imgSelected) => {
+      props.onClick(imgSelected);
+ }
   
   return (
     <section className="grid grid-cols-4">
-      {imgList.map((image, index) => (
-        <div key={index} className="relative w-full border border-transparent">
-          <h2 style={{ top: "50%", left: "50%", transform: "translate(-50%, -50%)"}} className="absolute z-10 text-white text-xl">{/*Overlay*/}</h2>
-          <Img src={image.replace('thumbnail', 'large')} style={{ height: "93.75px", width: "93.75px"}} />
+      {imgList.map((data, index) => (
+        <div key={index} style={{ cursor: "pointer" }} className="relative w-full border border-transparent" onClick={() => handleOnClick(data)}>
+          <Img src={data.image.replace('thumbnail', 'large')} style={{ height: "93.75px", width: "93.75px"}} />
         </div>
       ))}
     </section>
