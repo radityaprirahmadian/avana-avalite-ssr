@@ -24,7 +24,6 @@ const SlidersWithSlick = ({ setSelectedCategory, setSelectedCollection }) => {
             data: data,
             error: [],
          })
-         console.log(data)
       })
    }, [])
 
@@ -50,7 +49,6 @@ const SlidersWithSlick = ({ setSelectedCategory, setSelectedCollection }) => {
          if (urlCollectionId) {
             setSelectedCollection(Number(urlCollectionId))
          }
-         console.log("selectSmallSlider", data)
    })
 
    useEffect(() => {
