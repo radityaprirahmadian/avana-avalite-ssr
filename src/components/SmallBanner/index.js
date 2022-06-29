@@ -7,8 +7,6 @@ const SmallBanner = (props) => {
   const imgList = useMemo(() => {
     const smallBannerFilter = (imageObject) => imageObject.type === 1;
 
-    console.log(props?.images);
-
     return (
        (props?.imgKey
           ? props?.images?.filter(smallBannerFilter)
@@ -17,10 +15,6 @@ const SmallBanner = (props) => {
  }, [props?.images])
 
  const handleOnClick = (imgSelected) => {
-  console.log("handleOnClick", imgSelected);
-  // const selectedIdx = imgSelected <= imgList.length
-  //       ? imgSelected - 1
-  //       : 0
       props.onClick(imgSelected);
  }
   
