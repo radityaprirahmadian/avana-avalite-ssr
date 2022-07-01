@@ -60,14 +60,7 @@ export default function ProductSelection(props) {
          }, 300)
       },
       [search]
-   )
-
-   // Only use one of the two search parameters: category or collection
-   React.useEffect(() => {
-      if (selectedCategory !== "") setSelectedCollection("")
-      else if (selectedCollection !== "") setSelectedCategory("")
-   }, [selectedCategory, selectedCollection])
-   
+   )   
 
    const fnGetProducts = React.useCallback(
       (search, selectedCategory, selectedCollection, page = 1 ) => {
@@ -83,8 +76,8 @@ export default function ProductSelection(props) {
                   sortKey: 'quantity',
                   sortValue: 'desc',
                   limit: '10',
-                  categories: selectedCategory ? [selectedCategory] : undefined,
-                  collections: selectedCollection ? [selectedCollection] : undefined,
+                  categories: selectedCategory ? [selectedCategory] : "",
+                  collections: selectedCollection ? [selectedCollection] : "",
                   name: search,
                   page: page
                },
@@ -397,6 +390,7 @@ export default function ProductSelection(props) {
                         categories={CATEGORIES}
                         selectedCategory={selectedCategory}
                         setSelectedCategory={setSelectedCategory}
+                        setSelectedCollection={setSelectedCollection}
                      />
                   </div>
                </div>
