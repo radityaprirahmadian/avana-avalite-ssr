@@ -27,6 +27,10 @@ const SlidersWithSlick = ({ setSelectedCategory, setSelectedCollection }) => {
       })
    }, [])
 
+   /**
+    * This function is used to select the banner images
+    * @param {Object} data - The selected slider object
+    */
    const selectSlider = useCallback((data) => {
       const urlCategoryId = data?.url?.includes('/category/')
          ? data.url.split('/category/')[1]
@@ -35,21 +39,14 @@ const SlidersWithSlick = ({ setSelectedCategory, setSelectedCollection }) => {
          ? data.url.split('/collection/')[1]
          : ''
       if (urlCategoryId) {
-         setSelectedCategory(Number(urlCategoryId))
+         setSelectedCategory(String(urlCategoryId))
+         setSelectedCollection("")
       }
       if (urlCollectionId) {
-         setSelectedCollection(Number(urlCollectionId))
+         setSelectedCollection(String(urlCollectionId))
+         setSelectedCategory("")
       }
    }, [])
-
-   const selectSmallSlider = useCallback((data) => {
-      const urlCollectionId = data?.url?.includes('/collection/')
-         ? data.url.split('/collection/')[1]
-         : ''
-         if (urlCollectionId) {
-            setSelectedCollection(Number(urlCollectionId))
-         }
-   })
 
    useEffect(() => {
       getSlider()
@@ -69,7 +66,7 @@ const SlidersWithSlick = ({ setSelectedCategory, setSelectedCollection }) => {
             <SmallBanner
                imgKey="image"
                images={sliderList.data || []}
-               onClick={selectSmallSlider}
+               onClick={selectSlider}
             />
             </>
          )

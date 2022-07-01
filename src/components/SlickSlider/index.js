@@ -21,9 +21,13 @@ const SlickSlider = (props) => {
       dotsClass: `slick-dots ${styles.dots}`,
    }
 
-   // Get only the primary banner image
+   const mainBannerArray = [0, 1, 2]
+   /**
+    * Get only the primary banner image
+    * @requires mainBannerArray
+    */
    const imgList = useMemo(() => {
-      const primaryBannerFilter = (imageObject) => imageObject.type === 0;
+      const primaryBannerFilter = (imageObject) => mainBannerArray.includes(imageObject.type);
 
       return (
          (props?.imgKey
@@ -33,16 +37,19 @@ const SlickSlider = (props) => {
    }, [props?.images])
 
    const handleOnClick = (imgSelected) => {
-      const selectedIdx = imgSelected <= imgList.length
-            ? imgSelected - 1
-            : 0
-          props.onClick(props?.images?.[selectedIdx], selectedIdx);
+      props.onClick(imgSelected);
      }
+
+   const isAnchor = (imgSelected) => imgSelected.type === 0;
 
    return (
       <Slider className="mt-4" {...settings}>
          {imgList.map((data, index) => (
-            <a href={data.url} target="_blank" rel="nofollow noindex" key={index} onClick={() => handleOnClick(data)}>
+            <a href={isAnchor(data) ? data.url : "#"} target={isAnchor(data) ? "_blank" : null} key={index} onClick={() => {
+               if (isAnchor(data)) {
+                  handleOnClick(data)
+               }
+            }}>
                <Img
                   src={data.image.replace('thumbnail', 'large')}
                   style={{ width: '375px', height: '150px' }}

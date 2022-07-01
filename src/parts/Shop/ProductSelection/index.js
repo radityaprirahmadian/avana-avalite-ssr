@@ -62,6 +62,13 @@ export default function ProductSelection(props) {
       [search]
    )
 
+   // Only use one of the two search parameters: category or collection
+   React.useEffect(() => {
+      if (selectedCategory !== "") setSelectedCollection("")
+      else if (selectedCollection !== "") setSelectedCategory("")
+   }, [selectedCategory, selectedCollection])
+   
+
    const fnGetProducts = React.useCallback(
       (search, selectedCategory, selectedCollection, page = 1 ) => {
          setProducts((prev) => ({
