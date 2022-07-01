@@ -47,7 +47,10 @@ export default function CategoriesSelection(props) {
                   key={tab.id}
                   value={tab.id}
                   label={tab.label}
-                  onClick={() => props.setSelectedCategory(tab.id)}
+                  onClick={() => {
+                     props.setSelectedCategory(tab.id)
+                     props.setSelectedCollection("")
+                  }}
                   disableRipple
                   style={{
                      minWidth: 'fit-content',
