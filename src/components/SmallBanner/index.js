@@ -5,7 +5,7 @@ const SmallBanner = (props) => {
 
   // Get only the small banner image
   const imgList = useMemo(() => {
-    const smallBannerFilter = (imageObject) => imageObject.type === 1;
+    const smallBannerFilter = (imageObject) => imageObject.type === 3;
 
     return (
        (props?.imgKey
