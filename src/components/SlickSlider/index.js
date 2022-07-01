@@ -46,7 +46,7 @@ const SlickSlider = (props) => {
       <Slider className="mt-4" {...settings}>
          {imgList.map((data, index) => (
             <a href={isAnchor(data) ? data.url : "#"} target={isAnchor(data) ? "_blank" : null} key={index} onClick={() => {
-               if (isAnchor(data)) {
+               if (!isAnchor(data)) {
                   handleOnClick(data)
                }
             }}>
