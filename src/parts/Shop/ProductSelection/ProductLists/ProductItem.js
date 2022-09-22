@@ -22,10 +22,12 @@ export default function Row({
    fnToggleSelectVariant,
 }) {
    const {quantity: countProduct, isVariant} = selectedMeta || {}
-   const productImage = (item.main_image?.includes('/thumbnail/')
-      ? item.main_image
-      : item.main_image?.replace('/images', '/images/thumbnail')
-   );
+   // const productImage = (item.main_image?.includes('/thumbnail/')
+   //    ? item.main_image
+   //    : item.main_image?.replace('/images', '/images/thumbnail')
+   // );
+   const productImage =  item.main_image
+ 
    const handleOnEventChild = React.useCallback(
       (e, onClickEvent) => {
          e.stopPropagation();
