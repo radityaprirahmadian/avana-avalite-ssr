@@ -85,7 +85,7 @@ const CustomTabScrollButton = (props) => {
                direction === 'left'
                   ? '4px 0px 4px rgba(0, 0, 0, 0.25)'
                   : '-4px 0px 4px rgba(0, 0, 0, 0.25)',
-            display: disabled ? 'none' : '',
+            display: disabled ? 'none' : 'flex',
             zIndex: 1,
             position: 'absolute',
             top: '0',
