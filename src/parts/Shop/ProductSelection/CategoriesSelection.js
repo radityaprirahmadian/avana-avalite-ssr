@@ -29,7 +29,7 @@ export default function CategoriesSelection(props) {
 
    return (
       <div
-         className="sticky bg-white pb-2 z-30"
+         className="sticky bg-white my-2 z-30"
          style={{
             top: '5.25rem',
          }}
@@ -79,7 +79,7 @@ const CustomTabScrollButton = (props) => {
       <TabScrollButton
          style={{
             backgroundColor: '#FDB814',
-            width: '48px',
+            width: '20px',
             height: '48px',
             boxShadow:
                direction === 'left'
