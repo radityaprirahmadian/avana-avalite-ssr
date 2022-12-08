@@ -1,6 +1,6 @@
 import React from 'react'
-
-import { Tabs, Tab } from '@material-ui/core'
+import { Tabs, Tab, TabScrollButton } from '@material-ui/core'
+import { ArrowBack } from '@material-ui/icons'
 
 export default function CategoriesSelection(props) {
    const tabList = [
@@ -31,7 +31,7 @@ export default function CategoriesSelection(props) {
       <div
          className="sticky bg-white pb-2 z-30"
          style={{
-            top: '5.25rem'
+            top: '5.25rem',
          }}
       >
          <Tabs
@@ -39,8 +39,9 @@ export default function CategoriesSelection(props) {
             textColor="primary"
             value={props.selectedCategory}
             variant="scrollable"
+            scrollButtons="auto"
             aria-label="product category"
-            scrollButtons="off"
+            ScrollButtonComponent={CustomTabScrollButton}
          >
             {tabList.map((tab) => (
                <Tab
@@ -49,19 +50,57 @@ export default function CategoriesSelection(props) {
                   label={tab.label}
                   onClick={() => {
                      props.setSelectedCategory(tab.id)
-                     props.setSelectedCollection("")
+                     props.setSelectedCollection('')
                   }}
                   disableRipple
                   style={{
                      minWidth: 'fit-content',
-                     fontSize: '.75rem'
+                     fontSize: '.75rem',
+                     padding: '0 1rem',
                   }}
                   {...{
-                     "aria-label": `category-${tab.label}`
+                     'aria-label': `category-${tab.label}`,
                   }}
                />
             ))}
          </Tabs>
       </div>
+   )
+}
+
+/**
+ * Custom Tab Scroll Button with Custom Icon and Color
+ * @param {ScrollButtonComponent} props
+ */
+const CustomTabScrollButton = (props) => {
+   const { direction, disabled } = props
+
+   return (
+      <TabScrollButton
+         style={{
+            backgroundColor: '#FDB814',
+            width: '48px',
+            height: '48px',
+            boxShadow:
+               direction === 'left'
+                  ? '4px 0px 4px rgba(0, 0, 0, 0.25)'
+                  : '-4px 0px 4px rgba(0, 0, 0, 0.25)',
+            display: disabled ? 'none' : 'flex',
+            zIndex: 1,
+            position: 'absolute',
+            top: '0',
+            right: direction === 'right' && '0',
+            left: direction === 'left' && '0',
+            opacity: '1',
+         }}
+         children={
+            <ArrowBack
+               style={{
+                  transform: direction === 'left' ? 'rotate(180deg)' : '',
+               }}
+            />
+         }
+         {...props}
+      />
    )
 }
