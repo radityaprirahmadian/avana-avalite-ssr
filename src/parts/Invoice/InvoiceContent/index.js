@@ -56,7 +56,7 @@ export default function InvoiceContent({
   });
 
   const [courierType, setCourierType] = useState("regular");
-
+  const [totaPrice, setTotalPrice] = useState(0);
   const [SELFPICKUP, setSelfPickup] = React.useState({
     data: {},
     status: 'idle',
@@ -104,6 +104,7 @@ export default function InvoiceContent({
           pricingCharge={pricingCharge}
           productsOrdered={productsOrdered}
           fnUpdateOrderDetails={fnUpdateOrderDetails}
+          setTotalPrice={setTotalPrice}
         />
       </>
     )
@@ -115,6 +116,7 @@ export default function InvoiceContent({
           orderDetails={orderDetails}
           shop={shop}
           fnUpdateOrderDetails={fnUpdateOrderDetails}
+          totaPrice={totaPrice}
         />
       </>
     )

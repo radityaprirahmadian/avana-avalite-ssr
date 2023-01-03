@@ -45,6 +45,7 @@ export default function Payments({
   orderDetails,
   shop,
   fnUpdateOrderDetails,
+  totaPrice
 }) {
   const slickSetting= {
     dots: false,
@@ -59,7 +60,9 @@ export default function Payments({
       {
         paymentList
           ?.filter((payment) => payment.code !== 'manual' && payment.code !== 'COD')
-          ?.map((payment) => (
+          ?.map((payment) =>  {    const isAboveMinimum =
+            totaPrice >= payment.minimum_amount;
+             return isAboveMinimum && (
             <PaymentsWrapper
               key={payment.code}
               htmlFor={payment.code}
@@ -134,7 +137,8 @@ export default function Payments({
                 : ''
               }
             </PaymentsWrapper>
-          ))
+          )}
+          )
       }
     </PaymentsContainer>
   )
