@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import formatCurrency from 'src/helpers/formatCurrency';
 
 const PriceSummary = (props) => (
@@ -19,7 +19,7 @@ const PriceAmmount = (props) => (
    </span>
 )
 
-export default function SummaryDetails({lang, orderDetails, pricingCharge}) {
+export default function SummaryDetails({lang, orderDetails, pricingCharge,setTotalPrice}) {
    const calculateWrapper = React.useCallback(
       (cb) => {
          return pricingCharge.isCalculating
@@ -28,6 +28,11 @@ export default function SummaryDetails({lang, orderDetails, pricingCharge}) {
       },
       [orderDetails, pricingCharge]
    );
+    
+   const total = pricingCharge.totalPrice + pricingCharge.totalTaxShipping - (orderDetails.coupon?.total_discount || 0)
+  useEffect(() => {
+   setTotalPrice(total)
+ }, [orderDetails.coupon?.total_discount , pricingCharge.totalTaxShipping , pricingCharge.totalPrice]);
    return (
       <div>
          <PriceSummary>

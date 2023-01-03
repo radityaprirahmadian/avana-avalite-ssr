@@ -12,7 +12,8 @@ export default function Summary({
    pricingCharge,
    productsOrdered,
    formInfoData,
-   fnUpdateOrderDetails
+   fnUpdateOrderDetails,
+   setTotalPrice
 }) {
    const MAINCONTEXT = React.useContext(MainContext);
    const lang = Localization[MAINCONTEXT.locale];
@@ -39,6 +40,7 @@ export default function Summary({
             lang={lang}
             orderDetails={orderDetails}
             pricingCharge={pricingCharge}
+            setTotalPrice={setTotalPrice}
          />
       </div>
    )
