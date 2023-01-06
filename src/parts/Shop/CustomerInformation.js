@@ -11,7 +11,7 @@ export default function CustomerInformation(props) {
                id="form-customer-name"
                name="name"
                defaultValue={props.data.name}
-               label={props.lang?.label__name || 'Your Name'}
+               label={props.lang?.label__name || 'Name'}
                onChange={props.fnChange}
             />
          </div>
