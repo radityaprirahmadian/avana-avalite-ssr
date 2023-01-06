@@ -89,7 +89,7 @@ export default function Checkout(props) {
                   }
                   loading={props.statusOrder.isCreateOrderViaWA}
                >
-                  {whitelistFeatures?.['catalog_wacommerce'] ? props.lang?.btn__order_now : props.lang?.btn__order_via_whatsapp || 'Order via WhatsApp'}
+                  {whitelistFeatures?.['white_label_wa_commerce'] ? props.lang?.btn__order_now : props.lang?.btn__order_via_whatsapp || 'Order via WhatsApp'}
                </WhatsappButton>
             </div>
             
