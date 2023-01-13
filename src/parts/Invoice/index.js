@@ -195,6 +195,7 @@ export default function Invoice({ shopDetails, orderToken }) {
             }, 1500)
          } else {
             isSyncTotal = setTimeout(() => {
+               const productsWeight = products.map((product) => { return product.weight * product.quantity })
                shipping.getRate({
                   params: {
                      country_id: formInfoData.country,
@@ -208,6 +209,7 @@ export default function Invoice({ shopDetails, orderToken }) {
                         (acc, current) => acc + current.quantity * current.weight,
                         0
                      ),
+                     products_weight: `[${[productsWeight]}]`,
                      subtotal: subTotal,
                      is_self_pickup: Number(orderDetails.isShippingSelfPickup)
                    },
