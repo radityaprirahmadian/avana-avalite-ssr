@@ -209,7 +209,7 @@ export default function Invoice({ shopDetails, orderToken }) {
                         (acc, current) => acc + current.quantity * current.weight,
                         0
                      ),
-                     products_weight: `[${[productsWeight]}]`,
+                     products_weights: `[${[productsWeight]}]`,
                      subtotal: subTotal,
                      is_self_pickup: Number(orderDetails.isShippingSelfPickup)
                    },
