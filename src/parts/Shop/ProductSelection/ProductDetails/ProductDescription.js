@@ -236,8 +236,9 @@ export default function ProductDescription(props) {
                   }
                   disabled={!whitelistFeatures?.['catalog_wacommerce'] && (!product.data?.quantity || !productVariantsQuantity)}
                 >
-                  {whitelistFeatures?.['catalog_wacommerce']
-                    ? (lang?.btn__choose || 'Choose')
+                  {whitelistFeatures?.['catalog_wacommerce'] && !whitelistFeatures?.['wa_commerce_order_button_707'] 
+                    ? (lang?.btn__choose || 'Choose') 
+                    : whitelistFeatures?.['wa_commerce_order_button_707'] ? (lang?.btn__addToCart || 'Add to cart')
                     : (lang?.btn__buy || 'Buy')
                   }
                 </Button>

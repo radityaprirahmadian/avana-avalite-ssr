@@ -79,11 +79,13 @@ export default function VariationDetails(props) {
   const submitButtonLang = useMemo(
     () => {
       const catalogWhitelist = whitelistFeatures?.['catalog_wacommerce'];
+      const whitelist707 = whitelistFeatures?.['wa_commerce_order_button_707'];
       if (orderState === 'remove' && catalogWhitelist) return lang?.btn__cancel || 'Cancel'
       return orderState === 'update'
         ? lang?.btn__update || 'Update'
-        : orderState === 'choose'
+        : orderState === 'choose' && !whitelist707
           ? lang?.btn__choose || 'Choose'
+          : orderState === 'choose' && whitelist707 ? lang.btn__addToCart || 'Add to cart'
           : orderState === 'buy'
             ? lang?.btn__buy || 'Buy'
             : orderState === 'remove' && catalogWhitelist

@@ -184,10 +184,11 @@ export default function Row({
                         && (item.quantity === 0 || item.quantityVariants === 0)
                      }
                   >
-                     {whitelistFeatures?.['catalog_wacommerce']
-                        ? (lang?.btn__choose || 'Choose')
-                        : (lang?.btn__buy || 'Buy')
-                     }
+                     {whitelistFeatures?.['catalog_wacommerce'] && !whitelistFeatures?.['wa_commerce_order_button_707'] 
+                    ? (lang?.btn__choose || 'Choose') 
+                    : whitelistFeatures?.['wa_commerce_order_button_707'] ? (lang?.btn__addToCart || 'Add to cart')
+                    : (lang?.btn__buy || 'Buy')
+                  }
                   </Button>
                ) : (
                   productsOrdered?.[item.id] && whitelistFeatures?.['catalog_wacommerce'] ? (
