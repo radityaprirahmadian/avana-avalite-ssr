@@ -3,9 +3,10 @@
   "text__whatsapp_order_link": "Order link: ",
   "text__greeting": "Welcome to",
   "text__powered_by": "Powered By",
-  "label__name": "Your Name",
-  "label__phone": "Your Phone Number",
+  "label__name": "Name",
+  "label__phone": "Phone Number",
   "btn__checkout_now": "Checkout Now",
   "btn__order_via_whatsapp":  "Order via WhatsApp",
+  "btn__order_now":  "Order Now",
   "text__complete_phone_number": "Please complete your phone number"
 }
