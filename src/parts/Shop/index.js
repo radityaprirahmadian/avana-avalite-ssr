@@ -352,6 +352,7 @@ export default function Shop({ shopDetails }) {
          <Context.Provider value={CONTEXT}>
             {(!productDetails.isViewProductDetail && !productDetails.isViewProductVariant) && (
                <CustomerInformation
+                  whitelistFeatures={whitelistFeatures}
                   lang={lang}
                   defualtCountry={shopDetails.details.country.iso_code.toLowerCase()}
                   data={data}

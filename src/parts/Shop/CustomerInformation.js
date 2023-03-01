@@ -21,7 +21,11 @@ export default function CustomerInformation(props) {
                label={props?.lang?.label__phone || 'Phone Number'}
                value={props.data.phoneNumber}
                country={props.defualtCountry}
-               onlyCountries={['id', 'my', 'sg']}
+               onlyCountries={
+                  props.whitelistFeatures?.['white_label_707']
+                     ? ['id']
+                     : ['id', 'my', 'sg']
+               }
                onChange={(phone) =>
                   props.fnChange({
                      target: {
