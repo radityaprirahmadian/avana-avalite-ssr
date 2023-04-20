@@ -22,10 +22,10 @@ export default {
     },
   },
   nicepay_100: {
-    bca: {
-      name: 'BCA',
-      url: '/images/payments/bank/bca.png',
-    },
+    // bca: {
+    //   name: 'BCA',
+    //   url: '/images/payments/bank/bca.png',
+    // },
     bni: {
       name: 'BNI',
       url: '/images/payments/bank/bni.png',
