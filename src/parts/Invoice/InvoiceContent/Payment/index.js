@@ -51,7 +51,7 @@ export default function Payments({
     dots: false,
     arrows: false,
     infinite: true,
-    slidesToShow: 5,
+    slidesToShow: 4,
     swipeToSlide: true,
     className: 'h-100 w-100'
   };
